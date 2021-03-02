@@ -67,3 +67,6 @@ typings/
 
 #build
 /build
+
+#vtex user config
+vtex_authData.config.js
