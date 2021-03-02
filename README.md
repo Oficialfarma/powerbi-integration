@@ -1,4 +1,4 @@
-# INTEGRAÇÃO E CRIAÇÃO DE BASE DE DADOS PARA CRIAÇÃO DE DASHBOARD
+# INTEGRAÇÃO BASE DE DADOS E POWER BI
 ## Descrição
 Módulo para obter os dados de pedidos, centralizar na base local e utilizar as informações na criação de Dashboards
 > Status do Projeto: Em desenvolvimento :warning:
