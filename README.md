@@ -3,10 +3,6 @@
 Módulo para obter os dados de pedidos, centralizar na base local e utilizar as informações na criação de Dashboards
 > Status do Projeto: Em desenvolvimento :warning:
 <br />
-<p>
-<img src="https://img.shields.io/hexpm/l/apa" alt="Badges" />
-<img src="https://img.shields.io/static/v1?label=dependencies&message=node-fetch&color=brightgreen" alt="Badges"/>
-</p>
 
 ## Objetivo
 O objetivo do projeto é gerar uma ferramenta que execute a cada determinado período de tempo
