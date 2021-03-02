@@ -52,7 +52,17 @@ module.exports = {
 ### Acessando a pasta src pelo terminal
 > ``` cd src```
 
-### Para iniciar a geração/atualização dos pedidos
+### Para iniciar a geração dos pedidos em modo de produção
+> ```npm run dev```
+
+### Para iniciar a geração dos pedidos em produção
+Gere o build utilizando:
+> ```npm run build```
+
+Acesse a pasta do build:
+>```cd dist```
+
+Logo após inicie a aplicação:
 > ```node index```
 
 <br />
@@ -62,6 +72,7 @@ As seguintes ferramentas estão sendo utilizadas na construção deste projeto:
 
 - [Node.js](https://nodejs.org/en/)
 - [SQL Server 2019 Express](https://www.microsoft.com/pt-br/sql-server/sql-server-downloads)
+- [Typescript](https://www.typescriptlang.org/)
 
 ## Licença
 <img src="https://img.shields.io/hexpm/l/apa" alt="Badges"/>
@@ -73,3 +84,4 @@ As seguintes ferramentas estão sendo utilizadas na construção deste projeto:
 
 [![Linkedin Badge](https://img.shields.io/badge/-Alessandro-blue?style=flat-square&logo=Linkedin&logoColor=white&link=https://www.linkedin.com/in/alessandro-miranda-b23b74169)](https://www.linkedin.com/in/alessandro-miranda-b23b74169) 
 [![Gmail Badge](https://img.shields.io/badge/-ad.lmiranda2018@gmail.com-c14438?style=flat-square&logo=Gmail&logoColor=white&link=mailto:tgmarinho@gmail.com)](mailto:ad.lmiranda2018@gmail.com)
+[![Github Badge](https://img.shields.io/github/followers/Alessandro-Miranda?label=Follow&style=social)](https://github.com/Alessandro-Miranda)
