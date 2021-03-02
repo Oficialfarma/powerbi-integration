@@ -29,37 +29,27 @@ Para rodar os testes dos módulos rode:
 
 &nbsp;
 ## Iniciar a aplicação
-Verifique se na raíz existe o arquivo _**vtex_auth_config.js**_ caso não possua, acesse o portal da **VTEX** para obter a chave e o token de acesso e, também, o nome da conta, crie o arquivo com os itens de autenticação.
-Exemplo de arquivo:
+Crie o arquivo de configurção contendo a chave e token de autenticação da VTEX. Para obter as informações de acesso,
+acesse o perfil da sua loja VTEX e procure por: "X-VTEX-API-AppKey" e "X-VTEX-API-AppToken" e "VTEX ACCOUNT NAME"
+Exemplo de arquivo de configuração:
 ```javascript
-const vtex_api_appKey_appToken = {
-    "X-VTEX-API-AppKey": "sua-chave-de-acesso",
-    "X-VTEX-API-AppToken": "seu-token-de-acesso"
-};
-
-const vtexAccountName = "nome da conta vtex que é utilizada como parte da url";
-
 module.exports = {
-    vtex_api_appKey_appToken,
-    vtexAccountName
+    "X-VTEX-API-AppKey": "chave de acesso à API",
+    "X-VTEX-API-AppToken": "token de acesso à API",
+    "vtexAccountName": "nome da conta vtex"
 };
 ```
-## Após ter as chaves de autenticação definidas, inicie a aplicação:
-### Acessando a pasta src pelo terminal
-> ``` cd src```
+## Após ter as chaves de autenticação definidas, você poderá dar inicio a aplicação.
 
-### Para iniciar a geração dos pedidos em modo de produção
+### Para iniciar a geração dos pedidos em modo de desenvolvimento
 > ```npm run dev```
 
 ### Para iniciar a geração dos pedidos em produção
 Gere o build utilizando:
 > ```npm run build```
 
-Acesse a pasta do build:
->```cd dist```
-
 Logo após inicie a aplicação:
-> ```node index```
+> ```node build/src/index```
 
 <br />
 
