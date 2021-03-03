@@ -65,7 +65,6 @@ As seguintes ferramentas estão sendo utilizadas na construção deste projeto:
 <br />
 
 ## Autor
----
 <b>Alessandro Lima de Miranda</b>
 
 [![Linkedin Badge](https://img.shields.io/badge/-Alessandro-blue?style=flat-square&logo=Linkedin&logoColor=white&link=https://www.linkedin.com/in/alessandro-miranda-b23b74169)](https://www.linkedin.com/in/alessandro-miranda-b23b74169) 
