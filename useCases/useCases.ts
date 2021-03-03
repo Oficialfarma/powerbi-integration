@@ -1,0 +1,1 @@
+const text = "aqui vai ser onde ficaram os casos de uso, do que pode ou não rolar"
