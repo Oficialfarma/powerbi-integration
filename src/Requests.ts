@@ -1,29 +1,41 @@
 import fetch from "node-fetch";
-
-interface IRequestHeaders
-{
-    Accept: string;
-    "Content-Type": string;
-    "X-VTEX-API-AppKey": string;
-    "X-VTEX-API-AppToken": string;
-}
+import { IRequestOptions } from '../interfaces/IRequestOptions';
 
 interface IRequestDatas
 {
     url: string;
-    options: {
-        method: string;
-        headers: IRequestHeaders
-    };
+    queryParams?: "" | string;
+    options: IRequestOptions;
     timeout: number;
 }
 
 export class Requests
 {
-    makeRequest({ url, options, timeout }: IRequestDatas)
+    async makeRequest({ url, queryParams, options, timeout }: IRequestDatas): Promise<Object>
     {
-        return fetch('url');
+        return Promise.race([
+            this[options.method](url + queryParams, options),
+            this.timeDelay(url, timeout)
+        ]);
     }
+
+    async get(url: string, options: IRequestOptions)
+    {
+        return new Promise((resolve, reject) => {
+            fetch(url, options)
+                .then(resp => resolve(resp.json()))
+                    .catch(() => reject(url));
+        })
+    }
+
+    timeDelay(url: string, timeout: number)
+    {
+        return new Promise((resolve, reject) => {
+            setTimeout(this.errorTimeout(reject, url), timeout);
+        });
+    }
+
+    errorTimeout = (reject: (err: Error) => any, url: string) => () => reject(new Error(`Timeout at-${url}`));
 }
 
 // module.exports = Requests;
