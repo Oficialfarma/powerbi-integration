@@ -35,7 +35,7 @@ export class Requests
      * @param options request headers
      * @returns An object with orders details
      */
-    async get(url: string, options: IRequestOptions)
+    async get(url: string, options: IRequestOptions): Promise<void>
     {
         return new Promise((resolve, reject) => {
             fetch(url, options)
@@ -44,7 +44,7 @@ export class Requests
         })
     }
 
-    timeDelay(url: string, timeout: number)
+    timeDelay(url: string, timeout: number): Promise<void>
     {
         return new Promise((resolve, reject) => {
             setTimeout(this.errorTimeout(reject, url), timeout);
