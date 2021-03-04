@@ -10,6 +10,12 @@ uma requisição na api de pedidos da vtex - solicitando novas entradas de compr
 existentes na base de dados local para a utilização de todas as informações necessárias na geração de Dashboards e demais planilhas
 <br />
 
+## Funcionalidades
+ - [] Obtenção de pedidos gerais da API vtex
+ - [] Obtenção de informações detalhadas dos pedidos
+ - [] Cadastro dos pedidos/informações no banco de dados
+ - [] Atualização no banco de dados das informações dos pedidos
+ - [] Salvamento de status / logs das requisições em disco local
 
 ## Inicialização, instalação das dependências e execução de testes.
 ### Pré-requisitos
@@ -43,7 +49,7 @@ module.exports = {
 
 ### Para iniciar a geração dos pedidos em modo de desenvolvimento
 > ```npm run dev```
-
+<br />
 ### Para iniciar a geração dos pedidos em produção
 Gere o build utilizando:
 > ```npm run build```
