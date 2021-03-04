@@ -2,7 +2,7 @@ import * as fs from 'fs';
 import { IFileSystemRepository } from '../../interfaces/IFileSystemRepository';
 
 /**
- * @classdesc Read and write the files and log errors
+ * @classdesc Read and write the files and log errors. Contains complet implementation
  */
 export class FileSystem implements IFileSystemRepository
 {
@@ -11,7 +11,7 @@ export class FileSystem implements IFileSystemRepository
         return new Promise((resolve, reject) => {
             fs.writeFile(fileName, "teste", 'utf8', err => {
                 if(err) reject(new Error("Unexpected error"));
-                else resolve('File saved')
+                else resolve('File has saved')
             });
         })
     }

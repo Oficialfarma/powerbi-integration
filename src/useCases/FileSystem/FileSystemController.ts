@@ -1,6 +1,8 @@
-import { FileSystem } from "../../repositories/implementations/FileSystem";
 import { FileSystemUseCase } from "./FileSystemUseCase";
 
+/**
+ * @classdesc Handle the FileSystemUseCase methods' execution
+ */
 export class FileSystemController
 {
     constructor(

@@ -1,6 +1,9 @@
 import { IFileSystemRepository } from "../../interfaces/IFileSystemRepository";
 import { IFileSystemDTO } from "./IFileSystemDTO";
 
+/**
+ * @classdesc implements the logic about how to write / read files
+ */
 export class FileSystemUseCase
 {
     constructor(
@@ -11,7 +14,7 @@ export class FileSystemUseCase
     {
         if(datas.methodName === "write")
         {
-            return this.FileSystemRepository.writeFile();
+            return this.FileSystemRepository.writeFile("lastRequestStatus.json");
         }
         else
         {
