@@ -7,7 +7,7 @@ export class FileSystemController
         private createFileSystemUseCase: FileSystemUseCase
     ) {}
 
-    async handle(): Promise<string | object>
+    async handle(): Promise<void>
     {
         try
         {
@@ -20,7 +20,7 @@ export class FileSystemController
         }
         catch(err)
         {
-            return "erro";
+            this.handle()
         }
     }
 }
