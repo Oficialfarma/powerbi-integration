@@ -12,6 +12,6 @@ export interface IRequests
 {
     makeRequest(datas: IRequestDatas): Promise<void>;
     get(url: string, options: IRequestOptions): Promise<void>;
-    timeDelay(url: string, timeout: number): Promise<void>;
-    errorTimeout(reject: (err: Error) => any, url: string): Promise<void>; 
+    timeDelay(timeout: number): Promise<void>;
+    requestErrors(): Promise<void>; 
 }
