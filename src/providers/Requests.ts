@@ -1,6 +1,7 @@
 import fetch from "node-fetch";
 import { IRequestOptions } from '../interfaces/IRequestOptions';
 import { IRequestDatas, IRequests } from "../interfaces/IRequests";
+import createFileSystemController from "../useCases/FileSystem";
 
 /**
  * @classdesc Create all requests to API vtex
@@ -15,7 +16,7 @@ export class Requests implements IRequests
     {
         return Promise.race([
             this.get(url + queryParams, options),
-            this.timeDelay(url, timeout)
+            this.timeDelay(timeout)
         ]);
     }
 
@@ -27,17 +28,19 @@ export class Requests implements IRequests
      */
     async get(url: string, options: IRequestOptions): Promise<void>
     {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve, _reject) => {
             fetch(url, options)
                 .then(resp => resolve(resp.json()))
-                    .catch(() => reject(new Error(`Error at-${url}`)));
+                    .catch(async () => {
+                        this.requestErrors();
+                    });
         })
     }
 
-    timeDelay(url: string, timeout: number): Promise<void>
+    timeDelay( timeout: number): Promise<void>
     {
-        return new Promise((resolve, reject) => {
-            setTimeout(this.errorTimeout(reject, url), timeout);
+        return new Promise((_resolve, _reject) => {
+            setTimeout(this.requestErrors, timeout);
         });
     }
 
@@ -47,8 +50,11 @@ export class Requests implements IRequests
      * @param url
      * @return an Error when the api returns spent more than timeout defined
      */
-    errorTimeout(reject: (err: Error) => any, url: string)
+    async requestErrors()
     {
-        return reject(new Error(`Timeout at-${url}`))
+        return await createFileSystemController.handle({
+            lastRequest: "por a hora da última request aqui",
+            status: "failed"
+        });
     }
 }
