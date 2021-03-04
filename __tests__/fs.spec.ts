@@ -1,6 +1,6 @@
 import { FileSystem } from "../src/repositories/implementations/FileSystem";
 
-describe('FileSystem functions', () => {
+describe('FileSystem - Error', () => {
 
     const fs = new FileSystem();
 
