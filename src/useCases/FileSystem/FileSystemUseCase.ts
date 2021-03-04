@@ -1,5 +1,5 @@
+import { IFileSystemDTO } from "../../interfaces/IFileSystemDTO";
 import { IFileSystemRepository } from "../../interfaces/IFileSystemRepository";
-import { IFileSystemDTO } from "./IFileSystemDTO";
 
 /**
  * @classdesc implements the logic about how to write / read files
