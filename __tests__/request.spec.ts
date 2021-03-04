@@ -1,4 +1,4 @@
-import { Requests } from '../src/Requests';
+import { Requests } from '../src/providers/Requests';
 const requests = new Requests();
 
 import { allOrdersMockResponse } from '../__mocks__/requestAllOrders.mock';
