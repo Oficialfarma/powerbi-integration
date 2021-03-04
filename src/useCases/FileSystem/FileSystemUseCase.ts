@@ -14,7 +14,7 @@ export class FileSystemUseCase
     {
         if(datas.methodName === "write")
         {
-            return this.FileSystemRepository.writeFile("lastRequestStatus.json");
+            return this.FileSystemRepository.writeFile(datas.filePath, datas.content);
         }
         else
         {
