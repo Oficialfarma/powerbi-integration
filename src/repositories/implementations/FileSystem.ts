@@ -6,10 +6,10 @@ import { IFileSystemRepository } from '../../interfaces/IFileSystemRepository';
  */
 export class FileSystem implements IFileSystemRepository
 {
-    async writeFile(fileName: string): Promise<string>
+    async writeFile(fileName: string, content: string): Promise<string>
     {
         return new Promise((resolve, reject) => {
-            fs.writeFile(fileName, "teste", 'utf8', err => {
+            fs.writeFile(fileName, content, 'utf8', err => {
                 if(err) reject(new Error("Unexpected error"));
                 else resolve('File has saved')
             });
