@@ -37,7 +37,7 @@ export class Requests implements IRequests
         })
     }
 
-    timeDelay( timeout: number): Promise<void>
+    timeDelay(timeout: number): Promise<void>
     {
         return new Promise((_resolve, _reject) => {
             setTimeout(this.requestErrors, timeout);
