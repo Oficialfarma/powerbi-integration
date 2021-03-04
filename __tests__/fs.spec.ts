@@ -6,7 +6,7 @@ describe('FileSystem functions', () => {
 
     it("Throw an Error if cannot write / read a file", async () => {
         
-        const result = await fs.writeFile('../../lastRequestStatus.json').catch(err => {
+        const result = await fs.writeFile('../../lastRequestStatus.json', "teste").catch(err => {
             return err;
         });
 
