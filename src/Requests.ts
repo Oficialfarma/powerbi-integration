@@ -1,5 +1,5 @@
 import fetch from "node-fetch";
-import { IRequestOptions } from '../interfaces/IRequestOptions';
+import { IRequestOptions } from './interfaces/IRequestOptions';
 
 interface IRequestDatas
 {
@@ -11,8 +11,6 @@ interface IRequestDatas
 
 /**
  * @classdesc Create all requests to API vtex
- * @author Alessandro Lima de Miranda
- * 
  */
 export class Requests
 {
@@ -21,10 +19,10 @@ export class Requests
      * @param param0 an object with all url configurations
      * @returns a resolve or reject data
      */
-    async makeRequest({ url, queryParams, options, timeout }: IRequestDatas): Promise<Object>
+    async makeRequest({ url, queryParams, options, timeout }: IRequestDatas): Promise<void>
     {
         return Promise.race([
-            this[options.method](url + queryParams, options),
+            this.get(url + queryParams, options),
             this.timeDelay(url, timeout)
         ]);
     }
@@ -33,7 +31,7 @@ export class Requests
      * 
      * @param url
      * @param options request headers
-     * @returns An object with orders details
+     * @returns An object with orders detail
      */
     async get(url: string, options: IRequestOptions): Promise<void>
     {
