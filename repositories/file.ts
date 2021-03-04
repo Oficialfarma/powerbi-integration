@@ -1,1 +1,0 @@
-const teste = "Aqui ficará as funcionalidades que inserem os dados no banco";
