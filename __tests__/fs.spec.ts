@@ -10,6 +10,6 @@ describe('FileSystem - Error', () => {
             return err;
         });
 
-        expect(result).toEqual(new Error("Unexpected error"));
+        expect(result).toEqual(new Error('Error saving'));
     });
 });
