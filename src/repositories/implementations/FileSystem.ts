@@ -10,7 +10,7 @@ export class FileSystem implements IFileSystemRepository
     {
         return new Promise((resolve, reject) => {
             fs.writeFile(fileName, content, 'utf8', err => {
-                if(err) reject(new Error("Unexpected error"));
+                if(err) reject(new Error("Error saving"));
                 else resolve('File has saved');
             });
         })
