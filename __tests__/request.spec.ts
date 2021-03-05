@@ -4,7 +4,7 @@ const requests = new Requests();
 import { allOrdersMockResponse } from '../__mocks__/requestAllOrders.mock';
 import { mockedQueryParams } from '../__mocks__/requestParams.mock';
 
-jest.mock('../src/Requests');
+jest.mock('../src/providers/Requests');
 
 describe("VTEX Error connection", () => {
     
