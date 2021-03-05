@@ -50,7 +50,7 @@ module.exports = {
 ### Para iniciar a geração dos pedidos em modo de desenvolvimento
 > ```npm run dev```
 <br />
-### Para iniciar a geração dos pedidos em produção
+### Para iniciar a geração dos pedidos em produção<br />
 Gere o build utilizando:
 
 > ```npm run build```
