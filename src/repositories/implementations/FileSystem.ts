@@ -11,7 +11,7 @@ export class FileSystem implements IFileSystemRepository
         return new Promise((resolve, reject) => {
             fs.writeFile(fileName, content, 'utf8', err => {
                 if(err) reject(new Error("Unexpected error"));
-                else resolve('File has saved')
+                else resolve('File has saved');
             });
         })
     }
@@ -19,8 +19,15 @@ export class FileSystem implements IFileSystemRepository
     async readFile(filePath: string): Promise<string>
     {
         return new Promise((resolve, reject) => {
-            fs.readFile(filePath, (err, data) => {
-                console.log("retorno");
+            fs.readFile(filePath, 'utf8',(err, data) => {
+                if(err)
+                {
+                    reject(err);
+                }
+                else
+                {
+                    resolve(data);
+                }
             });
         });
     }
