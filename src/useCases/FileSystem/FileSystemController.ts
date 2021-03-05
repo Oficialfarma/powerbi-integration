@@ -8,7 +8,7 @@ interface IHandleErrorMessage
 
 interface IHandleDatas
 {
-    errorMessage: IHandleErrorMessage;
+    errorMessage?: IHandleErrorMessage;
     methodName: string;
     filePath: string;
 }
@@ -22,17 +22,22 @@ export class FileSystemController
         private createFileSystemUseCase: FileSystemUseCase
     ) {}
 
-    async handle(datas: IHandleDatas): Promise<void>
+    async handle(datas: IHandleDatas): Promise<string>
     {
         try
         {
-            await this.createFileSystemUseCase.execute({
+            let response = await this.createFileSystemUseCase.execute({
                 methodName: datas.methodName,
                 filePath: datas.filePath,
-                content: JSON.stringify(datas.errorMessage)
+                content: JSON.stringify(datas.errorMessage) ?? ""
             });
-
-            process.exit(0);
+            
+            if(datas.methodName === "write")
+            {
+                process.exit(0);
+            }
+            
+            return response.toString();
         }
         catch(err)
         {
