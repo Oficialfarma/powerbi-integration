@@ -3,7 +3,7 @@ import { IRequestOptions } from "./IRequestOptions";
 export interface IRequestDatas
 {
     url: string;
-    queryParams?: "" | string;
+    queryParams?: string;
     options: IRequestOptions;
     timeout: number;
 }
