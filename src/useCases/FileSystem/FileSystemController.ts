@@ -6,6 +6,13 @@ interface IHandleErrorMessage
     status: string;
 }
 
+interface IHandleDatas
+{
+    errorMessage: IHandleErrorMessage;
+    methodName: string;
+    filePath: string;
+}
+
 /**
  * @classdesc Handle the FileSystemUseCase methods' execution
  */
@@ -15,14 +22,14 @@ export class FileSystemController
         private createFileSystemUseCase: FileSystemUseCase
     ) {}
 
-    async handle(errorMessage?: IHandleErrorMessage): Promise<void>
+    async handle(datas: IHandleDatas): Promise<void>
     {
         try
         {
             await this.createFileSystemUseCase.execute({
-                methodName: 'write',
-                filePath: "lastRequestStatus.json",
-                content: JSON.stringify(errorMessage)
+                methodName: datas.methodName,
+                filePath: datas.filePath,
+                content: JSON.stringify(datas.errorMessage)
             });
 
             process.exit(0);
