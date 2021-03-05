@@ -10,7 +10,7 @@ export class FileSystemUseCase
         private FileSystemRepository: IFileSystemRepository
     ) {}
 
-    async execute(datas: IFileSystemDTO)
+    async execute(datas: IFileSystemDTO): Promise<string | object>
     {
         if(datas.methodName === "write")
         {
