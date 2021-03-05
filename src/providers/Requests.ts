@@ -53,8 +53,12 @@ export class Requests implements IRequests
     async requestErrors()
     {
         return await createFileSystemController.handle({
-            lastRequest: "por a hora da última request aqui",
-            status: "failed"
+            filePath: 'lastRequestStatus.json',
+            methodName: 'write',
+            errorMessage: {
+                lastRequest: 'pegar o horário aqui',
+                status: "failed | success"
+            }
         });
     }
 }
