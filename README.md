@@ -52,6 +52,7 @@ module.exports = {
 <br />
 ### Para iniciar a geração dos pedidos em produção
 Gere o build utilizando:
+
 > ```npm run build```
 
 Logo após inicie a aplicação:
