@@ -8,16 +8,16 @@ export class GetOptions
     static lastTimeRequestFromJson: Date;
     static actualTimeRequest: Date;
 
-    urlOptions(): IRequestDatas
+    urlOptions(method: string): IRequestDatas
     {
-        this.setTimeActualRequest();
-
-        let finalTime = DateFormat.dateFormatToQueryParams(new Date());
+        let finalTime = DateFormat.dateFormatToQueryParams(GetOptions.actualTimeRequest);
         let initialTime = DateFormat.dateFormatToQueryParams(GetOptions.lastTimeRequestFromJson);
 
         return {
             url: `https://${auth_config.vtexAccountName}.vtexcommercestable.com.br/api/oms/pvt/orders`,
-            queryParams: `?f_creationDate=creationDate%3A%5B${initialTime}%20TO%20${finalTime}%5D&per_page=100`,
+            queryParams: method === "listOrders" ?
+                `?f_creationDate=creationDate%3A%5B${initialTime}%20TO%20${finalTime}%5D&per_page=100`
+                : '',
             options: {
                 method: 'GET',
                 headers: {
