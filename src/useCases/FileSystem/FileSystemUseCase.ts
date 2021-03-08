@@ -14,11 +14,11 @@ export class FileSystemUseCase
     {
         if(datas.methodName === "write")
         {
-            return this.FileSystemRepository.writeFile(datas.filePath, datas.content);
+            return await this.FileSystemRepository.writeFile(datas.filePath, datas.content);
         }
         else
         {
-            return this.FileSystemRepository.readFile(datas.filePath);
+            return await this.FileSystemRepository.readFile(datas.filePath);
         }
     }
 }
