@@ -3,6 +3,11 @@ import { Requests } from "../providers/Requests";
 
 export class GetAmountPages
 {
+    /**
+     * 
+     * @param options url and queryParams 
+     * @returns amount of order pages
+     */
     static async getPages(options: IRequestDatas): Promise<number>
     {
         let amountPages: number = 1;
