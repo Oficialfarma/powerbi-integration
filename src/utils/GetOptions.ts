@@ -1,21 +1,19 @@
-import { auth_config } from '../../vtex_authData.config';
+const { auth_config } = require('../../vtex_authData.config');
 import { IRequestDatas } from '../interfaces/IRequests';
 import createFileSystemController from '../useCases/FileSystem';
 import { DateFormat } from './DateFormat';
 
 export class GetOptions
 {
-    static lastTimeRequest: any;
-    
-    constructor()
-    {
-        this.setLastTimeRequest();
-    }
+    static lastTimeRequestFromJson: Date;
+    static actualTimeRequest: Date;
 
     urlOptions(): IRequestDatas
     {
-        let finalTime = DateFormat.dateFormatToQueryParams(DateFormat.getActualTime());
-        let initialTime = DateFormat.dateFormatToQueryParams(GetOptions.lastTimeRequest);
+        this.setTimeActualRequest();
+
+        let finalTime = DateFormat.dateFormatToQueryParams(new Date());
+        let initialTime = DateFormat.dateFormatToQueryParams(GetOptions.lastTimeRequestFromJson);
 
         return {
             url: `https://${auth_config.vtexAccountName}.vtexcommercestable.com.br/api/oms/pvt/orders`,
@@ -33,7 +31,10 @@ export class GetOptions
         }
     }
 
-    async setLastTimeRequest()
+    /**
+     * @description set time of the last request status
+     */
+    async setLastTimeRequestFromJson()
     {
         let lastStatus = await createFileSystemController.handle({
             filePath: 'lastRequestStatus.json',
@@ -41,11 +42,31 @@ export class GetOptions
         });
 
         const { lastRequest } = JSON.parse(lastStatus); 
-        GetOptions.lastTimeRequest = lastRequest;
+        GetOptions.lastTimeRequestFromJson = new Date(lastRequest);
     }
 
-    static getLastTimeRequest(): string
+    /**
+     * @description set time of the actual request
+     */
+    setTimeActualRequest()
     {
-        return GetOptions.lastTimeRequest;
+        GetOptions.actualTimeRequest = new Date();
+    }
+    /**
+     * 
+     * @returns time of the actual request
+     */
+    static getTimeActualRequest()
+    {
+        return GetOptions.actualTimeRequest
+    }
+
+    /**
+     * 
+     * @returns last time request from json with last status
+     */
+    static getLastTimeRequestFromJson(): Date
+    {
+        return GetOptions.lastTimeRequestFromJson;
     }
 }
