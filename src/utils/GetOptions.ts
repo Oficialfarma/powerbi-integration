@@ -1,4 +1,4 @@
-const { auth_config } = require('../../vtex_authData.config');
+import { auth_config } from '../../vtex_authData.config';
 import { IRequestDatas } from '../interfaces/IRequests';
 import createFileSystemController from '../useCases/FileSystem';
 import { DateFormat } from './DateFormat';
