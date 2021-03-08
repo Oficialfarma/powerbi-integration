@@ -5,8 +5,8 @@ const options = new GetOptions();
 async function initOrdersGeneration()
 {
     await options.setLastTimeRequestFromJson();
-    let urlAndOptions = options.urlOptions();
-
+    options.setTimeActualRequest();
+    let urlAndOptions = options.urlOptions('listOrders');
     const pages = GetAmountPages.getPages(urlAndOptions);
 }
 
