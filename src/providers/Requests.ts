@@ -2,6 +2,7 @@ import fetch from "node-fetch";
 import { IRequestOptions } from '../interfaces/IRequestOptions';
 import { IRequestDatas, IRequests } from "../interfaces/IRequests";
 import createFileSystemController from "../useCases/FileSystem";
+import { GetOptions } from "../utils/GetOptions";
 
 /**
  * @classdesc Create all requests to API vtex
@@ -12,7 +13,7 @@ export class Requests implements IRequests
      * @param param0 an object with all url configurations
      * @returns a resolve or reject data
      */
-    async makeRequest({ url, queryParams, options, timeout }: IRequestDatas): Promise<void>
+    async makeRequest({ url, queryParams, options, timeout }: IRequestDatas): Promise<any>
     {
         return Promise.race([
             this.get(url + queryParams, options),
@@ -56,8 +57,8 @@ export class Requests implements IRequests
             filePath: 'lastRequestStatus.json',
             methodName: 'write',
             errorMessage: {
-                lastRequest: 'pegar o horário aqui',
-                status: "failed | success"
+                lastRequest: GetOptions.getLastTimeRequestFromJson().toString(),
+                status: "failed"
             }
         });
     }
