@@ -46,10 +46,9 @@ export class Requests implements IRequests
     }
 
     /**
-     * 
-     * @param reject reject function
-     * @param url
-     * @return an Error when the api returns spent more than timeout defined
+     * @description if there is an error in the requests, write the error
+     * status and finish the execution
+     * @returns Promise<void>
      */
     async requestErrors()
     {
