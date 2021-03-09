@@ -70,3 +70,6 @@ typings/
 
 #vtex user config
 vtex_authData.config.js
+
+#request status
+lastRequestStatus.txt
