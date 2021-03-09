@@ -11,12 +11,14 @@ export class GetOrdersUseCase
     {
         if(datas.methodType === "list")
         {
-            return await this.GetOrders.getOrders(
-                datas.url,
-                datas.options,
-                datas.methodType,
-                datas.timeout
-            );
+            return await this.GetOrders.getOrders({
+                url: datas.url,
+                options: datas.options,
+                queryParams: datas.queryParams,
+                methodType: datas.methodType,
+                timeout: datas.timeout,
+                amountPages: datas.amountPages
+            });
         }
         else
         {
