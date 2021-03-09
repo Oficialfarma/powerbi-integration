@@ -6,7 +6,13 @@ const requests = new Requests();
 
 export class GetOrders implements IGetOrders
 {
-    async getOrders(datas: IGetOrdersDTO): Promise<void>
+    /**
+     * 
+     * @param datas - data used as a request parameter.
+     * receive Url, options, query params, timeout delay, order id and page amount
+     * @returns array with orders id or detailed orders
+     */
+    async getOrders(datas: IGetOrdersDTO): Promise<string[] | object[]>
     {
         let request = [];
        
@@ -38,16 +44,16 @@ export class GetOrders implements IGetOrders
         
         const result = await Promise.allSettled(prepareRequests);
 
-        let allSucceded: Array<any>;
+        let allSucceded: Array<any> = [];
 
-        result.map(elem => {
+        result.forEach(elem => {
             if(elem.status === "fulfilled")
             {
                 if(datas.methodType === "list")
                 {
-                    // elem.value.list.map((order: { orderId: string }) => {
-                    //     allSucceded.push(order.orderId);
-                    // });
+                    elem.value.list.forEach((order: any) => {
+                        allSucceded.push(order.orderId);
+                    });
                 }
                 else
                 {
@@ -60,7 +66,6 @@ export class GetOrders implements IGetOrders
             }
         });
         
-        console.log(allSucceded);
-        // return succeded;
+        return allSucceded;
     }
 }
