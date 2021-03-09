@@ -1,14 +1,6 @@
-import { IRequestOptions } from "./IRequestOptions";
+import { IGetOrdersDTO } from "./IGetOrdersDTO";
 
 export interface IGetOrders
 {
-    getOrders(
-        url: string,
-        options: IRequestOptions,
-        methodType: string,
-        timeout: number,
-        queryParams?: string,
-        orderId?: string[],
-        amountPages?: number
-    ) : Promise<void>
+    getOrders(datas: IGetOrdersDTO) : Promise<void>
 }
