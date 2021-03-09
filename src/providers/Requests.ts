@@ -10,8 +10,8 @@ import { GetOptions } from "../utils/GetOptions";
 export class Requests implements IRequests
 {
     /**
-     * @param param0 an object with all url configurations
-     * @returns a resolve or reject data
+     * @param objectData - an object with all url configurations and timeout delay
+     * @returns {Promise} the resolved promise from the get method or a timeout error
      */
     async makeRequest({ url, queryParams, options, timeout }: IRequestDatas): Promise<any>
     {
@@ -40,8 +40,10 @@ export class Requests implements IRequests
 
     timeDelay(timeout: number): Promise<void>
     {
-        return new Promise((_resolve, _reject) => {
-            setTimeout(this.requestErrors, timeout);
+        return new Promise((_resolve, reject) => {
+            setTimeout(() => {
+                reject(new Error("Timeout error"));
+            }, timeout);
         });
     }
 
