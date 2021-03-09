@@ -55,7 +55,7 @@ export class Requests implements IRequests
     async requestErrors()
     {
         return await createFileSystemController.handle({
-            filePath: 'lastRequestStatus.json',
+            filePath: 'lastRequestStatus.txt',
             methodName: 'write',
             errorMessage: {
                 lastRequest: GetOptions.getLastTimeRequestFromJson().toString(),
