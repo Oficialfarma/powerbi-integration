@@ -27,13 +27,13 @@ export class Requests implements IRequests
      * @param options request headers
      * @returns An object with orders detail
      */
-    async get(url: string, options: IRequestOptions): Promise<void>
+    async get(url: string, options: IRequestOptions): Promise<object>
     {
         return new Promise((resolve, _reject) => {
             fetch(url, options)
                 .then(resp => resolve(resp.json()))
                     .catch(async () => {
-                        this.requestErrors();
+                        await this.requestErrors();
                     });
         })
     }
