@@ -37,7 +37,7 @@ export class GetOptions
     async setLastTimeRequestFromJson()
     {
         let lastStatus = await createFileSystemController.handle({
-            filePath: 'lastRequestStatus.json',
+            filePath: 'lastRequestStatus.txt',
             methodName: 'read'
         });
 
