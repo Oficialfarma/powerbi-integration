@@ -11,8 +11,9 @@ existentes na base de dados local para a utilização de todas as informações 
 <br />
 
 ## Funcionalidades
- - [ ] Obtenção da lista de pedidos gerais da API vtex
+ - [x] Obtenção da lista de ID's dos pedidos do período especificado
  - [ ] Obtenção de informações detalhadas dos pedidos
+ - [ ] Manipulação das informações (remoção de dados que não serão armazenados) dos pedidos detalhados
  - [ ] Cadastro dos pedidos/informações no banco de dados
  - [ ] Atualização no banco de dados das informações dos pedidos
  - [x] Escrita e leitura de status / logs das requisições em disco local
