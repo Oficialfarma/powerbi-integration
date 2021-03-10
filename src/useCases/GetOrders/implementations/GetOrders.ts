@@ -15,7 +15,7 @@ export class GetOrders implements IGetOrders
     async getOrders(datas: IGetOrdersDTO): Promise<string[] | object[]>
     {
         let request = [];
-       
+        
         if(datas.methodType === "list")
         {
             for(let i = 1; i <= datas.amountPages; i++)
@@ -33,13 +33,13 @@ export class GetOrders implements IGetOrders
             for(let i = 0; i < datas.orderId.length; i++)
             {
                 request.push({
-                    url: datas.url + `/${datas.orderId}`,
+                    url: datas.url + `/${datas.orderId[i]}`,
                     options: datas.options,
                     timeout: datas.timeout
                 })
             }
         }
-       
+        
         const prepareRequests = request.map(params => requests.makeRequest(params));
         
         const result = await Promise.allSettled(prepareRequests);
