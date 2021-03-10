@@ -69,7 +69,7 @@ typings/
 /build
 
 #vtex user config
-vtex_authData.config.js
+vtex_authData.config.ts
 
 #request status
 lastRequestStatus.txt
