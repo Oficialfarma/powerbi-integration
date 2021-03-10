@@ -1,6 +1,9 @@
 import { IGetOrders } from "../../interfaces/IGetOrders";
 import { IGetOrdersDTO } from "../../interfaces/IGetOrdersDTO";
 
+/**
+ * @classdesc implements the usage logic of obtaining orders
+ */
 export class GetOrdersUseCase
 {
     constructor(
@@ -9,25 +12,26 @@ export class GetOrdersUseCase
 
     async execute(datas: IGetOrdersDTO)
     {
+        const mainOptions = {
+            url: datas.url,
+            options: datas.options,
+            timeout: datas.timeout,
+            methodType: datas.methodType
+        };
+
         if(datas.methodType === "list")
         {
             return await this.GetOrders.getOrders({
-                url: datas.url,
-                options: datas.options,
+                ...mainOptions,
                 queryParams: datas.queryParams,
-                methodType: datas.methodType,
-                timeout: datas.timeout,
                 amountPages: datas.amountPages
             });
         }
         else
         {
             return await this.GetOrders.getOrders({
-                url: datas.url,
-                options: datas.options,
-                orderId: datas.orderId,
-                timeout: datas.timeout,
-                methodType: datas.methodType
+                ...mainOptions,
+                orderId: datas.orderId
             });
         }
     }

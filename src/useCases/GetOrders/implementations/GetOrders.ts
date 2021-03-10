@@ -7,10 +7,11 @@ const requests = new Requests();
 export class GetOrders implements IGetOrders
 {
     /**
-     * 
+     * @description prepare an array of objects with the API connection url (based on the type of request),
+     * headers and additional data; launches the request and returns an array with the requested information.
      * @param datas - data used as a request parameter.
      * receive Url, options, query params, timeout delay, order id and page amount
-     * @returns array with orders id or detailed orders
+     * @returns {Array} with orders id or detailed orders
      */
     async getOrders(datas: IGetOrdersDTO): Promise<string[] | object[]>
     {
