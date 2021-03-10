@@ -7,6 +7,6 @@ export interface IGetOrdersDTO
     options: IRequestOptions;
     timeout: number;
     queryParams?: string;
-    orderId?: string[];
+    orderId?: string[] | object[];
     amountPages?: number;
 }
