@@ -22,7 +22,13 @@ export class GetOrdersUseCase
         }
         else
         {
-
+            return await this.GetOrders.getOrders({
+                url: datas.url,
+                options: datas.options,
+                orderId: datas.orderId,
+                timeout: datas.timeout,
+                methodType: datas.methodType
+            });
         }
     }
 }
