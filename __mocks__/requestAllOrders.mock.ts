@@ -1,4 +1,4 @@
-export const allOrdersMockResponse = [
+export const allOrdersMockResponse: object[] = [
     {
         "orderId": "1080883513398-01",
         "sequence": "2929244",
