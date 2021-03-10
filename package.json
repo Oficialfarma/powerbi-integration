@@ -4,7 +4,7 @@
   "description": "Módulo para obter os dados de pedidos, centralizar na base local e utilizar as informações na criação de Dashboards.",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
+    "test": "jest --detectOpenHandles",
     "dev": "sucrase-node ./src/index.ts",
     "build": "tsc --build"
   },
