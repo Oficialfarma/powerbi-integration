@@ -21,7 +21,7 @@ describe("VTEX Error connection", () => {
 });
 
 describe("VTEX get orders", () => {
-    it('Return all / detailed orders', async () => {
+    it('Return list / detailed orders', async () => {
         requests.makeRequest = jest.fn().mockResolvedValue(allOrdersMockResponse);
 
         const response = await requests.makeRequest({...mockedQueryParams}).then(resp => {
