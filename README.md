@@ -12,7 +12,7 @@ existentes na base de dados local para a utilização de todas as informações 
 
 ## Funcionalidades
  - [x] Obtenção da lista de ID's dos pedidos do período especificado
- - [ ] Obtenção de informações detalhadas dos pedidos
+ - [x] Obtenção de informações detalhadas dos pedidos
  - [ ] Manipulação das informações (remoção de dados que não serão armazenados) dos pedidos detalhados
  - [ ] Cadastro dos pedidos/informações no banco de dados
  - [ ] Atualização no banco de dados das informações dos pedidos
