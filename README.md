@@ -35,7 +35,7 @@ Para rodar os testes dos módulos rode:
 
 &nbsp;
 ## Iniciar a aplicação
-Crie o arquivo de configurção contendo a chave e token de autenticação da VTEX(vtex_authData.config.js) e o arquivo contendo o objeto de verificação de status da última requisição (lastRequestStatus.txt). Para obter as informações de acesso, acesse o perfil da sua loja VTEX e procure por: "X-VTEX-API-AppKey" e "X-VTEX-API-AppToken" e "VTEX ACCOUNT NAME"
+Crie o arquivo de configurção contendo a chave e token de autenticação da VTEX(vtex_authData.config.ts) e o arquivo contendo o objeto de verificação de status da última requisição (lastRequestStatus.txt). Para obter as informações de acesso, acesse o perfil da sua loja VTEX e procure por: "X-VTEX-API-AppKey" e "X-VTEX-API-AppToken" e "VTEX ACCOUNT NAME"
 Exemplo de arquivo de configuração:
 ```javascript
 module.exports = {
