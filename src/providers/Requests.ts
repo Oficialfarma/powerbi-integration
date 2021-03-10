@@ -13,7 +13,7 @@ export class Requests implements IRequests
      * @param objectData - an object with all url configurations and timeout delay
      * @returns {Promise} the resolved promise from the get method or a timeout error
      */
-    async makeRequest({ url, queryParams, options, timeout }: IRequestDatas): Promise<any>
+    async makeRequest({ url, queryParams = "", options, timeout }: IRequestDatas): Promise<any>
     {
         return Promise.race([
             this.get(url + queryParams, options),
