@@ -32,8 +32,8 @@ export class Requests implements IRequests
         return new Promise((resolve, _reject) => {
             fetch(url, options)
                 .then(resp => resolve(resp.json()))
-                    .catch(async () => {
-                        await this.requestErrors();
+                    .catch(err => {
+                        return err;
                     });
         })
     }
