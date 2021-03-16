@@ -63,7 +63,9 @@ export class GetOrders implements IGetOrders
             }
             else
             {
-                requests.requestErrors();
+                requests.requestErrors().then(() => {
+                    process.exit(0);
+                });
             }
         });
         
