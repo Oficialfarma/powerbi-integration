@@ -32,10 +32,10 @@ export class FileSystemController
                 content: JSON.stringify(datas.errorMessage) ?? ""
             });
             
-            if(datas.methodName === "write")
-            {
-                process.exit(0);
-            }
+            // if(datas.methodName === "write")
+            // {
+            //     process.exit(0);
+            // }
             
             return response.toString();
         }
