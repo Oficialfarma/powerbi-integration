@@ -8,9 +8,7 @@ const options = new GetOptions();
 options.setTimeActualRequest();
 
 describe("VTEX Error connection", () => {
-    afterEach(() => {
-        jest.clearAllMocks();
-    })
+   
     test(`#TimeoutDelay Throw a timeout error`, async () => {
         await options.setLastTimeRequestFromJson();
         const urlAndOptions = options.urlOptions("listOrders");
