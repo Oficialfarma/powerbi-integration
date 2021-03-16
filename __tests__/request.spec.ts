@@ -44,26 +44,17 @@ describe("VTEX Error connection", () => {
 
     test('#makeRequest - should call the error status write when a request error occurs', async () => {
 
-        jest.mock('../src/providers/Requests.ts');
+        await options.setLastTimeRequestFromJson();
+        const urlAndOptions = options.urlOptions("listOrders");
 
-        requests.get = jest.fn().mockImplementation(() => {
-            return new Error('Connection error');
-        });
-
-        const result = await requests.get(
-            "https://urldoesntexist.com",
-            {
-                method: 'GET',
-                headers: {
-                    Accept: "application/json",
-                    "Content-Type": "application/json",
-                    "X-VTEX-API-AppKey": 'X-VTEX-API-AppKey',
-                    "X-VTEX-API-AppToken": 'X-VTEX-API-AppToken'
-                }
-            }
-        );
-
-        expect(result).toBeInstanceOf(Error);
+        const response = await requests.get(
+            urlAndOptions.url + "&page=100",
+            urlAndOptions.options
+        ).catch(err => {
+            return err;
+        })
+        
+        expect(response).toBeInstanceOf(Error);
     })
 
     test("#RequestErrors - Should write the error status", async () => {
