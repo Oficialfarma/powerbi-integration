@@ -29,12 +29,10 @@ export class Requests implements IRequests
      */
     async get(url: string, options: IRequestOptions): Promise<object>
     {
-        return new Promise((resolve, _reject) => {
+        return new Promise((resolve, reject) => {
             fetch(url, options)
                 .then(resp => resolve(resp.json()))
-                    .catch(err => {
-                        return err;
-                    });
+                    .catch(err => reject(err));
         })
     }
 
