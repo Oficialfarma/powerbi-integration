@@ -1,50 +1,52 @@
+import { describe, test, expect } from '@jest/globals';
+
 import createGetOrdersController from "../src/useCases/GetOrders";
-import { GetAmountPages } from "../src/utils/GetAmountPages";
 import { GetOptions } from "../src/utils/GetOptions";
 import { allOrdersMockResponse } from '../__mocks__/requestAllOrders.mock';
-
-jest.mock('../src/useCases/GetOrders/index');
 
 describe("Get orders", () => {
     
     const options = new GetOptions();
     options.setTimeActualRequest();
     
-    it("Returns an Array with All orders ID", async () => {
+    test("Returns an Array with All orders ID", async () => {
         expect.assertions(1);
         
         await options.setLastTimeRequestFromJson();
         let urlAndOptions = options.urlOptions("listOrders");
-        const pages = await GetAmountPages.getPages(urlAndOptions);
-        
-        createGetOrdersController.handle = jest.fn().mockResolvedValue([
-            '123456-01', '1236548-01', '5698125-65'
-        ]);
+        const pages = 1;
         
         return await createGetOrdersController.handle({
             methodType: "list",
             ...urlAndOptions,
             amountPages: pages
         }).then(resp => {
-            expect(resp.length).toBeGreaterThan(1);
+            let ids = 0;
+            
+            resp.map((el: any) => {
+                if(typeof el === 'string') ids++;
+            });
+
+            expect(ids).toStrictEqual(resp.length);
         });
     });
 
-    it("Returns an array of objects with all detailed orders", async () => {
+    test("Returns an array of objects with all detailed orders", async () => {
         expect.assertions(1);
 
         await options.setLastTimeRequestFromJson();
         let urlAndoptions = options.urlOptions('getOrders');
-        const mockedIds = ["12345678-01", "23456789-01", "5635156-01"];
-
-        createGetOrdersController.handle = jest.fn().mockResolvedValue(allOrdersMockResponse);
+        const mockedId = ["1080883513398-01"];
 
         return await createGetOrdersController.handle({
             methodType: 'get',
             ...urlAndoptions,
-            orderId: mockedIds 
+            orderId: mockedId 
         }).then(resp => {
-            expect(resp).toEqual(allOrdersMockResponse);
+            const expected = Object.keys(allOrdersMockResponse);
+            const result = Object.keys(resp);
+
+            expect(result).toEqual(expected);
         });
-    })
+    });
 });
