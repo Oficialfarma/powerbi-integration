@@ -84,5 +84,5 @@ As seguintes ferramentas estão sendo utilizadas na construção deste projeto:
 <b>Alessandro Lima de Miranda</b>
 
 [![Linkedin Badge](https://img.shields.io/badge/-Alessandro-blue?style=flat-square&logo=Linkedin&logoColor=white&link=https://www.linkedin.com/in/alessandro-miranda-b23b74169)](https://www.linkedin.com/in/alessandro-miranda-b23b74169) 
-[![Gmail Badge](https://img.shields.io/badge/-ad.lmiranda2018@gmail.com-c14438?style=flat-square&logo=Gmail&logoColor=white&link=mailto:tgmarinho@gmail.com)](mailto:ad.lmiranda2018@gmail.com)
+[![Gmail Badge](https://img.shields.io/badge/-alessandro@oficialfarma.com.br-c14438?style=flat-square&logo=Gmail&logoColor=white&link=mailto:alessandro@oficialfarma.com.br)](mailto:alessandro@oficialfarma.com.br)
 [![Github Badge](https://img.shields.io/github/followers/Alessandro-Miranda?label=Follow&style=social)](https://github.com/Alessandro-Miranda)
