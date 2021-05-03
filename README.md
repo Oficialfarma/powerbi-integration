@@ -28,12 +28,10 @@ Antes de começar será necessário ter instalado em sua máquina o [Node.js](ht
 ### Para baixar as dependências do projeto utilize:
 > ```npm install```
 
-&nbsp;
 ## Execução de testes
 Para rodar os testes dos módulos rode:
 > ```npm test```
 
-&nbsp;
 ## Iniciar a aplicação
 
 Crie o arquivo *.env* na raíz do projeto contendo os tokens de autenticação e configurações do banco de dados. Para a criação dessas variáveis de ambiente, siga o arquivo de exemplo *.env.example* que se encontra também na raíz.
@@ -51,8 +49,6 @@ Gere o build utilizando:
 
 Logo após inicie a aplicação:
 > ```node build/src/index```
-
-<br />
 
 ## :wrench: Tecnologias
 As seguintes ferramentas estão sendo utilizadas na construção deste projeto:
