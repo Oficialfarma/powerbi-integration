@@ -1,6 +1,8 @@
+import { Method } from "axios";
+
 export interface IRequestOptions
 {
-    method: string;
+    method: Method;
     headers: {
         Accept: string;
         "Content-Type": string;
