@@ -1,6 +1,6 @@
-import fetch from "node-fetch";
 import { IRequestOptions } from '../interfaces/IRequestOptions';
 import { IRequestDatas, IRequests } from "../interfaces/IRequests";
+import { api } from '../services/api';
 import createFileSystemController from "../useCases/FileSystem";
 import { GetOptions } from "../utils/GetOptions";
 
@@ -16,24 +16,47 @@ export class Requests implements IRequests
     async makeRequest({ url, queryParams = "", options, timeout }: IRequestDatas): Promise<any>
     {
         return Promise.race([
-            this.get(url + queryParams, options),
+            this.get(options, url + queryParams),
             this.timeDelay(timeout)
         ]);
     }
 
     /**
      * 
-     * @param url
+     * @param url base url complement
      * @param options request headers
      * @returns An object with orders detail
      */
-    async get(url: string, options: IRequestOptions): Promise<object>
+    async get(options: IRequestOptions, url?: string): Promise<object>
     {
-        return new Promise((resolve, reject) => {
-            fetch(url, options)
-                .then(resp => resolve(resp.json()))
-                    .catch(err => reject(err));
-        })
+        try
+        {
+            url = url || '';
+
+            const { data } = await api.get(url, {
+                method: options.method,
+                headers: options.headers
+            });
+
+            return data;
+        }
+        catch(err)
+        {
+            return err;
+        }
+
+        // return new Promise(async (resolve, reject) => {
+
+        //     await api.get(url, {
+        //         method: options.method,
+        //         headers: options.headers
+        //     });
+
+
+            // fetch(url, options)
+            //     .then(resp => resolve(resp.json()))
+            //         .catch(err => reject(err));
+        // })
     }
 
     timeDelay(timeout: number): Promise<void>
