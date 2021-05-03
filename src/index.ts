@@ -5,23 +5,23 @@ const options = new GetOptions();
 
 async function initOrdersGeneration()
 {
-    let urlAndOptions;
+    let paramsAndOptions;
 
     await options.setLastTimeRequestFromJson();
     options.setTimeActualRequest();
-    urlAndOptions = options.urlOptions('listOrders');
-    const pages = await GetAmountPages.getPages(urlAndOptions);
-
+    paramsAndOptions = options.urlOptions('listOrders');
+    const pages = await GetAmountPages.getPages(paramsAndOptions);
+    
     const ordersId = await createGetOrdersController.handle({
-        ...urlAndOptions,
+        ...paramsAndOptions,
         methodType: "list",
         amountPages: pages
     });
 
-    urlAndOptions = options.urlOptions('getOrders');
+    paramsAndOptions = options.urlOptions('getOrders');
 
     const detailedOrders = await createGetOrdersController.handle({
-        ...urlAndOptions,
+        ...paramsAndOptions,
         methodType: "get",
         orderId: ordersId
     });
