@@ -5,11 +5,11 @@
   "main": "index.ts",
   "scripts": {
     "dev": "set NODE_ENV=dev && sucrase-node ./src/index.ts",
-    "start": "set NODE_ENV=production && node ./build/index.js",    
+    "start": "set NODE_ENV=prod && node ./build/index.js",
     "build": "tsc --build",
-    "test": "npx jest --detectOpenHandles",
-    "test:cov": "npx jest --config jest.config.js --coverage",
-    "test:watch": "npx jest --config jest.config.js --watchAll"
+    "test": "set NODE_ENV=test && npx jest --detectOpenHandles",
+    "test:cov": "set NODE_ENV=test && npx jest --config jest.config.js --coverage",
+    "test:watch": "set NODE_ENV=test && npx jest --config jest.config.js --watchAll"
   },
   "repository": {
     "type": "git",
@@ -23,7 +23,8 @@
   },
   "homepage": "https://github.com/oficialfarma-dev-projetcs/powerbi-integration#readme",
   "dependencies": {
-    "axios": "^0.21.1"
+    "axios": "^0.21.1",
+    "dotenv": "^8.2.0"
   },
   "devDependencies": {
     "@types/node": "^15.0.1",
