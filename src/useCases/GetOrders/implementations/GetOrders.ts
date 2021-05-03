@@ -22,7 +22,6 @@ export class GetOrders implements IGetOrders
             for(let i = 1; i <= datas.amountPages; i++)
             {
                 request.push({
-                    url: datas.url,
                     queryParams: datas.queryParams + `&page=${i}`,
                     options: datas.options,
                     timeout: datas.timeout
@@ -34,7 +33,7 @@ export class GetOrders implements IGetOrders
             for(let i = 0; i < datas.orderId.length; i++)
             {
                 request.push({
-                    url: datas.url + `/${datas.orderId[i]}`,
+                    url: datas.orderId[i],
                     options: datas.options,
                     timeout: datas.timeout
                 })
