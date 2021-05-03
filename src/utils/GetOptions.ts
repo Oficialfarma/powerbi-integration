@@ -1,4 +1,3 @@
-import { auth_config } from '../../vtex_authData.config';
 import { IRequestDatas } from '../interfaces/IRequests';
 import createFileSystemController from '../useCases/FileSystem';
 import { DateFormat } from './DateFormat';
@@ -14,7 +13,6 @@ export class GetOptions
         let initialTime = DateFormat.dateFormatToQueryParams(GetOptions.lastTimeRequestFromJson);
 
         return {
-            url: `https://${auth_config.vtexAccountName}.vtexcommercestable.com.br/api/oms/pvt/orders`,
             queryParams: method === "listOrders" ?
                 `?f_creationDate=creationDate%3A%5B${initialTime}%20TO%20${finalTime}%5D&per_page=100`
                 : '',
@@ -23,8 +21,8 @@ export class GetOptions
                 headers: {
                     Accept: "application/json",
                     "Content-Type": "application/json",
-                    "X-VTEX-API-AppKey": auth_config['X-VTEX-API-AppKey'],
-                    "X-VTEX-API-AppToken": auth_config['X-VTEX-API-AppToken']
+                    "X-VTEX-API-AppKey": process.env.X_VTEX_API_APPKEY,
+                    "X-VTEX-API-AppToken": process.env.X_VTEX_API_APPTOKEN
                 }
             },
             timeout: 10000
