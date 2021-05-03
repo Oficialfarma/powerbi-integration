@@ -21,7 +21,7 @@ export class GetOrdersController
      * @param datas - request datas, method type and aditional options to make request
      * @returns {Array} Orders Id or detailed orders
      */
-    async handle(datas: IGetOrdersDTO): Promise<string[] | object[]>
+    async handle(datas: IGetOrdersDTO): Promise<any[]>
     {
         try
         {
