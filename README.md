@@ -40,7 +40,6 @@ Certifique-se de ter feito a importação no banco de dados da tabela contendo o
 
 ### Para iniciar a geração dos pedidos em modo de desenvolvimento
 > ```npm run dev```
-<br />
 
 ### Para iniciar a geração dos pedidos em produção<br />
 Gere o build utilizando:
@@ -58,7 +57,6 @@ As seguintes ferramentas estão sendo utilizadas na construção deste projeto:
 
 ## Licença
 <img src="https://img.shields.io/hexpm/l/apa" alt="Badges"/>
-<br />
 
 ## Autores
 <b>Alessandro Lima de Miranda</b>
