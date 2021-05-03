@@ -2,9 +2,10 @@
   "name": "powerbi-integration",
   "version": "1.0.0",
   "description": "Módulo para obter os dados de pedidos, centralizar na base local e utilizar as informações na criação de Dashboards.",
-  "main": "index.js",
+  "main": "index.ts",
   "scripts": {
-    "dev": "sucrase-node ./src/index.ts",
+    "dev": "set NODE_ENV=dev && sucrase-node ./src/index.ts",
+    "start": "set NODE_ENV=production && node ./build/index.js",    
     "build": "tsc --build",
     "test": "npx jest --detectOpenHandles",
     "test:cov": "npx jest --config jest.config.js --coverage",
@@ -22,11 +23,10 @@
   },
   "homepage": "https://github.com/oficialfarma-dev-projetcs/powerbi-integration#readme",
   "dependencies": {
-    "node-fetch": "^2.6.1"
+    "axios": "^0.21.1"
   },
   "devDependencies": {
-    "@types/node-fetch": "^2.5.8",
-    "cross-env": "^7.0.3",
+    "@types/node": "^15.0.1",
     "jest": "^26.6.3",
     "sucrase": "^3.17.1",
     "ts-jest": "^26.5.2",
