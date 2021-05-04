@@ -5,7 +5,7 @@ import { fork } from 'child_process';
 import { Database } from './repositories/Database';
 
 // const child = fork(__dirname + '/initOrdersGeneration.ts', ['normal']);
-(async function init() {
+(async function() {
     const db = Database.for().createConnection();
     const lastTime = await db.select('lastTimeRequest').from('requestStatus').build();
     
