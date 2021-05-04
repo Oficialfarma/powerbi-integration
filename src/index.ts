@@ -1,35 +1,20 @@
 import * as dotenv from 'dotenv';
 dotenv.config();
 
-import { IRequestDatas } from './interfaces/IRequests';
-import createGetOrdersController from "./useCases/GetOrders";
-import { GetAmountPages } from "./utils/GetAmountPages";
-import { GetOptions } from "./utils/GetOptions";
-const options = new GetOptions();
+import { fork } from 'child_process';
+import { Database } from './repositories/Database';
 
-async function initOrdersGeneration()
-{
-    let paramsAndOptions: IRequestDatas;
-
-    await options.setLastTimeRequestFromJson();
-    options.setTimeActualRequest();
-    paramsAndOptions = options.urlOptions('listOrders');
+// const child = fork(__dirname + '/initOrdersGeneration.ts', ['normal']);
+(async function init() {
+    const db = Database.for().createConnection();
+    const lastTime = await db.select('lastTimeRequest').from('requestStatus').build();
     
-    const pages = await GetAmountPages.getPages(paramsAndOptions);
-    
-    const ordersId = await createGetOrdersController.handle({
-        ...paramsAndOptions,
-        methodType: "list",
-        amountPages: pages
-    });
+    console.log(lastTime)
+})();
 
-    paramsAndOptions = options.urlOptions('getOrders');
-
-    const detailedOrders = await createGetOrdersController.handle({
-        ...paramsAndOptions,
-        methodType: "get",
-        orderId: ordersId
-    });
-}
-
-initOrdersGeneration();
+// child.on('exit', status => {
+//     if(Boolean(status))
+//     {
+//         console.log('erro ', status)
+//     }
+// });
