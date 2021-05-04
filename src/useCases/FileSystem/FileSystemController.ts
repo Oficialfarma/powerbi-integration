@@ -1,13 +1,11 @@
 import { FileSystemUseCase } from "./FileSystemUseCase";
 
-interface IHandleErrorMessage
-{
+type IHandleErrorMessage = {
     lastRequest: string;
     status: string;
 }
 
-interface IHandleDatas
-{
+type IHandleDatas = {
     errorMessage?: IHandleErrorMessage;
     methodName: string;
     filePath: string;
@@ -31,11 +29,6 @@ export class FileSystemController
                 filePath: datas.filePath,
                 content: JSON.stringify(datas.errorMessage) ?? ""
             });
-            
-            // if(datas.methodName === "write")
-            // {
-            //     process.exit(0);
-            // }
             
             return response.toString();
         }
