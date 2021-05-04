@@ -19,7 +19,7 @@ existentes na base de dados local para a utilização de todas as informações 
 
 ## Inicialização, instalação das dependências e execução de testes.
 ### Pré-requisitos
-Antes de começar será necessário ter instalado em sua máquina o [Node.js](https://nodejs.org/en/) e o [npm](https://www.npmjs.com/).
+Antes de começar será necessário ter instalado em sua máquina o [Node.js](https://nodejs.org/en/) e o [SQL Server 2019 Express](https://www.microsoft.com/pt-br/sql-server/sql-server-downloads).
 
 ## Instalando as dependências
 ### Acesse a pasta raíz do projeto pelo terminal
@@ -37,6 +37,11 @@ Para rodar os testes dos módulos rode:
 Crie o arquivo *.env* na raíz do projeto contendo os tokens de autenticação e configurações do banco de dados. Para a criação dessas variáveis de ambiente, siga o arquivo de exemplo *.env.example* que se encontra também na raíz.
 Certifique-se de ter feito a importação no banco de dados da tabela contendo o status da última requisição feita.
 *Obs*: Para obter os tokens de acesso para a api vtex, acesse o perfil da sua loja VTEX e procure por: "X-VTEX-API-AppKey" e "X-VTEX-API-AppToken" e "VTEX ACCOUNT NAME".
+
+### Iniciar o Banco de Dados
+
+Para importar o banco de dados é necessário apenas abrir o script que está na pasta *database* como uma nova query no SQL Server Management Studio e executar.
+Pode ser necessário atualizar os paths para o caminho do SQL na sua máquina
 
 ### Para iniciar a geração dos pedidos em modo de desenvolvimento
 > ```npm run dev```
