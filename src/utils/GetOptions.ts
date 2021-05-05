@@ -2,15 +2,18 @@ import { IRequestDatas } from '../interfaces/IRequests';
 import createFileSystemController from '../useCases/FileSystem';
 import { DateFormat } from './DateFormat';
 
+type Params = {
+    method: 'listOrders' | 'getOrders';
+    actualTimeRequest: Date;
+    lastRequestTime: Date;
+}
+
 export class GetOptions
 {
-    static lastTimeRequestFromJson: Date;
-    static actualTimeRequest: Date;
-
-    urlOptions(method: string): IRequestDatas
+    urlOptions({ method, actualTimeRequest, lastRequestTime }: Params): IRequestDatas
     {
-        let finalTime = DateFormat.dateFormatToQueryParams(GetOptions.actualTimeRequest);
-        let initialTime = DateFormat.dateFormatToQueryParams(GetOptions.lastTimeRequestFromJson);
+        let finalTime = DateFormat.dateFormatToQueryParams(actualTimeRequest);
+        let initialTime = DateFormat.dateFormatToQueryParams(lastRequestTime);
 
         return {
             queryParams: method === "listOrders" ?
@@ -27,44 +30,5 @@ export class GetOptions
             },
             timeout: 10000
         }
-    }
-
-    /**
-     * @description set time of the last request status
-     */
-    async setLastTimeRequestFromJson()
-    {
-        let lastStatus = await createFileSystemController.handle({
-            filePath: 'lastRequestStatus.txt',
-            methodName: 'read'
-        });
-
-        const { lastRequest } = JSON.parse(lastStatus); 
-        GetOptions.lastTimeRequestFromJson = new Date(lastRequest);
-    }
-
-    /**
-     * @description set time of the actual request
-     */
-    setTimeActualRequest()
-    {
-        GetOptions.actualTimeRequest = new Date();
-    }
-    /**
-     * 
-     * @returns time of the actual request
-     */
-    static getTimeActualRequest()
-    {
-        return GetOptions.actualTimeRequest
-    }
-
-    /**
-     * 
-     * @returns last time request from json with last status
-     */
-    static getLastTimeRequestFromJson(): Date
-    {
-        return GetOptions.lastTimeRequestFromJson;
     }
 }
