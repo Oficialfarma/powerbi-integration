@@ -10,8 +10,10 @@ import { GetOptions } from "../utils/GetOptions";
 export class Requests implements IRequests
 {
     /**
+     * @description Throws a concurrent promise between
+     * the request for the api or a timeout error
      * @param objectData - an object with all url configurations and timeout delay
-     * @returns {Promise} the resolved promise from the get method or a timeout error
+     * @returns The promise to first respond, whether with success or error
      */
     async makeRequest({ url = "", queryParams = "", options, timeout }: IRequestDatas): Promise<any>
     {
@@ -22,7 +24,7 @@ export class Requests implements IRequests
     }
 
     /**
-     * 
+     * @description makes a get request for the vtex api
      * @param url base url complement
      * @param options request headers
      * @returns An object with orders detail
@@ -32,12 +34,12 @@ export class Requests implements IRequests
         try
         {
             url = url || '';
-
+            
             const { data } = await api.get(url, {
                 method: options.method,
                 headers: options.headers
             });
-
+            
             return data;
         }
         catch(err)
@@ -46,29 +48,18 @@ export class Requests implements IRequests
         }
     }
 
-    timeDelay(timeout: number): Promise<void>
+    /**
+     * @description throws an error after a certain time to
+     * indicate that the api request was not successful
+     * @param timeout - Limit time
+     * @returns Timeout Error
+     */
+    timeDelay(timeout: number): Promise<Error>
     {
         return new Promise((_resolve, reject) => {
             setTimeout(() => {
                 reject(new Error("Timeout error"));
             }, timeout);
-        });
-    }
-
-    /**
-     * @description if there is an error in the requests, write the error
-     * status and finish the execution
-     * @returns Promise<void>
-     */
-    async requestErrors()
-    {
-        return await createFileSystemController.handle({
-            filePath: 'lastRequestStatus.txt',
-            methodName: 'write',
-            errorMessage: {
-                lastRequest: GetOptions.getLastTimeRequestFromJson().toString(),
-                status: "failed"
-            }
         });
     }
 }
