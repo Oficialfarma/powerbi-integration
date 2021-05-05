@@ -6,27 +6,27 @@ const options = new GetOptions();
 
 async function initOrdersGeneration()
 {
-    let paramsAndOptions: IRequestDatas;
+    // let paramsAndOptions: IRequestDatas;
 
-    await options.setLastTimeRequestFromJson();
-    options.setTimeActualRequest();
-    paramsAndOptions = options.urlOptions('listOrders');
+    // paramsAndOptions = options.urlOptions({
+    //     method: 'listOrders',
+    // });
     
-    const pages = await GetAmountPages.getPages(paramsAndOptions);
+    // const pages = await GetAmountPages.getPages(paramsAndOptions);
     
-    const ordersId = await createGetOrdersController.handle({
-        ...paramsAndOptions,
-        methodType: "list",
-        amountPages: pages
-    });
+    // const ordersId = await createGetOrdersController.handle({
+    //     ...paramsAndOptions,
+    //     methodType: "list",
+    //     amountPages: pages
+    // });
 
-    paramsAndOptions = options.urlOptions('getOrders');
+    // paramsAndOptions = options.urlOptions('getOrders');
 
-    const detailedOrders = await createGetOrdersController.handle({
-        ...paramsAndOptions,
-        methodType: "get",
-        orderId: ordersId
-    });
+    // const detailedOrders = await createGetOrdersController.handle({
+    //     ...paramsAndOptions,
+    //     methodType: "get",
+    //     orderId: ordersId
+    // });
 }
 
 initOrdersGeneration();
