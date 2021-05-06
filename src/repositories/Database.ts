@@ -16,7 +16,7 @@ export class Database implements IDatabaseRepository
     createConnection()
     {
         const config = {
-            user: ',sad',
+            user: process.env.DB_NAME_DEV,
             password: process.env.DB_PASS_DEV,
             server: process.env.DB_SERVER_DEV,
             database: process.env.DB_NAME_DEV,
