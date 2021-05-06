@@ -1,12 +1,12 @@
 # INTEGRAÇÃO BASE DE DADOS E POWER BI
 ## Descrição
-Módulo para obter os dados de pedidos, centralizar na base local e utilizar as informações na criação de Dashboards
+Módulo para obter os dados de pedidos, centralizar em base local e utilizar as informações na criação de Dashboards
 > Status do Projeto: Em desenvolvimento :warning:
 
 ## Objetivo
-O objetivo do projeto é gerar uma ferramenta que execute a cada determinado período de tempo
+Criar um módulo capaz de executar a cada determinado período de tempo
 uma requisição na api de pedidos da vtex - solicitando novas entradas de compras - e faça a atualização de pedidos já
-existentes na base de dados local para a utilização de todas as informações necessárias na geração de Dashboards e demais planilhas
+existentes na base de dados local para a utilização de todas as informações necessárias na geração de Dashboards e demais planilhas.
 <br />
 
 ## Funcionalidades
@@ -25,12 +25,8 @@ Antes de começar será necessário ter instalado em sua máquina o [Node.js](ht
 ### Acesse a pasta raíz do projeto pelo terminal
 > ```cd powerbi-integration```
 
-### Para baixar as dependências do projeto utilize:
+### Instale as dependências do projeto com:
 > ```npm install```
-
-## Execução de testes
-Para rodar os testes dos módulos rode:
-> ```npm test```
 
 ## Iniciar a aplicação
 
@@ -38,7 +34,7 @@ Crie o arquivo *.env* na raíz do projeto contendo os tokens de autenticação e
 Certifique-se de ter feito a importação no banco de dados da tabela contendo o status da última requisição feita.
 *Obs*: Para obter os tokens de acesso para a api vtex, acesse o perfil da sua loja VTEX e procure por: "X-VTEX-API-AppKey" e "X-VTEX-API-AppToken" e "VTEX ACCOUNT NAME".
 
-### Iniciar o Banco de Dados
+### Banco de Dados
 
 Para importar o banco de dados é necessário apenas abrir o script que está na pasta *database* como uma nova query no SQL Server Management Studio e executar.
 Pode ser necessário atualizar os paths para o caminho do SQL na sua máquina
@@ -46,12 +42,21 @@ Pode ser necessário atualizar os paths para o caminho do SQL na sua máquina
 ### Para iniciar a geração dos pedidos em modo de desenvolvimento
 > ```npm run dev```
 
-### Para iniciar a geração dos pedidos em produção<br />
-Gere o build utilizando:
+### Execução de testes
+Para rodar os testes dos módulos rode:
+> ```npm test```
 
+Para os testes com watch:
+> ```npm run test:watch```
+
+Para gerar a cobertura de códigos:
+> ```npm run test:cov```
+
+## Build
+Para gerar o build do projeto execute:
 > ```npm run build```
 
-Logo após inicie a aplicação:
+Logo após será possível iniciar a aplicação com:
 > ```node build/src/index```
 
 ## :wrench: Tecnologias
