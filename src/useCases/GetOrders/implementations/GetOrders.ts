@@ -23,7 +23,6 @@ export class GetOrders implements IGetOrders
             {
                 request.push({
                     queryParams: datas.queryParams + `&page=${i}`,
-                    options: datas.options,
                     timeout: datas.timeout
                 });
             }
@@ -34,7 +33,6 @@ export class GetOrders implements IGetOrders
             {
                 request.push({
                     url: datas.orderId[i],
-                    options: datas.options,
                     timeout: datas.timeout
                 })
             }
@@ -62,9 +60,7 @@ export class GetOrders implements IGetOrders
             }
             else
             {
-                requests.requestErrors().then(() => {
-                    process.exit(0);
-                });
+                process.exit(0);
             }
         });
         
