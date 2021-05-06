@@ -1,4 +1,4 @@
-# INTEGRAÇÃO BASE DE DADOS E POWER BI
+# INTEGRAÇÃO VTEX, SQL Server e POWER BI
 ## Descrição
 Módulo para obter os dados de pedidos, centralizar em base local e utilizar as informações na criação de Dashboards
 > Status do Projeto: Em desenvolvimento :warning:
