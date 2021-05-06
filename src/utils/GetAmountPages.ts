@@ -10,15 +10,15 @@ export class GetAmountPages
      */
     static async getPages(options: IRequestDatas): Promise<number>
     {
-        let amountPages: number = 1;
+        let amountPages: number;
         const requests = new Requests();
 
         await requests.makeRequest({
             ...options
         }).then(resp => {
             amountPages = resp.paging.pages;
-        }).catch(async () => {
-            await requests.requestErrors();
+        }).catch(err => {
+            return Promise.reject(err);
         });
 
         return amountPages;
