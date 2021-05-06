@@ -44,7 +44,7 @@ export class Requests implements IRequests
         }
         catch(err)
         {
-            return err;
+            return Promise.reject(err);
         }
     }
 
