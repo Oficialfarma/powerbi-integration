@@ -7,9 +7,9 @@
     "dev": "set NODE_ENV=dev && ts-node ./src/index.ts",
     "start": "set NODE_ENV=prod && node ./build/index.js",
     "build": "tsc --build",
-    "test": "set NODE_ENV=test && npx jest --detectOpenHandles",
-    "test:cov": "set NODE_ENV=test && npx jest --config jest.config.js --coverage",
-    "test:watch": "set NODE_ENV=test && npx jest --config jest.config.js --watchAll"
+    "test": "set NODE_ENV=test && npx jest --runInBand",
+    "test:cov": "set NODE_ENV=test && npx jest --config jest.config.js --coverage --runInBand",
+    "test:watch": "set NODE_ENV=test && npx jest --config jest.config.js --watchAll --runInBand"
   },
   "repository": {
     "type": "git",
