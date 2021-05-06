@@ -13,8 +13,6 @@ export class GetOrdersUseCase
     async execute(datas: IGetOrdersDTO)
     {
         const mainOptions = {
-            url: datas.url,
-            options: datas.options,
             timeout: datas.timeout,
             methodType: datas.methodType
         };
