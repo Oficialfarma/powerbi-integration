@@ -41,9 +41,10 @@ export class GetOrders implements IGetOrders
         const prepareRequests = request.map(params => requests.makeRequest(params));
         
         const result = await Promise.allSettled(prepareRequests);
-
+        
         let allSucceded: Array<any> = [];
-
+        let allFailed;
+        
         result.forEach(elem => {
             if(elem.status === "fulfilled")
             {
@@ -60,9 +61,11 @@ export class GetOrders implements IGetOrders
             }
             else
             {
-                process.exit(0);
+               allFailed = elem.reason;
             }
         });
+
+        if(allFailed) return Promise.reject(allFailed);
         
         return allSucceded;
     }
