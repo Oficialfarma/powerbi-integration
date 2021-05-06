@@ -4,8 +4,8 @@ dotenv.config();
 import { describe, test, expect, jest, beforeEach } from "@jest/globals";
 
 import { Requests } from '../src/providers/Requests';
-import { GetOptions } from "../src/utils/GetOptions";
 import axios from 'axios';
+import { DateFormat } from '../src/utils/DateFormat';
 
 describe("VTEX API request", () => {
 
@@ -14,17 +14,12 @@ describe("VTEX API request", () => {
     })
    
     test('#Make request - Should returns a resolve promisse with order id/datas', async () => {
-        const options = new GetOptions();
         const requests = new Requests();
 
-        const actualTimeRequest = new Date('2021-05-05T13:30:00');
-        const lastRequestTime = new Date('2021-05-05T13:00:00');
+        const actualTimeRequest = DateFormat.dateFormatToQueryParams(new Date('2021-05-05T13:30:00'));
+        const lastRequestTime = DateFormat.dateFormatToQueryParams(new Date('2021-05-05T13:00:00'));
 
-        const params = options.urlOptions({
-            method: 'listOrders',
-            actualTimeRequest,
-            lastRequestTime
-        });
+        const queryParams = `?f_creationDate=creationDate%3A%5B${lastRequestTime}%20TO%20${actualTimeRequest}%5D&per_page=100`;
         
         const expected = [
             {
@@ -328,8 +323,7 @@ describe("VTEX API request", () => {
         ];
 
         await requests.makeRequest({
-            options: params.options,
-            queryParams: params.queryParams,
+            queryParams,
             timeout: 1000
         }).then(resp => {
 
@@ -345,23 +339,14 @@ describe("VTEX API request", () => {
         const mockedAxios = axios as jest.Mocked<typeof axios>;
         mockedAxios.get.mockRejectedValueOnce(new Error('Connection error'));
 
-        const options = new GetOptions();
         const requests = new Requests();
 
         const actualTimeRequest = new Date('2021-05-05T13:30:00');
         const lastRequestTime = new Date('2021-05-05T13:00:00');
 
-        const params = options.urlOptions({
-            method: 'listOrders',
-            actualTimeRequest,
-            lastRequestTime
-        });
-
         const expected = new Error('Connection error');
 
         await requests.makeRequest({
-            options: params.options,
-            queryParams: params.queryParams,
             timeout: 1000
         }).catch(err => {
             expect(axios.get).toBeCalledTimes(1);
@@ -373,23 +358,18 @@ describe("VTEX API request", () => {
 
         expect(axios.get).not.toHaveBeenCalled();
         
-        const options = new GetOptions();
         const requests = new Requests();
 
-        const actualTimeRequest = new Date('2021-05-05T13:30:00');
-        const lastRequestTime = new Date('2021-05-05T13:00:00');
+        const actualTimeRequest = DateFormat.dateFormatToQueryParams(new Date('2021-05-05T13:30:00'));
+        const lastRequestTime = DateFormat.dateFormatToQueryParams(new Date('2021-05-05T13:00:00'));
 
-        const params = options.urlOptions({
-            method: 'getOrders',
-            actualTimeRequest,
-            lastRequestTime
-        });
+        const queryParams = `?f_creationDate=creationDate%3A%5B${lastRequestTime}%20TO%20${actualTimeRequest}%5D&per_page=100`;
 
         const expected = new Error("Timeout error");
         
         await expect(
             requests.makeRequest({
-                options: params.options,
+                queryParams,
                 timeout: 1
             })
         ).rejects.toEqual(expected);
