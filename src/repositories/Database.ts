@@ -46,8 +46,18 @@ export class Database implements IDatabaseRepository
 
     async build()
     {
+        if(!this.tableName)
+        {
+            return {};
+        }
+
         try
         {
+            if(this.tableName && !this.selectColumns.length)
+            {
+                this.selectColumns.push('*');
+            }
+
             const stmt = `SELECT ${this.selectColumns.join(',')} FROM ${this.tableName}`;
             await this.connPool.connect();
             const { recordset } = await this.connPool.query(stmt);
@@ -59,11 +69,11 @@ export class Database implements IDatabaseRepository
         catch(err)
         {
             if(this.connLimit === 0)
-            { 
+            {
                 throw new Error("Limite de tentativas excedido");
             }
 
-            await this.remakeBuild(5000);
+            await this.remakeBuild(2000);
         }   
     }
 
