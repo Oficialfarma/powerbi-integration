@@ -30,8 +30,6 @@ export class Requests implements IRequests
     {
         try
         {
-            url = url || '';
-            
             const { data } = await api.get(url);
             
             return data;
