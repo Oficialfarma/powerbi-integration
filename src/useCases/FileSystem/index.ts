@@ -1,4 +1,4 @@
-import { FileSystem } from "../../repositories/implementations/FileSystem";
+import { FileSystem } from "../../repositories/FileSystem";
 import { FileSystemController } from "./FileSystemController";
 import { FileSystemUseCase } from "./FileSystemUseCase";
 
