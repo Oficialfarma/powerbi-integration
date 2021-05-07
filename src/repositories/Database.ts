@@ -68,7 +68,8 @@ export class Database implements IDatabaseRepository
         }
         catch(err)
         {
-            return Promise.reject(err);
+            this.connPool.close();
+            return err;
         }   
     }
 }
