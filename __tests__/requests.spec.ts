@@ -343,9 +343,6 @@ describe("VTEX API request", () => {
 
         const requests = new Requests();
 
-        const actualTimeRequest = new Date('2021-05-05T13:30:00');
-        const lastRequestTime = new Date('2021-05-05T13:00:00');
-
         const expected = new Error('Connection error');
 
         await requests.makeRequest({
