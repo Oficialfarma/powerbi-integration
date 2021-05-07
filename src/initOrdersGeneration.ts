@@ -1,32 +1,38 @@
-import { IRequestDatas } from './interfaces/IRequests';
 import createGetOrdersController from "./useCases/GetOrders";
 import { GetAmountPages } from "./utils/GetAmountPages";
-import { GetOptions } from "./utils/GetOptions";
-const options = new GetOptions();
 
-async function initOrdersGeneration()
+type Params = {
+    queryParams: string;
+    lastTime: Date;
+    actualTimeRequest: Date;
+};
+
+process.on('message', data => {
+
+    initOrdersGeneration(data);
+});
+
+async function initOrdersGeneration({ queryParams, actualTimeRequest, lastTime }: Params)
 {
-    // let paramsAndOptions: IRequestDatas;
-
-    // paramsAndOptions = options.urlOptions({
-    //     method: 'listOrders',
-    // });
-    
-    // const pages = await GetAmountPages.getPages(paramsAndOptions);
-    
+    const pages = await GetAmountPages.getPages({
+        queryParams: queryParams,
+        timeout: 10000,
+    }).catch(err => {
+        if(err) process.exit(0);
+    });
+    console.log(pages)
     // const ordersId = await createGetOrdersController.handle({
-    //     ...paramsAndOptions,
+    //     queryParams: data.queryparams,
+    //     timeout: 10000,
     //     methodType: "list",
     //     amountPages: pages
     // });
 
-    // paramsAndOptions = options.urlOptions('getOrders');
 
     // const detailedOrders = await createGetOrdersController.handle({
-    //     ...paramsAndOptions,
+    //     queryParams: data.queryparams,
+    //     timeout: 10000,
     //     methodType: "get",
     //     orderId: ordersId
     // });
 }
-
-initOrdersGeneration();
