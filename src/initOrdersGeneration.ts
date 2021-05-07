@@ -14,25 +14,41 @@ process.on('message', data => {
 
 async function initOrdersGeneration({ queryParams, actualTimeRequest, lastTime }: Params)
 {
-    const pages = await GetAmountPages.getPages({
+    let pages: number;
+
+    try
+    {
+        pages = await GetAmountPages.getPages({
+            queryParams: queryParams,
+            timeout: 10000,
+        })
+    }
+    catch(err)
+    {
+        // process.send('Error: ', );
+        process.send(`Error: ${err.toString()}`);
+    }
+
+    const ordersId = await createGetOrdersController.handle({
         queryParams: queryParams,
         timeout: 10000,
-    }).catch(err => {
-        if(err) process.exit(0);
+        methodType: "list",
+        amountPages: pages
     });
-    console.log(pages)
-    // const ordersId = await createGetOrdersController.handle({
-    //     queryParams: data.queryparams,
-    //     timeout: 10000,
-    //     methodType: "list",
-    //     amountPages: pages
-    // });
+    
+    let detailedOrders: object[];
 
-
-    // const detailedOrders = await createGetOrdersController.handle({
-    //     queryParams: data.queryparams,
-    //     timeout: 10000,
-    //     methodType: "get",
-    //     orderId: ordersId
-    // });
+    try
+    {
+        detailedOrders = await createGetOrdersController.handle({
+            queryParams: queryParams,
+            timeout: 10000,
+            methodType: "get",
+            orderId: ordersId
+        });
+    }
+    catch(err)
+    {
+        process.exit(1);
+    }
 }
