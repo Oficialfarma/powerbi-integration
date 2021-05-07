@@ -1,13 +1,8 @@
 import { FileSystemUseCase } from "./FileSystemUseCase";
 
-type IHandleErrorMessage = {
-    lastRequest: string;
-    status: string;
-}
-
 type IHandleDatas = {
-    errorMessage?: IHandleErrorMessage;
-    methodName: string;
+    errorMessage: string;
+    methodName: "write" | "read";
     filePath: string;
 }
 
