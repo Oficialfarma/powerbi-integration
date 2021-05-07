@@ -17,7 +17,7 @@ describe("Database", () => {
 
         const result = await Database.for().build().catch(err => err);
         
-        expect(result).toEqual({})
+        expect(result).toEqual([{}])
     });
     
     test("#From - Given a table name, it shoulds return all fields", async () => {
