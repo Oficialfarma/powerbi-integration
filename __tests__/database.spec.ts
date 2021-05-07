@@ -57,5 +57,5 @@ describe("Database", () => {
             .select('anyColumn')
             .build()
         ).rejects.toBeInstanceOf(sql.RequestError);
-    })
+    });
 })
