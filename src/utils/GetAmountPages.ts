@@ -12,7 +12,7 @@ export class GetAmountPages
     {
         let amountPages: number;
         const requests = new Requests();
-
+        
         await requests.makeRequest({
             ...options
         }).then(resp => {
