@@ -1,5 +1,5 @@
 import * as fs from 'fs';
-import { IFileSystemRepository } from '../../interfaces/IFileSystemRepository';
+import { IFileSystemRepository } from '../interfaces/IFileSystemRepository';
 
 /**
  * @classdesc Read and write the files and log errors. Contains complet implementation
