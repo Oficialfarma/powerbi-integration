@@ -48,7 +48,7 @@ export class Database implements IDatabaseRepository
     {
         if(!this.tableName)
         {
-            return {};
+            return [{}];
         }
 
         try
