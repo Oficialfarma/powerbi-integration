@@ -6,7 +6,6 @@ export class Database implements IDatabaseRepository
     private connPool: sql.ConnectionPool;
     private selectColumns: string[] = [];
     private tableName: string;
-    private connLimit = 10;
 
     static for()
     {
@@ -16,7 +15,7 @@ export class Database implements IDatabaseRepository
     createConnection()
     {
         const config = {
-            user: process.env.DB_NAME_DEV,
+            user: process.env.DB_USERID_DEV,
             password: process.env.DB_PASS_DEV,
             server: process.env.DB_SERVER_DEV,
             database: process.env.DB_NAME_DEV,
@@ -37,6 +36,7 @@ export class Database implements IDatabaseRepository
 
         return this;
     }
+
     from(tableName: string)
     {
         this.tableName = tableName;
@@ -68,22 +68,7 @@ export class Database implements IDatabaseRepository
         }
         catch(err)
         {
-            if(this.connLimit === 0)
-            {
-                throw new Error("Limite de tentativas excedido");
-            }
-
-            await this.remakeBuild(2000);
+            return Promise.reject(err);
         }   
-    }
-
-    private async remakeBuild(time: number)
-    {
-        return new Promise((resolve, reject) => {
-            setTimeout(() => {
-                this.connLimit-=1;
-                resolve(this.build());
-            }, time);
-        });
     }
 }
