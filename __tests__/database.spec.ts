@@ -52,10 +52,10 @@ describe("Database", () => {
     test('#error - should return a request error', async () => {
         const db = Database.for().createConnection();
 
-        await expect(
-            db.from('fakeTable')
+        const result = await db.from('fakeTable')
             .select('anyColumn')
-            .build()
-        ).rejects.toBeInstanceOf(sql.RequestError);
+            .build();
+
+        expect(result).toBeInstanceOf(sql.RequestError);
     });
 })
