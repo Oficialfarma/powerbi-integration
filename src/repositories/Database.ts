@@ -1,11 +1,19 @@
 import { IDatabaseRepository } from "../interfaces/IDatabaseRepository";
 import * as sql from 'mssql';
 
+type InsertValues = {
+    columnName: string;
+    value: any;
+}
+
 export class Database implements IDatabaseRepository
 {
     private connPool: sql.ConnectionPool;
-    private selectColumns: string[] = [];
+    private selectColumns = '';
     private tableName: string;
+    private insertInto: string;
+    private insertValues: object[] = [];
+    private queriesToExecute: string[] = [];
 
     static for()
     {
@@ -32,7 +40,7 @@ export class Database implements IDatabaseRepository
 
     select(columns: string)
     {
-        this.selectColumns.push(columns);
+        this.selectColumns = columns;
 
         return this;
     }
@@ -41,7 +49,63 @@ export class Database implements IDatabaseRepository
     {
         this.tableName = tableName;
 
+        this.performSelect();
+
         return this;
+    }
+
+    private performSelect()
+    {
+        if(this.tableName && this.selectColumns === '')
+        {
+            this.selectColumns = '*';
+        }
+
+        const query = `SELECT ${this.selectColumns} FROM ${this.tableName}`;
+
+        this.queriesToExecute.push(query);
+    }
+
+    insertIntoTable(tableName: string)
+    {
+        this.insertInto = tableName;
+
+        return this;
+    }
+
+    values(values: object | object[])
+    {
+        if(Array.isArray(values))
+        {
+            this.insertValues.concat(values);
+        }
+        else
+        {
+            this.insertValues.push(values);
+        }
+
+        this.performInsert();
+        
+        return this;
+    }
+
+    private performInsert()
+    {
+        let columNames = Object.keys(this.insertValues[0]);
+        let query = `INSERT INTO ${this.insertInto} (${columNames}) VALUES `;
+
+        this.insertValues.forEach((value: any) => {
+            let actualValue = [];
+
+            for(const key in value)
+            {
+                actualValue.push(value[key])
+            }
+
+            query+= `(${actualValue.join(',')})`;
+        });
+
+        this.queriesToExecute.push(query);
     }
 
     async build()
@@ -53,23 +117,47 @@ export class Database implements IDatabaseRepository
 
         try
         {
-            if(this.tableName && !this.selectColumns.length)
-            {
-                this.selectColumns.push('*');
-            }
-
-            const stmt = `SELECT ${this.selectColumns.join(',')} FROM ${this.tableName}`;
             await this.connPool.connect();
-            const { recordset } = await this.connPool.query(stmt);
+            const transaction = new sql.Transaction(this.connPool);
 
-            this.connPool.close();
+            try
+            {
+                await transaction.begin().catch(err => {
+                    this.connPool.close();
+                    throw new Error(err);
+                });
+    
+                const request = new sql.Request(transaction);
+    
+                let result:object[] = [];
 
-            return recordset;
+                for(const query of this.queriesToExecute)
+                {
+                    const { recordset } = await request.query(query);
+                    result = result.concat(recordset);
+                }
+    
+                await transaction.commit()
+                    .catch(err => {
+                        result = err;
+                    });
+
+                this.connPool.close();
+
+                return result;
+            }
+            catch(err)
+            {
+                transaction.rollback(() => {
+                    this.connPool.close();
+                })
+    
+                return err;
+            }   
         }
         catch(err)
         {
-            this.connPool.close();
             return err;
-        }   
+        }
     }
 }
