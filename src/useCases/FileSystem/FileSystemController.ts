@@ -1,7 +1,7 @@
 import { FileSystemUseCase } from "./FileSystemUseCase";
 
 type IHandleDatas = {
-    errorMessage: string;
+    errorMessage?: string;
     methodName: "write" | "read";
     filePath: string;
 }
@@ -22,14 +22,14 @@ export class FileSystemController
             let response = await this.createFileSystemUseCase.execute({
                 methodName: datas.methodName,
                 filePath: datas.filePath,
-                content: JSON.stringify(datas.errorMessage) ?? ""
+                content: datas.errorMessage
             });
             
             return response.toString();
         }
         catch(err)
         {
-            process.exit(0);
+            return err;
         }
     }
 }
