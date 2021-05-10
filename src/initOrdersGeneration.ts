@@ -1,3 +1,4 @@
+import createFileSystemController from "./useCases/FileSystem";
 import createGetOrdersController from "./useCases/GetOrders";
 import { GetAmountPages } from "./utils/GetAmountPages";
 
@@ -25,16 +26,24 @@ async function initOrdersGeneration({ queryParams, actualTimeRequest, lastTime }
     }
     catch(err)
     {
-        // process.send('Error: ', );
-        process.send(`Error: ${err.toString()}`);
+        writeLogError(err);
     }
 
-    const ordersId = await createGetOrdersController.handle({
-        queryParams: queryParams,
-        timeout: 10000,
-        methodType: "list",
-        amountPages: pages
-    });
+    let ordersId: string[];
+
+    try
+    {
+        ordersId = await createGetOrdersController.handle({
+            queryParams: queryParams,
+            timeout: 10000,
+            methodType: "list",
+            amountPages: pages
+        });
+    }
+    catch(err)
+    {
+        writeLogError(err);
+    }
     
     let detailedOrders: object[];
 
@@ -49,6 +58,47 @@ async function initOrdersGeneration({ queryParams, actualTimeRequest, lastTime }
     }
     catch(err)
     {
-        process.exit(1);
+        writeLogError(err);
     }
+}
+
+let retryWriteLogLimit = 5;
+
+async function writeLogError(errorMessage: string)
+{
+    const datas = await createFileSystemController.handle({
+        filePath: 'error.log',
+        methodName: 'read'
+    })
+    .then(resp => resp)
+    .catch(err => err);
+    
+    let message;
+
+    if(datas instanceof Error)
+    {
+        message = errorMessage + " " + new Date();
+    }
+    else
+    {
+        message = datas + '\r\n' + errorMessage + " " + new Date();
+    }
+    
+    await createFileSystemController.handle({
+        filePath: 'error.log',
+        methodName: 'write',
+        errorMessage: message
+    }).then(() => {
+        process.exit(1);
+    }).catch((err) => {
+        if(retryWriteLogLimit > 0)
+        {
+            retryWriteLogLimit-=1;
+            setTimeout(writeLogError, 2000);
+        }
+        else
+        {
+            process.exit(1);
+        }
+    }); 
 }
