@@ -4,14 +4,13 @@ dotenv.config();
 import { fork } from 'child_process';
 import { Database } from './repositories/Database';
 import { DateFormat } from './utils/DateFormat';
-import createFileSystemController from './useCases/FileSystem';
 
 (async function() {
     const child = fork(__dirname + '/initOrdersGeneration.ts', ['normal']);
     const db = Database.for().createConnection();
 
-    const lastTimeInDb = await db.from('requestStatus').select('lastTimeRequest').build();
-    
+    const lastTimeInDb = await db.select('lastTimeRequest').from('requestStatus').build();
+
     const { lastTimeRequest } = lastTimeInDb[0];
     
     const actualTimeRequest = DateFormat.dateFormatToQueryParams(new Date('2021-05-04T12:00:00'));
