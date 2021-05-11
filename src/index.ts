@@ -7,8 +7,8 @@ import { DateFormat } from './utils/DateFormat';
 
 (async function() {
     const child = fork(__dirname + '/initOrdersGeneration.ts', ['normal']);
-    const db = Database.for().createConnection();
-
+    const db = new Database().createConnection();
+    
     const lastTimeInDb = await db.select('lastTimeRequest').from('requestStatus').build();
 
     const { lastTimeRequest } = lastTimeInDb[0];
@@ -35,5 +35,4 @@ import { DateFormat } from './utils/DateFormat';
             // se a saída for bem sucedida, atualiza o último horário
         }
     });
-
 })();
