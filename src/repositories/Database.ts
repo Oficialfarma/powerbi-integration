@@ -1,38 +1,33 @@
 import { IDatabaseRepository } from "../interfaces/IDatabaseRepository";
 import * as sql from 'mssql';
 
-type InsertValues = {
-    columnName: string;
-    value: any;
-}
-
 export class Database implements IDatabaseRepository
 {
     private connPool: sql.ConnectionPool;
     private selectColumns = '';
     private tableName: string;
-    private insertInto: string;
+    private insertIntoTableName: string;
     private insertValues: object[] = [];
+    private updateTable = '';
+    private setFields = {};
+    private whereFilter = '';
+    private deleteTable: string;
     private queriesToExecute: string[] = [];
-
-    static for()
-    {
-        return new Database();
-    }
 
     createConnection()
     {
+        let envToUse = process.env.NODE_ENV.toUpperCase().trimEnd();
+
         const config = {
-            user: process.env.DB_USERID_DEV,
-            password: process.env.DB_PASS_DEV,
-            server: process.env.DB_SERVER_DEV,
-            database: process.env.DB_NAME_DEV,
+            user: process.env[`DB_USERID_${envToUse}`],
+            password: process.env[`DB_PASS_${envToUse}`],
+            server: process.env[`DB_SERVER_${envToUse}`],
+            database: process.env[`DB_NAME_${envToUse}`],
             options: {
                 encrypt: true,
                 enableArithAbort: true
             }
         }
-    
         this.connPool = new sql.ConnectionPool(config);
 
         return this;
@@ -40,6 +35,7 @@ export class Database implements IDatabaseRepository
 
     select(columns: string)
     {
+        this.selectColumns = ''
         this.selectColumns = columns;
 
         return this;
@@ -64,11 +60,13 @@ export class Database implements IDatabaseRepository
         const query = `SELECT ${this.selectColumns} FROM ${this.tableName}`;
 
         this.queriesToExecute.push(query);
+        this.selectColumns = '';
     }
 
-    insertIntoTable(tableName: string)
+    insertInto(tableName: string)
     {
-        this.insertInto = tableName;
+        this.insertIntoTableName = '';
+        this.insertIntoTableName = tableName;
 
         return this;
     }
@@ -77,7 +75,7 @@ export class Database implements IDatabaseRepository
     {
         if(Array.isArray(values))
         {
-            this.insertValues.concat(values);
+            this.insertValues = this.insertValues.concat(values);
         }
         else
         {
@@ -91,35 +89,103 @@ export class Database implements IDatabaseRepository
 
     private performInsert()
     {
-        let columNames = Object.keys(this.insertValues[0]);
-        let query = `INSERT INTO ${this.insertInto} (${columNames}) VALUES `;
-
-        this.insertValues.forEach((value: any) => {
+        let columNames = '';
+        let queryValues:string[] = [];
+        
+        this.insertValues.forEach((value: any, index:number) => {
             let actualValue = [];
+            columNames = Object.keys(this.insertValues[index]).join(',');
 
             for(const key in value)
             {
-                actualValue.push(value[key])
+                actualValue.push(value[key]);
             }
 
-            query+= `(${actualValue.join(',')})`;
+            queryValues.push(`(${actualValue.join(',')})`)
         });
+
+        let query = `INSERT INTO ${this.insertIntoTableName} (${columNames}) VALUES `;
+
+        query += queryValues.join(',');
+
+        this.queriesToExecute.push(query);
+        this.insertValues = [];
+    }
+
+    update(tableName: string)
+    {
+        this.updateTable = tableName;
+
+        return this;
+    }
+
+    set(datas: object)
+    {
+        Object.assign(this.setFields, datas);
+        return this;
+    }
+    where(filter: string)
+    {
+        this.whereFilter = filter;
+
+        if(this.updateTable)
+        {
+            this.performUpdate();
+        }
+        
+        if(this.deleteTable)
+        {
+            this.performDelete();
+        }
+
+        this.whereFilter = '';
+
+        return this;
+    }
+
+    private performUpdate()
+    {
+        let columnValue = Object.entries(this.setFields);
+        let fields = '';
+        let actualField:string[] = []
+
+        for(const [ column, value ] of columnValue)
+        {
+            actualField.push(`${column}=${value}`);
+        }
+        
+        fields+= actualField.join(',');
+        let query = `UPDATE [${this.updateTable}] SET ${fields} WHERE ${this.whereFilter}`;
+
+        this.queriesToExecute.push(query);
+    }
+
+    deleteFrom(tableName: string)
+    {
+        this.deleteTable = ''
+        this.deleteTable = tableName;
+
+        return this;
+    }
+
+    private performDelete()
+    {
+        let query = `DELETE FROM ${this.deleteTable} WHERE ${this.whereFilter}`;
 
         this.queriesToExecute.push(query);
     }
 
     async build()
     {
-        if(!this.tableName)
+        if(!this.queriesToExecute.length)
         {
             return [{}];
         }
-
         try
         {
             await this.connPool.connect();
             const transaction = new sql.Transaction(this.connPool);
-
+            
             try
             {
                 await transaction.begin().catch(err => {
@@ -130,19 +196,28 @@ export class Database implements IDatabaseRepository
                 const request = new sql.Request(transaction);
     
                 let result:object[] = [];
-
+                
                 for(const query of this.queriesToExecute)
                 {
-                    const { recordset } = await request.query(query);
-                    result = result.concat(recordset);
+                    if(query.match(/(update)|(insert)|(delete)/i))
+                    {
+                        const { rowsAffected } = await request.query(query);
+                        result = result.concat(rowsAffected);
+                    }
+                    else
+                    {   
+                        const { recordset } = await request.query(query);
+                        result = result.concat(recordset);
+                    }
                 }
     
                 await transaction.commit()
-                    .catch(err => {
-                        result = err;
-                    });
+                    .catch(err => 
+                        result = err
+                    );
 
                 this.connPool.close();
+                this.clearDatas();
 
                 return result;
             }
@@ -150,14 +225,28 @@ export class Database implements IDatabaseRepository
             {
                 transaction.rollback(() => {
                     this.connPool.close();
-                })
+                    this.clearDatas();
+                });
     
                 return err;
             }   
         }
         catch(err)
         {
+            this.clearDatas();
             return err;
         }
+    }
+
+    private clearDatas()
+    {
+        this.insertIntoTableName = '';
+        this.insertValues = [];
+        this.queriesToExecute = [];
+        this.selectColumns = '';
+        this.tableName = '';
+        this.updateTable = '';
+        this.setFields = {};
+        this.whereFilter = '';
     }
 }
