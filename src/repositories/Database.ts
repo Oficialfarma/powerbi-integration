@@ -190,7 +190,7 @@ export class Database implements IDatabaseRepository
             {
                 await transaction.begin().catch(err => {
                     this.connPool.close();
-                    throw new Error(err);
+                    throw err;
                 });
     
                 const request = new sql.Request(transaction);
@@ -212,9 +212,9 @@ export class Database implements IDatabaseRepository
                 }
     
                 await transaction.commit()
-                    .catch(err => 
-                        result = err
-                    );
+                    .catch(err => {
+                        throw err;
+                    });
 
                 this.connPool.close();
                 this.clearDatas();
@@ -223,8 +223,8 @@ export class Database implements IDatabaseRepository
             }
             catch(err)
             {
-                transaction.rollback(() => {
-                    this.connPool.close();
+                transaction.rollback(async () => {
+                    await this.connPool.close();
                     this.clearDatas();
                 });
     
