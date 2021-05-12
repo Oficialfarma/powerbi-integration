@@ -14,6 +14,10 @@ export class Database implements IDatabaseRepository
     private deleteTable: string;
     private queriesToExecute: string[] = [];
 
+    /**
+     * @description Creates a new connection pool using the
+     * bank information based on the current NODE_ENV
+     */
     createConnection()
     {
         let envToUse = process.env.NODE_ENV.toUpperCase().trimEnd();
@@ -33,9 +37,15 @@ export class Database implements IDatabaseRepository
         return this;
     }
 
+    /**
+     * @description Clears the name of the existing columns in the class,
+     * so that a chained select can be made and configures new columns
+     * to mount the select query
+     * @param columns Name of the columns to be selected in the bank
+     * @returns Class instance
+     */
     select(columns: string)
     {
-        this.selectColumns = ''
         this.selectColumns = columns;
 
         return this;
@@ -61,6 +71,7 @@ export class Database implements IDatabaseRepository
 
         this.queriesToExecute.push(query);
         this.selectColumns = '';
+        this.tableName = '';
     }
 
     insertInto(tableName: string)
