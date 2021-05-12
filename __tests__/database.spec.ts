@@ -6,7 +6,6 @@ import { Database } from "../src/repositories/Database";
 import * as sql from 'mssql';
 
 jest.unmock('axios');
-jest.unmock('mssql');
 
 const resetDatabase = async () => {
     const config = {
@@ -28,6 +27,8 @@ const resetDatabase = async () => {
 
     await connPool
         .query("INSERT INTO [requestStatus](id_status, requestStatus, lastTimeRequest) VALUES(1, 1, '2021-05-11T13:59:32.750Z')");
+
+    await connPool.close();
 }
 
 describe("Database", () => {
@@ -211,10 +212,13 @@ describe("Database", () => {
         expect(result).toBeInstanceOf(sql.RequestError);
     });
 
-    test.only('#error - should return a erro in sql.Transaction create', async () => {
+    test('#Transaction error - should return an error in sql.Transaction create', async () => {
+        const connect = sql.ConnectionPool.prototype.connect;
 
         sql.ConnectionPool.prototype.connect = jest.fn().mockImplementation(() => {
-            throw new Error('ENOTOPEN (ConnectionError)');
+            return new Promise((resolve, reject) => {
+                return reject(new Error('ENOTOPEN (ConnectionError)'));
+            })
         });
         
         const db = new Database().createConnection();
@@ -227,7 +231,56 @@ describe("Database", () => {
                 lastTimeRequest: "'" + new Date().toISOString() + "'"
             })
             .build();
-            
+        
+        sql.ConnectionPool.prototype.connect = connect;
         expect(result).toEqual(new Error('ENOTOPEN (ConnectionError)'));
+    });
+
+    test("#Transaction erro - Should return a error in transaction begin", async () => {
+        const begin = sql.Transaction.prototype.begin;
+
+        sql.Transaction.prototype.begin = jest.fn().mockImplementation(() => {
+            return new Promise((resolve, reject) => {
+                return reject(new Error('ENOTOPEN (ConnectionError)'));
+            });
+        });
+        
+        const db = new Database().createConnection();
+
+        const result = await db
+            .insertInto('requestStatus')
+            .values({
+                id_status:2,
+                requestStatus: 0,
+                lastTimeRequest: "'" + new Date().toISOString() + "'"
+            })
+            .build();
+        
+        sql.Transaction.prototype.begin = begin;
+        expect(result).toEqual(new Error('ENOTOPEN (ConnectionError)'));
+    });
+
+    test('#Transaction commit - should return an error on commit the transaction', async () => {
+        const commit = sql.Transaction.prototype.commit;
+
+        sql.Transaction.prototype.commit = jest.fn().mockImplementation(() => {
+            return new Promise((resolve, reject) => {
+                return reject(new Error('ENOTBEGUN (TransactionError'));
+            });
+        });
+
+        const db = new Database().createConnection();
+
+        const result = await db
+            .insertInto('requestStatus')
+            .values({
+                id_status:2,
+                requestStatus: 0,
+                lastTimeRequest: "'" + new Date().toISOString() + "'"
+            })
+            .build();
+
+        sql.Transaction.prototype.commit = commit;
+        expect(result).toEqual(new Error('ENOTBEGUN (TransactionError'));
     })
 })
