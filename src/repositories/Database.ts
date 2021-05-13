@@ -51,6 +51,12 @@ export class Database implements IDatabaseRepository
         return this;
     }
 
+    /**
+     * @description Sets the name of the table where the select
+     * will be made and calls the method for creating the query
+     * @param tableName Name of the table where the select will be made
+     * @returns Class instance
+     */
     from(tableName: string)
     {
         this.tableName = tableName;
@@ -60,6 +66,10 @@ export class Database implements IDatabaseRepository
         return this;
     }
 
+    /**
+     * @description Generates the select query with the information
+     * configured in the select and from methods
+     */
     private performSelect()
     {
         if(this.tableName && this.selectColumns === '')
@@ -74,6 +84,12 @@ export class Database implements IDatabaseRepository
         this.tableName = '';
     }
 
+    /**
+     * @description sets the name of the table
+     * where the insert will be made
+     * @param tableName Name of the table where the insert will be made
+     * @returns Class instance
+     */
     insertInto(tableName: string)
     {
         this.insertIntoTableName = '';
@@ -82,6 +98,12 @@ export class Database implements IDatabaseRepository
         return this;
     }
 
+    /**
+     * @description Sets the values ​​to be inserted in the table
+     * @param values values ​​to be inserted in the table in object
+     * format with the column name pair: value. E.g.: {column1: value1}
+     * @returns Class instance
+     */
     values(values: object | object[])
     {
         if(Array.isArray(values))
@@ -98,6 +120,10 @@ export class Database implements IDatabaseRepository
         return this;
     }
 
+    /**
+     * @description go through the values ​​of the insert,
+     * separating column and value by assembling the query for the insert
+     */
     private performInsert()
     {
         let columNames = '';
@@ -123,6 +149,11 @@ export class Database implements IDatabaseRepository
         this.insertValues = [];
     }
 
+    /**
+     * @description Sets the name of the table where the update will be made
+     * @param tableName Name of the table where the update will be made
+     * @returns Class instance
+     */
     update(tableName: string)
     {
         this.updateTable = tableName;
@@ -130,11 +161,23 @@ export class Database implements IDatabaseRepository
         return this;
     }
 
+    /**
+     * @description configure the columns and values ​​that will be used in the update
+     * @param datas values ​​to be updated in the table in object
+     * format with the column name pair: value. E.g.: {column1: value1}
+     * @returns 
+     */
     set(datas: object)
     {
         Object.assign(this.setFields, datas);
         return this;
     }
+    /**
+     * @description configure the filter used in the update
+     * and delete and call the method that will build the corresponding query
+     * @param filter
+     * @returns Class instance
+     */
     where(filter: string)
     {
         this.whereFilter = filter;
@@ -154,6 +197,10 @@ export class Database implements IDatabaseRepository
         return this;
     }
 
+    /**
+     * @description Cycles through the values ​​defined in the set method,
+     * separating in column and value and, at the end, assembles the query
+     */
     private performUpdate()
     {
         let columnValue = Object.entries(this.setFields);
@@ -171,6 +218,11 @@ export class Database implements IDatabaseRepository
         this.queriesToExecute.push(query);
     }
 
+    /**
+     * @description configure the name of the tables
+     * @param tableName 
+     * @returns Class instance
+     */
     deleteFrom(tableName: string)
     {
         this.deleteTable = ''
@@ -179,6 +231,10 @@ export class Database implements IDatabaseRepository
         return this;
     }
 
+    /**
+     * @description assembles the delete query based
+     * on the name of the passed table and filter
+     */
     private performDelete()
     {
         let query = `DELETE FROM ${this.deleteTable} WHERE ${this.whereFilter}`;
@@ -186,6 +242,11 @@ export class Database implements IDatabaseRepository
         this.queriesToExecute.push(query);
     }
 
+    /**
+     * @description creates the connection with the
+     * bank and initiates transactions
+     * @returns query result or lines affected
+     */
     async build()
     {
         if(!this.queriesToExecute.length)
@@ -249,6 +310,9 @@ export class Database implements IDatabaseRepository
         }
     }
 
+    /**
+     *  @description clear all class attributes
+     */
     private clearDatas()
     {
         this.insertIntoTableName = '';
