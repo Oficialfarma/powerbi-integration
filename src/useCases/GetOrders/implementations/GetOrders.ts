@@ -11,7 +11,7 @@ export class GetOrders implements IGetOrders
      * headers and additional data; launches the request and returns an array with the requested information.
      * @param datas - data used as a request parameter.
      * receive Url, options, query params, timeout delay, order id and page amount
-     * @returns {Array} with orders id or detailed orders
+     * @returns with orders id or detailed orders
      */
     async getOrders(datas: IGetOrdersDTO): Promise<string[] | object[]>
     {
