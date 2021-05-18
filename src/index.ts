@@ -10,10 +10,9 @@ import { DateFormat } from './utils/DateFormat';
     const db = new Database().createConnection();
     
     const lastTimeInDb = await db.select('lastTimeRequest').from('requestStatus').build();
-
     const { lastTimeRequest } = lastTimeInDb[0];
     
-    const actualTimeRequest = DateFormat.dateFormatToQueryParams(new Date('2021-05-04T12:00:00'));
+    const actualTimeRequest = DateFormat.dateFormatToQueryParams(new Date('2021-05-18T14:53:00'));
     const lastTime = DateFormat.dateFormatToQueryParams(new Date(lastTimeRequest));
     
     // const queryParams = `?f_creationDate=creationDate%3A%5B${lastTime}%20TO%20${actualTimeRequest}%5D&per_page=100`;
