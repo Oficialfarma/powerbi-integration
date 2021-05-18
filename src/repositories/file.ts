@@ -1,1 +1,0 @@
-const te = "Aqui ficará as funcionalidades que fazem o meio termo entre os casos de uso e onde ficará armazenados os conteúdos";
