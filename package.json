@@ -26,12 +26,14 @@
     "axios": "^0.21.1",
     "dotenv": "^8.2.0",
     "mssql": "^6.3.1",
-    "ts-node": "^9.1.1"
+    "ts-node": "^9.1.1",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@types/jest": "^26.0.23",
     "@types/mssql": "^6.0.8",
     "@types/node": "^15.0.2",
+    "@types/uuid": "^8.3.0",
     "jest": "^26.5.0",
     "ts-jest": "^26.5.2",
     "typescript": "^4.2.2"
