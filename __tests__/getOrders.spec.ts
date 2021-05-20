@@ -11,7 +11,7 @@ describe("Get orders", () => {
 
     afterEach(() => {
         jest.clearAllMocks();
-    })
+    });
     
     test("Returns an Array with All orders ID", async () => {
 
@@ -21,14 +21,14 @@ describe("Get orders", () => {
         const queryParams = `?f_creationDate=creationDate%3A%5B${lastRequestTime}%20TO%20${actualTimeRequest}%5D&per_page=100`;
         const expected = ["1080883513398-01"];
 
-        await expect(
-            createGetOrdersController.handle({
-                methodType: 'list',
-                timeout: 1000,
-                amountPages: 1,
-                queryParams
-            })
-        ).resolves.toEqual(expected)
+        const result = await createGetOrdersController.handle({
+            methodType: 'list',
+            timeout: 1000,
+            amountPages: 1,
+            queryParams
+        });
+
+        expect(result).toEqual(expected);
 
         expect(axios.get).toHaveBeenCalledTimes(1);
     });
@@ -101,14 +101,14 @@ describe("Get orders", () => {
 
         const queryParams = `?f_creationDate=creationDate%3A%5B${lastRequestTime}%20TO%20${actualTimeRequest}%5D&per_page=100`;
         const expected = new Error('Networking Error');
-        await expect(
-            createGetOrdersController.handle({
-                methodType: 'get',
-                timeout: 1000,
-                queryParams,
-                orderId: ['1080883513398-01']
-            })
-        ).rejects.toStrictEqual(expected)
+        const result = await createGetOrdersController.handle({
+            methodType: 'get',
+            timeout: 1000,
+            queryParams,
+            orderId: ['1080883513398-01']
+        });
+
+        expect(result).toStrictEqual(expected)
 
         expect(axios.get).toHaveBeenCalledTimes(1);
     });
