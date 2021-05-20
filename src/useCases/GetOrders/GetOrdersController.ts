@@ -31,7 +31,7 @@ export class GetOrdersController
         }
         catch(err)
         {
-            return Promise.reject(err)
+            return err
         }
     }
 }

@@ -1,5 +1,6 @@
 import { IGetOrders } from "../../../interfaces/IGetOrders";
 import { IGetOrdersDTO } from "../../../interfaces/IGetOrdersDTO";
+import { OrdersDTO } from "../../../interfaces/OrdersDTO";
 import { Requests } from "../../../providers/Requests";
 
 const requests = new Requests();
@@ -13,7 +14,7 @@ export class GetOrders implements IGetOrders
      * receive Url, options, query params, timeout delay, order id and page amount
      * @returns with orders id or detailed orders
      */
-    async getOrders(datas: IGetOrdersDTO): Promise<string[] | object[]>
+    async getOrders(datas: IGetOrdersDTO): Promise<string[] | OrdersDTO[]>
     {
         let request = [];
         
