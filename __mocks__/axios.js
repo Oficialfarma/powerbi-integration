@@ -269,7 +269,7 @@ const axios = {
                                     "id": "shippingData",
                                     "address": {
                                         "addressType": "residential",
-                                        "receiverName": "receiver name",
+                                        "receiverName": "José Matias",
                                         "addressId": "65157854594",
                                         "postalCode": "15930-000",
                                         "city": "Cândido Rodrigues",
@@ -277,7 +277,7 @@ const axios = {
                                         "country": "BRA",
                                         "street": "Carolina Delamona rua",
                                         "number": "15648",
-                                        "neighborhood": "Arca da aliança ",
+                                        "neighborhood": "Arca da aliança",
                                         "complement": null,
                                         "reference": null,
                                         "geoCoordinates": [
