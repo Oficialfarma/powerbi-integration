@@ -1,3 +1,4 @@
+import { OrdersDTO } from "../../interfaces/OrdersDTO";
 import HandleOrdersUseCase from "./HandleOrdersUseCase";
 
 export default class HandleOrdersController
@@ -6,7 +7,7 @@ export default class HandleOrdersController
         private createHandleOrdersControllers: HandleOrdersUseCase
     ){}
 
-    handle(order: object)
+    handle(order: OrdersDTO[])
     {
         const formatedOrders = this.createHandleOrdersControllers.execute(order);
         

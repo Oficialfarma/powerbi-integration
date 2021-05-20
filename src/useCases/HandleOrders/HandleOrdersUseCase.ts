@@ -1,4 +1,5 @@
 import { IHandleOrders } from "../../interfaces/IHandleOrders";
+import { OrdersDTO } from "../../interfaces/OrdersDTO";
 
 export default class HandleOrdersUseCase
 {
@@ -6,7 +7,7 @@ export default class HandleOrdersUseCase
         private HandleOrders: IHandleOrders
     ){}
 
-    execute(orders: object[])
+    execute(orders: OrdersDTO[])
     {
         let hasBeenSuccessfullySaved: boolean;
         
