@@ -10,37 +10,60 @@ export default class HandleOrders implements IHandleOrders
         clientEmail = clientEmail.substring(0, clientEmail.indexOf('-'));
 
         return {
-            client_id: order.clientProfileData.id,
-            name: order.clientProfileData.firstName,
-            last_name: order.clientProfileData.lastName,
-            email: clientEmail,
-            document: order.clientProfileData.document,
+            client: {
+                client_id: order.clientProfileData.id,
+                name: order.clientProfileData.firstName,
+                last_name: order.clientProfileData.lastName,
+                email: clientEmail,
+                document: order.clientProfileData.document
+            }
         };
     }
 
     addressShippingData(order: OrdersDTO)
     {
         return {
-            addressId: order.shippingData.address.addressId,
-            state: order.shippingData.address.state,
-            city: order.shippingData.address.city,
-            receiverName: order.shippingData.address.receiverName,
-            neighborhood: order.shippingData.address.neighborhood
+            addressShippingData: {
+                addressId: order.shippingData.address.addressId,
+                state: order.shippingData.address.state,
+                city: order.shippingData.address.city,
+                receiverName: order.shippingData.address.receiverName,
+                neighborhood: order.shippingData.address.neighborhood
+            }
         }
     }
 
     clientShippingData(order: OrdersDTO)
     {
         return {
-            clientShippingId: uuidv4(),
-            client_id: order.clientProfileData.id,
-            address_id: order.shippingData.address.addressId
+            clientShippingData: {
+                clientShippingId: uuidv4(),
+                client_id: order.clientProfileData.id,
+                address_id: order.shippingData.address.addressId
+            }
         }
     }
 
-    dicountsName(order: OrdersDTO)
+    discountsName(order: OrdersDTO)
     {
-        return {}
+        const discountsName = order.ratesAndBenefitsData.rateAndBenefitsIdentifiers.map(elem => {
+            return {
+                discountsName: {
+                    discountId: elem.id,
+                    orderId: order.orderId,
+                    discountName: elem.name
+                }
+            };
+        });
+        
+        if(discountsName.length > 1)
+        {
+            return JSON.parse(discountsName.join(','));
+        }
+        else
+        {
+            return discountsName[0];
+        }
     }
 
     items(order: OrdersDTO)
