@@ -6,7 +6,7 @@ export interface IHandleOrders
     orders(order: object): object;
     logisticsInfo(order: object): object;
     paymentData(order: object): object;
-    dicountsName(order: object): object;
+    discountsName(order: object): object | object[];
     orderItems(order: object): object;
     items(order: object): object;
     saveOrders(orders: object[]): boolean 
