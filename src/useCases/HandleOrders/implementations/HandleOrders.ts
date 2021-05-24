@@ -58,7 +58,7 @@ export default class HandleOrders implements IHandleOrders
         
         if(discountsName.length > 1)
         {
-            return JSON.parse(discountsName.join(','));
+            return discountsName;
         }
         else
         {
@@ -68,12 +68,41 @@ export default class HandleOrders implements IHandleOrders
 
     items(order: OrdersDTO)
     {
-        return {}
+        const itens = order.items.map(item => {
+            return {
+                itens: {
+                    skuId: item.id,
+                    skuName: item.name
+                }
+            };
+        });
+        
+        if(itens.length > 1)
+        {
+            return itens;
+        }
+        else
+        {
+            return itens[0];
+        }
     }
 
     logisticsInfo(order: OrdersDTO)
     {
-        return {}
+        const logisticsInfo = {
+            logisticsInfo: {
+                logistics_id: uuidv4(),
+                slaType: order.shippingData.logisticsInfo[0].selectedSla,
+                courrier: order.shippingData.logisticsInfo[0].selectedSla,
+                estimateDeliveryDate: order.shippingData.logisticsInfo[0].shippingEstimateDate,
+                deliveryDeadline: order.shippingData.logisticsInfo[0].shippingEstimate,
+                trackingNumber: order.packageAttachment.packages[0].trackingNumber,
+                orderId: order.orderId,
+                addressId: order.shippingData.selectedAddresses[0].addressId
+            }
+        };
+
+        return logisticsInfo;
     }
 
     orderItems(order: OrdersDTO)
