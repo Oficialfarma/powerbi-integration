@@ -563,7 +563,11 @@ describe("VTEX API request", () => {
                     "fulfillmentEndpoint": "http://fulfillment.asdsds.com.br/api/fulfillment?sc=1&an=accountName"
                 }
             ],
-            "callCenterOperatorData": null,
+            "callCenterOperatorData": {
+                "id": "CallCenterOperatorAttachment",
+                "email": "televendas@oficialfarma.com.br",
+                "userName": "[SAC] Televendas"
+            },
             "followUpEmail": "bc9c527de09f48eda88fc47a3a72c07e@ct.vtex.com.br",
             "lastMessage": null,
             "hostname": "oficialfarma",
