@@ -1,6 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 import { IHandleOrders } from "../../../interfaces/IHandleOrders";
 import { OrdersDTO } from "../../../interfaces/OrdersDTO";
+import { Database } from '../../../repositories/Database';
 
 export default class HandleOrders implements IHandleOrders
 {
@@ -10,8 +11,8 @@ export default class HandleOrders implements IHandleOrders
         clientEmail = clientEmail.substring(0, clientEmail.indexOf('-'));
 
         return {
-            client: {
-                client_id: order.clientProfileData.id,
+            Client: {
+                client_id: order.clientProfileData.userProfileId,
                 name: order.clientProfileData.firstName,
                 last_name: order.clientProfileData.lastName,
                 email: clientEmail,
@@ -23,7 +24,7 @@ export default class HandleOrders implements IHandleOrders
     addressShippingData(order: OrdersDTO)
     {
         return {
-            addressShippingData: {
+            ShippingData: {
                 addressId: order.shippingData.address.addressId,
                 state: order.shippingData.address.state,
                 city: order.shippingData.address.city,
@@ -36,7 +37,7 @@ export default class HandleOrders implements IHandleOrders
     clientShippingData(order: OrdersDTO)
     {
         return {
-            clientShippingData: {
+            Client_ShippingData: {
                 clientShippingId: uuidv4(),
                 client_id: order.clientProfileData.id,
                 address_id: order.shippingData.address.addressId
@@ -48,7 +49,7 @@ export default class HandleOrders implements IHandleOrders
     {
         const discountsName = order.ratesAndBenefitsData.rateAndBenefitsIdentifiers.map(elem => {
             return {
-                discountsName: {
+                DiscountsName: {
                     discountId: elem.id,
                     orderId: order.orderId,
                     discountName: elem.name
@@ -56,41 +57,27 @@ export default class HandleOrders implements IHandleOrders
             };
         });
         
-        if(discountsName.length > 1)
-        {
-            return discountsName;
-        }
-        else
-        {
-            return discountsName[0];
-        }
+        return discountsName;
     }
 
     items(order: OrdersDTO)
     {
         const itens = order.items.map(item => {
             return {
-                itens: {
+                Items: {
                     skuId: item.id,
                     skuName: item.name
                 }
             };
         });
         
-        if(itens.length > 1)
-        {
-            return itens;
-        }
-        else
-        {
-            return itens[0];
-        }
+        return itens;
     }
 
     logisticsInfo(order: OrdersDTO)
     {
         const logisticsInfo = {
-            logisticsInfo: {
+            LogisticsInfo: {
                 logistics_id: uuidv4(),
                 slaType: order.shippingData.logisticsInfo[0].selectedSla,
                 courrier: order.shippingData.logisticsInfo[0].selectedSla,
@@ -107,21 +94,103 @@ export default class HandleOrders implements IHandleOrders
 
     orderItems(order: OrdersDTO)
     {
-        return {}
+        const itens = order.items.map((item, index) => {
+            return {
+                Order_Items: {
+                    orderItemsId: `${order.orderId}-${item.id}`,
+                    quantitySold: item.seller,
+                    skuSellingPrice: item.sellingPrice / 100,
+                    skuTotalPrice: (item.sellingPrice * Number(item.seller)) / 100,
+                    skuValue: item.costPrice / 100,
+                    orderId: order.orderId,
+                    skuId: item.id,
+                    shippingValue: order.shippingData.logisticsInfo[index].price / 100,
+                    shippingListPrice: order.shippingData.logisticsInfo[index].listPrice / 100
+                }
+            }
+        });
+
+        return itens;
     }
 
     orders(order: OrdersDTO)
     {
-        return {}
+        let callCenterDatas: object;
+
+        if(order.callCenterOperatorData !== null)
+        {
+            callCenterDatas = {
+                callCenterEmail: order.callCenterOperatorData.email,
+                callCenterCode: order.callCenterOperatorData.userName
+            }
+        }
+        else
+        {
+            callCenterDatas = {
+                callCenterEmail: null,
+                callCenterCode: null
+            };
+        }
+
+        return {
+            Orders: {
+                orderId: order.orderId,
+                origin: order.origin,
+                sequence: order.sequence,
+                creation_date: order.creationDate,
+                statusDescription: order.statusDescription,
+                lastChangeDate: order.lastChange,
+                utmSource: order.marketingData.utmSource,
+                utmMedium: order.marketingData.utmMedium,
+                utmCampaign: order.marketingData.utmCampaign,
+                coupon: order.marketingData.coupon,
+                totalValue: order.value / 100,
+                discountsTotals: order.totals.find(totals => {
+                    return totals.id === 'Discounts';
+                }).value / 100,
+                host: order.hostname,
+                sellerName: order.sellers[0].name,
+                ...callCenterDatas,
+                client_id: order.clientProfileData.userProfileId,
+            }
+        }
     }
 
     paymentData(order: OrdersDTO)
     {
-        return {}
+        const payments = order.paymentData.transactions[0].payments.map(payment => {
+            return {
+                PaymentData: {
+                    transaction_id: payment.id,
+                    orderId: order.orderId,
+                    paymentSystemName: payment.paymentSystemName,
+                    installments: payment.installments,
+                    paymentValue: payment.value / 100
+                }
+            }
+        });
+
+        return payments
     }
 
     saveOrders(orders: object[])
     {
+        if(!orders.length) return false;
+
+        const db = new Database().createConnection();
+
+        orders.forEach((order: any) => {
+            const tableName = Object.keys(order)[0];
+            
+            const values = Object.entries(order[tableName]);
+            console.log(order[tableName])
+            db.insertInto(tableName).values(order[tableName]);
+            // for(const [ key, value ] of values)
+            // {
+                
+            // }
+        });
+        
         return false;
     }
 }
