@@ -70,3 +70,7 @@ typings/
 
 #production and development configs
 .env
+
+#order example
+detailedOrderExample.json
+moreThanOnePayment.json
