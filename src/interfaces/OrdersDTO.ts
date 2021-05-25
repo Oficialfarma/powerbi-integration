@@ -281,6 +281,11 @@ type ItemMetadata = {
     AssemblyOptions: any[]
 }
 
+type CallCenterOperatorData = {
+    id: string;
+    email: string;
+    userName: string;
+}
 export type OrdersDTO =
 {
     orderId: string;
@@ -334,7 +339,7 @@ export type OrdersDTO =
         packages: Packages[]
     };
     sellers: Sellers[];
-    callCenterOperatorData: any;
+    callCenterOperatorData: null | CallCenterOperatorData;
     followUpEmail: string;
     lastMessage: any;
     hostname: string;
