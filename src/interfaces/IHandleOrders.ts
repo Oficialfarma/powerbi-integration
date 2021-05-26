@@ -9,5 +9,5 @@ export interface IHandleOrders
     discountsName(order: object): object | object[];
     orderItems(order: object): object;
     items(order: object): object;
-    saveOrders(orders: object[]): boolean 
+    saveOrders(orders: object[]): Promise<boolean | Error> 
 }
