@@ -90,7 +90,7 @@ describe("Database", () => {
                 id_status: 1
             }
         ];
-
+        
         expect(result).toStrictEqual(expected);
         expect(resultChained).toStrictEqual(expectedSelectChained);
     });
