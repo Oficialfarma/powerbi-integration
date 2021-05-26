@@ -46,7 +46,15 @@ export class Database implements IDatabaseRepository
      */
     select(columns: string)
     {
-        this.selectColumns = columns;
+        if(this.selectColumns === '')
+        {
+            this.selectColumns = columns;
+        }
+        else
+        {
+            this.performSelect();
+            this.selectColumns = columns;
+        }
 
         return this;
     }
@@ -60,8 +68,6 @@ export class Database implements IDatabaseRepository
     from(tableName: string)
     {
         this.tableName = tableName;
-
-        this.performSelect();
 
         return this;
     }
@@ -77,7 +83,13 @@ export class Database implements IDatabaseRepository
             this.selectColumns = '*';
         }
 
-        const query = `SELECT ${this.selectColumns} FROM ${this.tableName}`;
+        let query = `SELECT ${this.selectColumns} FROM ${this.tableName}`;
+
+        if(this.whereFilter !== '')
+        {
+            query += ` WHERE ${this.whereFilter}`;
+            this.whereFilter = '';
+        }
 
         this.queriesToExecute.push(query);
         this.selectColumns = '';
@@ -114,7 +126,7 @@ export class Database implements IDatabaseRepository
         {
             this.insertValues.push(values);
         }
-
+        
         this.performInsert();
         
         return this;
@@ -192,6 +204,11 @@ export class Database implements IDatabaseRepository
             this.performDelete();
         }
 
+        if(this.selectColumns)
+        {
+            this.performSelect();
+        }
+
         this.whereFilter = '';
 
         return this;
@@ -244,11 +261,16 @@ export class Database implements IDatabaseRepository
 
     /**
      * @description creates the connection with the
-     * bank and initiates transactions
+     * DB and initiates transactions
      * @returns query result or lines affected
      */
     async build()
     {
+        if(this.selectColumns || this.tableName)
+        {
+            this.performSelect();
+        }
+    
         if(!this.queriesToExecute.length)
         {
             return [{}];
