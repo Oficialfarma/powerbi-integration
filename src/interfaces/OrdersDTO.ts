@@ -207,25 +207,32 @@ type Payments = {
     value: number;
     installments: number;
     referenceValue: number;
-    cardHolder: any;
-    cardNumber: any;
-    firstDigits: any;
-    lastDigits: any;
-    cvv2: any;
-    expireMonth: any;
-    expireYear: any;
-    giftCardId: any;
-    giftCardName: any;
-    giftCardCaption: any;
-    redemptionCode: any;
-    group: string;
-    dueDate: string;
-    connectorResponses: object;
-    giftCardProvider: any;
-    giftCardAsDiscount: any;
-    koinUrl: any;
-    accountId: any;
-    parentAccountId: any;
+    cardHolder?: any;
+    cardNumber?: any;
+    firstDigits?: any;
+    lastDigits?: any;
+    cvv2?: any;
+    expireMonth?: any;
+    expireYear?: any;
+    url?: any;
+    giftCardId?: any;
+    giftCardName?: any;
+    giftCardCaption?: any;
+    redemptionCode?: any;
+    group?: string;
+    tid?: any
+    dueDate?: string;
+    connectorResponses?: object;
+    giftCardProvider?: any;
+    giftCardAsDiscount?: any;
+    koinUrl?: any;
+    accountId?: any;
+    parentAccountId?: any;
+    bankIssuedInvoiceIdentificationNumber?: any;
+    bankIssuedInvoiceIdentificationNumberFormatted?: any,
+    bankIssuedInvoiceBarCodeNumber?: any,
+    bankIssuedInvoiceBarCodeType?: any,
+    billingAddress?: object;
 }
 
 type Transactions = {
