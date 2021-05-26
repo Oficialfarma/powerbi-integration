@@ -7,36 +7,43 @@ export default class HandleOrdersUseCase
         private HandleOrders: IHandleOrders
     ){}
 
-    execute(orders: OrdersDTO[])
-    {
-        let hasBeenSuccessfullySaved: boolean;
+    async execute(orders: OrdersDTO[])
+    {   
+        let handledOrders: object[] = [];
         
-        const handledOrders = orders.map(order => {
-            const addressShippingData = this.HandleOrders.addressShippingData(order);
-            const client = this.HandleOrders.client(order);
-            const clientShippingData = this.HandleOrders.clientShippingData(order);
-            const dicountsName = this.HandleOrders.dicountsName(order);
-            const items = this.HandleOrders.items(order);
-            const logisticsInfo = this.HandleOrders.logisticsInfo(order);
-            const orderItems = this.HandleOrders.orderItems(order);
-            const orders = this.HandleOrders.orders(order);
-            const paymentData = this.HandleOrders.paymentData(order);
+        orders.forEach((order: OrdersDTO) => {
+            const ShippingData = this.HandleOrders.addressShippingData(order);
+            const Client = this.HandleOrders.client(order);
+            const Client_ShippingData = this.HandleOrders.clientShippingData(order);
+            const DiscountsName = this.HandleOrders.discountsName(order);
+            const Items = this.HandleOrders.items(order);
+            const LogisticsInfo = this.HandleOrders.logisticsInfo(order);
+            const Order_Items = this.HandleOrders.orderItems(order);
+            const Orders = this.HandleOrders.orders(order);
+            const PaymentData = this.HandleOrders.paymentData(order);
 
-            return [
-                addressShippingData,
-                client,
-                clientShippingData,
-                dicountsName,
-                items,
-                logisticsInfo,
-                orderItems,
-                orders,
-                paymentData
-            ];
+            handledOrders = handledOrders.concat([
+                Client,
+                ...Items,
+                Orders,
+                ...Order_Items,
+                ...PaymentData,
+                ShippingData,
+                Client_ShippingData,
+                ...DiscountsName,
+                LogisticsInfo,
+            ]);
         });
 
-        hasBeenSuccessfullySaved = this.HandleOrders.saveOrders(handledOrders);
+        const status = await this.HandleOrders.saveOrders(handledOrders);
 
-        return hasBeenSuccessfullySaved;
+        if(status instanceof Error)
+        {
+            return status;
+        }
+        else
+        {
+            return true;
+        }
     }
 }
