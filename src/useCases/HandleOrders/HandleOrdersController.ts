@@ -7,9 +7,9 @@ export default class HandleOrdersController
         private createHandleOrdersControllers: HandleOrdersUseCase
     ){}
 
-    handle(order: OrdersDTO[])
+    async handle(order: OrdersDTO[])
     {
-        const formatedOrders = this.createHandleOrdersControllers.execute(order);
+        const formatedOrders = await this.createHandleOrdersControllers.execute(order);
         
         return formatedOrders;
     }
