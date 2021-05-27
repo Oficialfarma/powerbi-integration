@@ -50,7 +50,7 @@ export default class HandleOrders implements IHandleOrders
         const discountsName = order.ratesAndBenefitsData.rateAndBenefitsIdentifiers.map(elem => {
             return {
                 DiscountsName: {
-                    discountId: `'${elem.id}'`,
+                    discountId: `'${uuidv4()}'`,
                     orderId: `'${order.orderId}'`,
                     discountName: `'${elem.name}'`
                 }
@@ -76,6 +76,22 @@ export default class HandleOrders implements IHandleOrders
 
     logisticsInfo(order: OrdersDTO)
     {
+        let trackingNumber: string;
+
+        if(order.packageAttachment.packages[0])
+        {
+            trackingNumber = order.packageAttachment.packages[0].trackingNumber
+        }
+        else
+        {
+            trackingNumber = "''";
+        }
+
+        if(order.shippingData.logisticsInfo[0].shippingEstimateDate === null)
+        {
+            order.shippingData.logisticsInfo[0].shippingEstimateDate = '2199-12-12T00:00:00.00+00:00'
+        }
+        
         const logisticsInfo = {
             LogisticsInfo: {
                 logistics_id: `'${uuidv4()}'`,
@@ -83,7 +99,7 @@ export default class HandleOrders implements IHandleOrders
                 courrier: `'${order.shippingData.logisticsInfo[0].selectedSla}'`,
                 estimateDeliveryDate: `'${order.shippingData.logisticsInfo[0].shippingEstimateDate}'`,
                 deliveryDeadline: `'${order.shippingData.logisticsInfo[0].shippingEstimate}'`,
-                trackingNumber: `'${order.packageAttachment.packages[0].trackingNumber}'`,
+                trackingNumber,
                 orderId: `'${order.orderId}'`,
                 addressId: `'${order.shippingData.address.addressId}'`
             }
@@ -97,7 +113,7 @@ export default class HandleOrders implements IHandleOrders
         const itens = order.items.map((item, index) => {
             return {
                 Order_Items: {
-                    orderItemsId: `'${order.orderId}-${item.id}'`,
+                    orderItemsId: `'${uuidv4()}'`,
                     quantitySold: `'${item.seller}'`,
                     skuSellingPrice: item.sellingPrice / 100,
                     skuTotalPrice: (item.sellingPrice * Number(item.seller)) / 100,
@@ -132,6 +148,20 @@ export default class HandleOrders implements IHandleOrders
             };
         }
 
+        let utmSource: string, utmMedium: string, utmCampaign: string, coupon: string;
+
+        if(order.marketingData === null)
+        {
+            utmSource = utmMedium = utmCampaign = coupon = "''"
+        }
+        else
+        {
+            utmSource = `'${order.marketingData.utmSource}'`;
+            utmMedium = `'${order.marketingData.utmMedium}'`;
+            utmCampaign = `'${order.marketingData.utmCampaign}'`;
+            coupon = `'${order.marketingData.coupon}'`;
+        }
+
         return {
             Orders: {
                 orderId: `'${order.orderId}'`,
@@ -140,10 +170,10 @@ export default class HandleOrders implements IHandleOrders
                 creation_date: `'${order.creationDate}'`,
                 statusDescription: `'${order.statusDescription}'`,
                 lastChangeDate: `'${order.lastChange}'`,
-                utmSource: `'${order.marketingData.utmSource}'`,
-                utmMedium: `'${order.marketingData.utmMedium}'`,
-                utmCampaign: `'${order.marketingData.utmCampaign}'`,
-                coupon: `'${order.marketingData.coupon}'`,
+                utmSource,
+                utmMedium,
+                utmCampaign,
+                coupon,
                 totalValue: order.value / 100,
                 discountsTotals: order.totals.find(totals => {
                     return totals.id === 'Discounts';
@@ -186,7 +216,7 @@ export default class HandleOrders implements IHandleOrders
         });
 
         const response = await db.build().then(resp => resp);
-
+        
         return response;
     }
 }
