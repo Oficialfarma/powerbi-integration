@@ -13,7 +13,7 @@ CREATE TABLE ShippingData(
 	addressId VARCHAR(50),
 	state VARCHAR(2) NOT NULL,
 	city VARCHAR(25) NOT NULL,
-	receiver_name VARCHAR(50),
+	receiverName VARCHAR(150),
 	neighborhood VARCHAR(75) NOT NULL,
 	CONSTRAINT PK_addressId PRIMARY KEY CLUSTERED (addressId)
 );
@@ -32,18 +32,18 @@ CREATE TABLE Orders(
 	origin VARCHAR(30),
 	sequence VARCHAR(10),
 	creation_date DATETIMEOFFSET(2) NOT NULL,
-	statusDescription VARCHAR(10),
+	statusDescription VARCHAR(50),
 	lastChangeDate DATETIMEOFFSET(2) NOT NULL,
-	utmSource VARCHAR(10),
-	utmMedium VARCHAR(10),
-	utmCampaign VARCHAR(15),
-	coupon VARCHAR(10),
+	utmSource VARCHAR(50),
+	utmMedium VARCHAR(50),
+	utmCampaign VARCHAR(50),
+	coupon VARCHAR(50),
 	totalValue DECIMAL NOT NULL,
 	discountsTotals DECIMAL NOT NULL,
-	host VARCHAR(20),
-	sellerName VARCHAR(25),
+	host VARCHAR(30),
+	sellerName VARCHAR(30),
 	callCenterEmail VARCHAR(50),
-	callCenterCode VARCHAR(20),
+	callCenterCode VARCHAR(50),
 	client_id VARCHAR(50) NOT NULL,
 	CONSTRAINT PK_orderId PRIMARY KEY CLUSTERED (orderId),
 	CONSTRAINT FK_Orders_client_id FOREIGN KEY (client_id) REFERENCES Client (client_id)
@@ -51,8 +51,8 @@ CREATE TABLE Orders(
 
 CREATE TABLE LogisticsInfo(
 	logistics_id VARCHAR(50),
-	slaType VARCHAR(5),
-	courrier VARCHAR(5),
+	slaType VARCHAR(20),
+	courrier VARCHAR(20),
 	estimateDeliveryDate DATETIMEOFFSET(2),
 	deliveryDeadline VARCHAR(4),
 	trackingNumber VARCHAR(20),
@@ -83,11 +83,11 @@ CREATE TABLE DiscountsName(
 
 CREATE TABLE Items(
 	skuID VARCHAR(6),
-	skuName VARCHAR(100) NOT NULL,
+	skuName VARCHAR(200) NOT NULL,
 	CONSTRAINT PK_skuId PRIMARY KEY CLUSTERED (skuId)
 );
 
-CREATE TABLE Order_Itens(
+CREATE TABLE Order_Items(
 	orderItemsId VARCHAR(50),
 	quantitySold INTEGER,
 	skuSellingPrice DECIMAL,
