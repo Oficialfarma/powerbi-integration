@@ -1,51 +1,47 @@
+import { OrdersDTO } from "./interfaces/OrdersDTO";
 import createFileSystemController from "./useCases/FileSystem";
 import createGetOrdersController from "./useCases/GetOrders";
+import createHandleOrdersController from "./useCases/HandleOrders";
 import { GetAmountPages } from "./utils/GetAmountPages";
-
-type Params = {
-    queryParams: string;
-    lastTime: Date;
-    actualTimeRequest: Date;
-};
 
 process.on('message', data => {
 
     initOrdersGeneration(data);
 });
 
-async function initOrdersGeneration({ queryParams, actualTimeRequest, lastTime }: Params)
+async function initOrdersGeneration(queryParams: string)
 {
     let pages: number;
 
-    try
-    {
-        pages = await GetAmountPages.getPages({
-            queryParams: queryParams,
-            timeout: 10000,
-        })
-    }
-    catch(err)
-    {
-        writeLogError(err);
-    }
+    // try
+    // {
+    //     pages = await GetAmountPages.getPages({
+    //         queryParams: queryParams,
+    //         timeout: 10000,
+    //     })
+    // }
+    // catch(err)
+    // {
+    //     writeLogError(err);
+    // }
 
-    let ordersId: string[];
+    // let ordersId: string[];
 
-    try
-    {
-        ordersId = await createGetOrdersController.handle({
-            queryParams: queryParams,
-            timeout: 10000,
-            methodType: "list",
-            amountPages: pages
-        });
-    }
-    catch(err)
-    {
-        writeLogError(err);
-    }
+    // try
+    // {
+    //     ordersId = await createGetOrdersController.handle({
+    //         queryParams: queryParams,
+    //         timeout: 10000,
+    //         methodType: "list",
+    //         amountPages: pages
+    //     });
+    // }
+    // catch(err)
+    // {
+    //     writeLogError(err);
+    // }
     
-    let detailedOrders: object[];
+    let detailedOrders: OrdersDTO[];
 
     try
     {
@@ -53,13 +49,25 @@ async function initOrdersGeneration({ queryParams, actualTimeRequest, lastTime }
             queryParams: queryParams,
             timeout: 10000,
             methodType: "get",
-            orderId: ordersId
+            // orderId: ordersId
+            orderId: ['1135150878674-01']
         });
     }
     catch(err)
     {
         writeLogError(err);
     }
+    console.log(detailedOrders[0].shippingData);
+    // const status = await createHandleOrdersController.handle(detailedOrders);
+
+    // if(status instanceof Error)
+    // {
+    //     writeLogError(status.toString());
+    // }
+    // else
+    // {
+    //     process.exit(1);
+    // }
 }
 
 let retryWriteLogLimit = 5;
@@ -89,7 +97,7 @@ async function writeLogError(errorMessage: string)
         methodName: 'write',
         errorMessage: message
     }).then(() => {
-        process.exit(1);
+        process.exit(0);
     }).catch((err) => {
         if(retryWriteLogLimit > 0)
         {
@@ -98,7 +106,7 @@ async function writeLogError(errorMessage: string)
         }
         else
         {
-            process.exit(1);
+            process.exit(0);
         }
     }); 
 }
