@@ -12,26 +12,27 @@ import { DateFormat } from './utils/DateFormat';
     const lastTimeInDb = await db.select('lastTimeRequest').from('requestStatus').build();
     const { lastTimeRequest } = lastTimeInDb[0];
     
-    const actualTimeRequest = DateFormat.dateFormatToQueryParams(new Date('2021-05-18T14:53:00'));
+    const actualTimeRequest = DateFormat.dateFormatToQueryParams(new Date('2021-05-27T09:15:00'));
     const lastTime = DateFormat.dateFormatToQueryParams(new Date(lastTimeRequest));
     
-    // const queryParams = `?f_creationDate=creationDate%3A%5B${lastTime}%20TO%20${actualTimeRequest}%5D&per_page=100`;
-    const queryParams = ``;
+    const queryParams = `?f_creationDate=creationDate%3A%5B${lastTime}%20TO%20${actualTimeRequest}%5D&per_page=100`;
+    // const queryParams = ``;
 
-    child.send({
-        queryParams,
-        lastTime,
-        actualTimeRequest
-    });
+    child.send(queryParams);
 
-    child.on('exit', async (status) => {
+    child.on('exit', async (status: number) => {
         if(Boolean(status))
         {
-            // erro - aqui chama o insert com a última data
+            await db.update('requestStatus').set({
+                lastTimeRequest: actualTimeRequest,
+                requestStatus: 1
+            }).where("id_status=1").build();
         }
         else
         {
-            // se a saída for bem sucedida, atualiza o último horário
+            await db.update('requestStatus').set({
+                requestStatus: 0
+            }).where("id_status=1").build();
         }
     });
 })();
