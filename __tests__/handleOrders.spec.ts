@@ -682,6 +682,8 @@ describe('Handle Orders', () => {
 
         const list = mockedResponse;
 
+        (uuidv4 as jest.Mock).mockReturnValue('a25d1sd-1321-478b-a351-as2d8d1d5');
+
         list[0].ratesAndBenefitsData.rateAndBenefitsIdentifiers.push({
             "description": null,
             "featured": false,
@@ -788,9 +790,40 @@ describe('Handle Orders', () => {
         expect(result).toEqual(expected);
     });
 
+    test("#LogisticsInfo - should return a empty tracking number and shippingEstimateDate", () => {
+        (uuidv4 as jest.Mock).mockReturnValue('a12sd-1235s-apel1');
+
+        const order = [...mockedResponse];
+
+        order[0].packageAttachment.packages[0] = null;
+        order[0].shippingData.logisticsInfo[0].shippingEstimateDate = null;
+
+        const handleOrders = new HandleOrders();
+        const result = order.map((order: OrdersDTO) => {
+            return handleOrders.logisticsInfo(order);
+        });
+
+        const expected = [
+            {
+                LogisticsInfo: {
+                    logistics_id: "'a12sd-1235s-apel1'",
+                    slaType: "'PAC'",
+                    courrier: "'PAC'",
+                    estimateDeliveryDate: "'2199-12-31T00:00:00.00+00:00'",
+                    deliveryDeadline: "'12bd'",
+                    trackingNumber: "''",
+                    orderId: "'1080883513398-01'",
+                    addressId: "'65157854594'"
+                }
+            }
+        ];
+
+        expect(result).toEqual(expected);
+    });
+
     test('#orderItems - should return the order/item', async () => {
 
-        (uuidv4 as jest.Mock).mockReturnValue('a12sd-1235s-apel1');
+        (uuidv4 as jest.Mock).mockReturnValue('a1a2sd-1f235s-apghel1');
 
         const handleOrders = new HandleOrders();
         const [ result ] = mockedResponse.map((order: OrdersDTO) => {
@@ -800,7 +833,7 @@ describe('Handle Orders', () => {
         const expected = [
             {
                 Order_Items: {
-                    orderItemsId: "'1080883513398-01-5304'",
+                    orderItemsId: "'a1a2sd-1f235s-apghel1'",
                     quantitySold: "'1'",
                     skuSellingPrice: 58.66,
                     skuTotalPrice: 58.66,
@@ -813,7 +846,7 @@ describe('Handle Orders', () => {
             },
             {
                 Order_Items: {
-                    orderItemsId: "'1080883513398-01-1008'",
+                    orderItemsId: "'a1a2sd-1f235s-apghel1'",
                     quantitySold: "'1'",
                     skuSellingPrice: 28.40,
                     skuTotalPrice: 28.40,
@@ -886,8 +919,8 @@ describe('Handle Orders', () => {
                     discountsTotals: -4.59,
                     host: "'oficialfarma'",
                     sellerName: "'oficialfarma'",
-                    callCenterEmail: "' '",
-                    callCenterCode: "' '",
+                    callCenterEmail: "''",
+                    callCenterCode: "''",
                     client_id: "'ada159s-ed23-425s2d-80bf-78dcd344aa64'",
                 }
             }
@@ -895,6 +928,46 @@ describe('Handle Orders', () => {
 
         expect(result).toEqual(expected);
         expect(resultWithoutCallCenterData).toEqual(expectedWithoutCallCenterData);
+    });
+
+    test('#orders - should return empty marketing datas', () => {
+        const list = [...mockedResponse];
+
+        (uuidv4 as jest.Mock).mockReturnValue('a12sd-1235s-apel1');
+
+        const expected: any = [
+            {
+                Orders: {
+                    orderId: "'1080883513398-01'",
+                    origin: "'Marketplace'",
+                    sequence: "'2929244'",
+                    creation_date: "'2020-12-02T23:58:29.8363023+00:00'",
+                    statusDescription: "'Faturado'",
+                    lastChangeDate: "'2020-12-16T14:55:41.9145604+00:00'",
+                    utmSource: "''",
+                    utmMedium: "''",
+                    utmCampaign: "''",
+                    coupon: "''",
+                    totalValue: 102.21,
+                    discountsTotals: -4.59,
+                    host: "'oficialfarma'",
+                    sellerName: "'oficialfarma'",
+                    callCenterEmail: "''",
+                    callCenterCode: "''",
+                    client_id: "'ada159s-ed23-425s2d-80bf-78dcd344aa64'",
+                }
+            }
+        ];
+
+        list[0].callCenterOperatorData = null;
+        list[0].marketingData = null;
+
+        const handleOrders = new HandleOrders();
+        const result = list.map((order: OrdersDTO) => {
+            return handleOrders.orders(order);
+        });        
+
+        expect(result).toEqual(expected);
     });
 
     test('#paymentData - should returns the payment datas', async () => {
@@ -1025,10 +1098,7 @@ describe('Handle Orders', () => {
 
         let handledOrders: object[] = [];
 
-        const orders: object[] = [];
-
-        orders.concat(mockedResponse);
-        orders.concat(mockedResponse);
+        mockedResponse[0].items.splice(1,1);
 
         mockedResponse.forEach((order: OrdersDTO) => {
             const Client = handleOrders.client(order);
@@ -1091,11 +1161,9 @@ describe('Handle Orders', () => {
             .select('skuName')
             .from('Items')
             .build();
-
+            
         expect(response).toEqual([
-            { skuId: '1008' },
             { skuId: '5304' },
-            { skuName: 'Maca Peruana' },
             { skuName: 'Ioimbina' }
         ]);
     });
@@ -1106,7 +1174,6 @@ describe('Handle Orders', () => {
         const response = await db.from('Items').build();
 
         expect(response).toEqual([
-            { skuID: '1008', skuName: 'Maca Peruana' },
             { skuID: '5304', skuName: 'Ioimbina' }
         ]);
     });
@@ -1114,9 +1181,95 @@ describe('Handle Orders', () => {
     test("#saveOrder - Checks if already exists an Item so that save it", async () => {
         const db = new Database().createConnection();
         const handleOrders = new HandleOrders();
+        mockedResponse[0].items.push({
+            "uniqueId": "ED064B849F15438EACDF87C136A60CCB",
+            "id": "1008",
+            "productId": "1008",
+            "ean": "7898070130061",
+            "lockId": "00-1080883513398-01",
+            "itemAttachment": {
+                "content": {},
+                "name": null
+            },
+            "attachments": [],
+            "quantity": 1,
+            "seller": "1",
+            "name": "Maca Peruana",
+            "refId": null,
+            "price": 2990,
+            "listPrice": 5390,
+            "manualPrice": null,
+            "priceTags": [
+                {
+                    "name": "DISCOUNT@MARKETPLACE",
+                    "value": -150,
+                    "isPercentual": false,
+                    "identifier": "ca50fab9-1321-478b-a351-ad644c10e3df",
+                    "rawValue": -1.5,
+                    "rate": null,
+                    "jurisCode": null,
+                    "jurisType": null,
+                    "jurisName": null
+                }
+            ],
+            "imageUrl": "https://ur/arquivos/ids/162897-55-55/1008.jpg?v=637090838307430000",
+            "detailUrl": "/url/p",
+            "components": [],
+            "bundleItems": [],
+            "params": [],
+            "offerings": [],
+            "sellerSku": "1008",
+            "priceValidUntil": null,
+            "commission": 0,
+            "tax": 0,
+            "preSaleDate": null,
+            "additionalInfo": {
+                "brandName": "OficialFarma",
+                "brandId": "1",
+                "categoriesIds": "/10/",
+                "categories": [
+                    {
+                        "id": 10,
+                        "name": "Desempenho Físico"
+                    },
+                    {
+                        "id": 42,
+                        "name": "Saúde Sexual"
+                    }
+                ],
+                "productClusterId": "140,141,156,157,161,165,167,170,171,178,183,199,217,219,223,239,248,255,260,261,264,274,281,290",
+                "commercialConditionId": "1",
+                "dimension": {
+                    "cubicweight": 0.2,
+                    "height": 30,
+                    "length": 30,
+                    "weight": 200,
+                    "width": 15
+                },
+                "offeringInfo": null,
+                "offeringType": null,
+                "offeringTypeId": null
+            },
+            "measurementUnit": "un",
+            "unitMultiplier": 1,
+            "sellingPrice": 2840,
+            "isGift": false,
+            "shippingPrice": null,
+            "rewardValue": 60,
+            "freightCommission": 0,
+            "priceDefinitions": null,
+            "taxCode": null,
+            "parentItemIndex": null,
+            "parentAssemblyBinding": null,
+            "callCenterOperator": null,
+            "serialNumbers": null,
+            "assemblies": [],
+            "costPrice": 5390
+        });
+
         const handledItems = handleOrders.items(mockedResponse[0]);
 
-        let noItemsToSave: object[] = [];
+        let someItemsToSave: object[] = [];
         
         for(const { Items } of handledItems)
         {
@@ -1128,7 +1281,7 @@ describe('Handle Orders', () => {
                 
             if(!response.length)
             {
-                noItemsToSave.push({
+                someItemsToSave.push({
                     Items: {
                         ...Items
                     }
@@ -1175,7 +1328,7 @@ describe('Handle Orders', () => {
             }
         }
 
-        expect(noItemsToSave).toHaveLength(0);
+        expect(someItemsToSave).toHaveLength(1);
         expect(itensToSave).toHaveLength(2);
         expect(itensToSave).toEqual([
             {
