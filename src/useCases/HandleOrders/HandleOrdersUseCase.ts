@@ -70,52 +70,6 @@ export default class HandleOrdersUseCase
         }
         
         handledOrders = removeDoubleClients(handledOrders);
-        
-        
-        // console.log(handledOrders)
-        // orders.forEach((order: OrdersDTO) => {
-        //     const ShippingData = this.HandleOrders.addressShippingData(order);
-        //     const Client = this.HandleOrders.client(order);
-        //     const Client_ShippingData = this.HandleOrders.clientShippingData(order);
-        //     const DiscountsName = this.HandleOrders.discountsName(order);
-        //     const Items = this.HandleOrders.items(order);
-        //     const LogisticsInfo = this.HandleOrders.logisticsInfo(order);
-        //     const Order_Items = this.HandleOrders.orderItems(order);
-        //     const Orders = this.HandleOrders.orders(order);
-        //     const PaymentData = this.HandleOrders.paymentData(order);
-
-        //     const db = new Database().createConnection();
-
-        //     const ItemsToSave: object[] = [];
-            
-        //     Items.forEach(async (item) => {
-        //         const result = await db.select('skuID').from('Items').where(`skuID=${item.Items.skuId}`).build();
-
-        //         if(!result.length)
-        //         {
-        //             ItemsToSave.push(item);
-        //         }
-        //     });
-
-        //     // console.log(clientAlreadyExits)
-        //     // if(!clientAlreadyExits.length)
-        //     // {
-        //     //     ClientToSave = Client;
-        //     // }
-            
-        //     // console.log("cliente", ClientToSave)
-        //     // handledOrders = handledOrders.concat([
-        //     //     Client,
-        //     //     ...ItemsToSave,
-        //     //     Orders,
-        //     //     ...Order_Items,
-        //     //     ...PaymentData,
-        //     //     ShippingData,
-        //     //     Client_ShippingData,
-        //     //     ...DiscountsName,
-        //     //     LogisticsInfo,
-        //     // ]);
-        // });
 
         const status = await this.HandleOrders.saveOrders(handledOrders);
 
