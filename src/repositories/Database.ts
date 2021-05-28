@@ -198,6 +198,7 @@ export class Database implements IDatabaseRepository
         if(this.updateTable)
         {
             this.performUpdate();
+            this.setFields = {};
         }
         
         if(this.deleteTable)
