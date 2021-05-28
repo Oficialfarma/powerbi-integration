@@ -1,3 +1,11 @@
+/**
+ * @description Removes double elements from an Array recursively 
+ * until all items in the array have been checked
+ * @param items Original array with double elements
+ * @param itemsToBeReturned new array with no double elements.
+ * Array passed during recursive call
+ * @returns New array with no double informations
+ */
 export default function removeDoubleClients(items: Array<any>, itemsToBeReturned: Array<any> = []): Array<any>
 {
     if(items.length > 0)
