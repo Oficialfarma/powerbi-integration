@@ -80,16 +80,16 @@ export default class HandleOrders implements IHandleOrders
 
         if(order.packageAttachment.packages[0])
         {
-            trackingNumber = order.packageAttachment.packages[0].trackingNumber
+            trackingNumber = `'${order.packageAttachment.packages[0].trackingNumber}'`;
         }
         else
         {
             trackingNumber = "''";
         }
 
-        if(order.shippingData.logisticsInfo[0].shippingEstimateDate === null)
+        if(!order.shippingData.logisticsInfo[0].shippingEstimateDate)
         {
-            order.shippingData.logisticsInfo[0].shippingEstimateDate = '2199-12-12T00:00:00.00+00:00'
+            order.shippingData.logisticsInfo[0].shippingEstimateDate = '2199-12-31T00:00:00.00+00:00';
         }
         
         const logisticsInfo = {
@@ -143,8 +143,8 @@ export default class HandleOrders implements IHandleOrders
         else
         {
             callCenterDatas = {
-                callCenterEmail: "' '",
-                callCenterCode: "' '"
+                callCenterEmail: "''",
+                callCenterCode: "''"
             };
         }
 
