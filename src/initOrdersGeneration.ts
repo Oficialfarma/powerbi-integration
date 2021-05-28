@@ -1,8 +1,8 @@
 import { OrdersDTO } from "./interfaces/OrdersDTO";
-import createFileSystemController from "./useCases/FileSystem";
 import createGetOrdersController from "./useCases/GetOrders";
 import createHandleOrdersController from "./useCases/HandleOrders";
 import { GetAmountPages } from "./utils/GetAmountPages";
+import writeLogError from "./utils/writeLogError";
 
 process.on('message', data => {
 
@@ -13,100 +13,57 @@ async function initOrdersGeneration(queryParams: string)
 {
     let pages: number;
 
-    // try
-    // {
-    //     pages = await GetAmountPages.getPages({
-    //         queryParams: queryParams,
-    //         timeout: 10000,
-    //     })
-    // }
-    // catch(err)
-    // {
-    //     writeLogError(err);
-    // }
+    try
+    {
+        pages = await GetAmountPages.getPages({
+            queryParams: queryParams,
+            timeout: 10000,
+        })
+    }
+    catch(err)
+    {
+        writeLogError(err);
+    }
 
-    // let ordersId: string[];
-
-    // try
-    // {
-    //     ordersId = await createGetOrdersController.handle({
-    //         queryParams: queryParams,
-    //         timeout: 10000,
-    //         methodType: "list",
-    //         amountPages: pages
-    //     });
-    // }
-    // catch(err)
-    // {
-    //     writeLogError(err);
-    // }
-    
-    let detailedOrders: OrdersDTO[];
+    let ordersId: string[];
 
     try
     {
-        detailedOrders = await createGetOrdersController.handle({
+        ordersId = await createGetOrdersController.handle({
             queryParams: queryParams,
             timeout: 10000,
-            methodType: "get",
-            // orderId: ordersId
-            orderId: ['1135150878674-01']
+            methodType: "list",
+            amountPages: pages
         });
     }
     catch(err)
     {
         writeLogError(err);
     }
-    console.log(detailedOrders[0].shippingData);
-    // const status = await createHandleOrdersController.handle(detailedOrders);
-
-    // if(status instanceof Error)
-    // {
-    //     writeLogError(status.toString());
-    // }
-    // else
-    // {
-    //     process.exit(1);
-    // }
-}
-
-let retryWriteLogLimit = 5;
-
-async function writeLogError(errorMessage: string)
-{
-    const datas = await createFileSystemController.handle({
-        filePath: 'error.log',
-        methodName: 'read'
-    })
-    .then(resp => resp)
-    .catch(err => err);
     
-    let message;
+    let detailedOrders: OrdersDTO[];
 
-    if(datas instanceof Error)
+    try
     {
-        message = errorMessage + " " + new Date();
+        detailedOrders = await createGetOrdersController.handle({
+            timeout: 10000,
+            methodType: "get",
+            orderId: ordersId
+        });
+    }
+    catch(err)
+    {
+        writeLogError(err);
+    }
+    
+    const status = await createHandleOrdersController.handle(detailedOrders);
+
+    if(status instanceof Error)
+    {
+        writeLogError(status.toString());
     }
     else
     {
-        message = datas + '\r\n' + errorMessage + " " + new Date();
+        process.exit(1);
     }
-    
-    await createFileSystemController.handle({
-        filePath: 'error.log',
-        methodName: 'write',
-        errorMessage: message
-    }).then(() => {
-        process.exit(0);
-    }).catch((err) => {
-        if(retryWriteLogLimit > 0)
-        {
-            retryWriteLogLimit-=1;
-            setTimeout(writeLogError, 2000);
-        }
-        else
-        {
-            process.exit(0);
-        }
-    }); 
 }
