@@ -67,14 +67,30 @@ type ordersId = {
         const actualKey = Object.keys(information)[0];
         const objId = Object.keys(information[actualKey])[0];
         const objIdValue = information[actualKey][objId];
+        const differentUpdates = ["discountId", "logistics_id", "orderId"];
+
+        db.update(actualKey).set(information[actualKey])
+
+        if(objId === "clientShippingId")
+        {
+            db.where(`client_id=${information[actualKey].client_id}`);
+        }
+        else if(differentUpdates.includes(objId))
+        {
+            db.where(`orderId=${information[actualKey].orderId}`);
+        }
+        else
+        {
+            db.where(`${objId}=${objIdValue}`);
+        }
         
-        db.update(actualKey).set(information[actualKey]).where(`${objId}=${objIdValue}`);
+        // db.update(actualKey).set(information[actualKey]).where(`${objId}=${objIdValue}`);
     });
 
     const response = await db.build();
     console.log(response);
 
-    const status = Error;
+    const status:any = "";
 
     if(status instanceof Error)
     {
