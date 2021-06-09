@@ -67,34 +67,39 @@ type ordersId = {
         const actualKey = Object.keys(information)[0];
         const objId = Object.keys(information[actualKey])[0];
         const objIdValue = information[actualKey][objId];
-        const differentUpdates = ["discountId", "logistics_id", "orderId"];
+        const differentUpdates = ["logistics_id", "orderItemsId", "discountId"];
 
-        db.update(actualKey).set(information[actualKey])
-
-        if(objId === "clientShippingId")
+        if(objId === "client_id")
         {
-            db.where(`client_id=${information[actualKey].client_id}`);
+            const clientId = information[actualKey][objId];
+            delete information[actualKey][objId];
+            
+            db.update(actualKey).set(information[actualKey]).where(`client_id=${clientId}`);
         }
         else if(differentUpdates.includes(objId))
         {
-            db.where(`orderId=${information[actualKey].orderId}`);
+            delete information[actualKey][objId];
+            
+            db.update(actualKey).set(information[actualKey]).where(`orderId=${information[actualKey].orderId}`);
+        }
+        else if(objId === "clientShippingId")
+        {
+            const clientId = information[actualKey].client_id;
+            delete information[actualKey][objId];
+            
+            db.update(actualKey).set(information[actualKey]).where(`client_id=${clientId}`);
         }
         else
         {
-            db.where(`${objId}=${objIdValue}`);
+            db.update(actualKey).set(information[actualKey]).where(`${objId}=${objIdValue}`);
         }
-        
-        // db.update(actualKey).set(information[actualKey]).where(`${objId}=${objIdValue}`);
     });
 
     const response = await db.build();
-    console.log(response);
 
-    const status:any = "";
-
-    if(status instanceof Error)
+    if(response instanceof Error)
     {
-        writeLogError(status.toString());
+        writeLogError(response.toString());
     }
     else
     {
