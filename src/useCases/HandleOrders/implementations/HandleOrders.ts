@@ -2,6 +2,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { IHandleOrders } from "../../../interfaces/IHandleOrders";
 import { OrdersDTO } from "../../../interfaces/OrdersDTO";
 import { Database } from '../../../repositories/Database';
+import writeLogError from '../../../utils/writeLogError';
 
 export default class HandleOrders implements IHandleOrders
 {
@@ -27,7 +28,7 @@ export default class HandleOrders implements IHandleOrders
             ShippingData: {
                 addressId: `'${order.shippingData.address.addressId}'`,
                 state: `'${order.shippingData.address.state}'`,
-                city: `'${order.shippingData.address.city}'`,
+                city: `'${order.shippingData.address.city.replace("'", "")}'`,
                 receiverName: `'${order.shippingData.address.receiverName}'`,
                 neighborhood: `'${order.shippingData.address.neighborhood}'`
             }
@@ -210,13 +211,14 @@ export default class HandleOrders implements IHandleOrders
         const db = new Database().createConnection();
 
         orders.forEach((order: any) => {
+
             const tableName = Object.keys(order)[0];
             
             db.insertInto(tableName).values(order[tableName]);
         });
 
         const response = await db.build().then(resp => resp);
-        
+        console.log(response);
         return response;
     }
 }
