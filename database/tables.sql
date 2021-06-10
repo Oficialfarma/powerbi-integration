@@ -12,7 +12,7 @@ CREATE TABLE Client(
 CREATE TABLE ShippingData(
 	addressId VARCHAR(50),
 	state VARCHAR(2) NOT NULL,
-	city VARCHAR(25) NOT NULL,
+	city VARCHAR(100) NOT NULL,
 	receiverName VARCHAR(150),
 	neighborhood VARCHAR(75) NOT NULL,
 	CONSTRAINT PK_addressId PRIMARY KEY CLUSTERED (addressId)
