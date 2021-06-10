@@ -19,7 +19,7 @@ export default async function writeLogError(errorMessage: string)
     }
     else
     {
-        message = datas + '\r\n' + errorMessage + " " + new Date();
+        message = datas + '\r\n \r\n' + errorMessage + " " + new Date();
     }
     
     await createFileSystemController.handle({
