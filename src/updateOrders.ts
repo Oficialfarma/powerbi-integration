@@ -18,6 +18,8 @@ type ordersId = {
         .where("statusDescription<>'faturado' AND statusDescription<>'cancelado'")
         .build();
 
+    if(!ordersToUpdate.length) process.exit(1);
+    console.log("está atualizando")
     const orderId = ordersToUpdate.map((order: ordersId) => order.orderId);
     
     let detailedOrders: OrdersDTO[];
@@ -34,7 +36,7 @@ type ordersId = {
     {
         writeLogError(err);
     }
-
+    
     const handleOrders = new HandleOrders();
     let handledOrders: object[] = [];
 
@@ -100,6 +102,7 @@ type ordersId = {
     if(response instanceof Error)
     {
         writeLogError(response.toString());
+        process.exit(0);
     }
     else
     {
