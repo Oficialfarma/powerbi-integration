@@ -200,13 +200,11 @@ export class Database implements IDatabaseRepository
             this.performUpdate();
             this.setFields = {};
         }
-        
-        if(this.deleteTable)
+        else if(this.deleteTable)
         {
             this.performDelete();
         }
-
-        if(this.selectColumns)
+        else
         {
             this.performSelect();
         }
@@ -294,7 +292,7 @@ export class Database implements IDatabaseRepository
                 let result:object[] = [];
                 
                 for(const query of this.queriesToExecute)
-                {
+                {console.log(query)
                     if(query.match(/(update)|(insert)|(delete)/i))
                     {
                         const { rowsAffected } = await request.query(query);
@@ -312,7 +310,7 @@ export class Database implements IDatabaseRepository
                         throw err;
                     });
 
-                this.connPool.close();
+                await this.connPool.close();
                 this.clearDatas();
 
                 return result;
