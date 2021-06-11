@@ -1,6 +1,7 @@
 /**
  * @description Removes double elements from an Array recursively 
- * until all items in the array have been checked
+ * until all items in the array have been checked.
+ * Ps.: For now, it should be a not very large amount of information to avoid stack overflow
  * @param items Original array with double elements
  * @param itemsToBeReturned new array with no double elements.
  * Array passed during recursive call
