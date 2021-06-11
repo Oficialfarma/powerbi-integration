@@ -23,18 +23,24 @@ type ordersId = {
     const orderId = ordersToUpdate.map((order: ordersId) => order.orderId);
     
     let detailedOrders: OrdersDTO[];
-
+    
     try
     {
         detailedOrders = await createGetOrdersController.handle({
             timeout: 10000,
             methodType: "get",
             orderId
-        });
+        })
+        
+        if(detailedOrders instanceof Error)
+        {
+            throw detailedOrders;
+        }
     }
     catch(err)
     {
-        writeLogError(err);
+        writeLogError(err + "on update orders");
+        process.exit(err);
     }
     
     const handleOrders = new HandleOrders();
