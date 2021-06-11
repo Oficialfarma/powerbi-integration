@@ -14,7 +14,7 @@ CREATE TABLE ShippingData(
 	state VARCHAR(2) NOT NULL,
 	city VARCHAR(100) NOT NULL,
 	receiverName VARCHAR(150),
-	neighborhood VARCHAR(75) NOT NULL,
+	neighborhood VARCHAR(200) NOT NULL,
 	CONSTRAINT PK_addressId PRIMARY KEY CLUSTERED (addressId)
 );
 
@@ -38,8 +38,8 @@ CREATE TABLE Orders(
 	utmMedium VARCHAR(50),
 	utmCampaign VARCHAR(50),
 	coupon VARCHAR(50),
-	totalValue DECIMAL NOT NULL,
-	discountsTotals DECIMAL NOT NULL,
+	totalValue DECIMAL(18,2) NOT NULL,
+	discountsTotals DECIMAL(18,2) NOT NULL,
 	host VARCHAR(30),
 	sellerName VARCHAR(30),
 	callCenterEmail VARCHAR(50),
@@ -68,7 +68,7 @@ CREATE TABLE PaymentData(
 	orderId VARCHAR(50),
 	paymentSystemName VARCHAR(35),
 	installments INTEGER,
-	paymentValue DECIMAL
+	paymentValue DECIMAL(18,2)
 	CONSTRAINT FK_PaymentData_orderId FOREIGN KEY (orderId) REFERENCES Orders (orderId),
 	CONSTRAINT PK_PaymentData_transaction_id PRIMARY KEY CLUSTERED (transaction_id, orderId)
 );
@@ -90,13 +90,13 @@ CREATE TABLE Items(
 CREATE TABLE Order_Items(
 	orderItemsId VARCHAR(50),
 	quantitySold INTEGER,
-	skuSellingPrice DECIMAL,
-	skuTotalPrice DECIMAL,
-	skuValue DECIMAL,
+	skuSellingPrice DECIMAL(18,2),
+	skuTotalPrice DECIMAL(18,2),
+	skuValue DECIMAL(18,2),
 	orderId VARCHAR(50),
 	skuId VARCHAR(6),
-	shippingListPrice DECIMAL,
-	shippingValue DECIMAL,
+	shippingListPrice DECIMAL(18,2),
+	shippingValue DECIMAL(18,2),
 	CONSTRAINT PK_orderItensId PRIMARY KEY CLUSTERED (orderItemsId),
 	CONSTRAINT FK_Order_Itens_orderId FOREIGN KEY (orderId) REFERENCES Orders (orderId),
 	CONSTRAINT FK_Order_Itens_skuId FOREIGN KEY (skuId) REFERENCES Items (skuId)
