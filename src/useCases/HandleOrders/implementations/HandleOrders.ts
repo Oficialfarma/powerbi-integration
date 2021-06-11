@@ -14,8 +14,8 @@ export default class HandleOrders implements IHandleOrders
         return {
             Client: {
                 client_id: `'${order.clientProfileData.userProfileId}'`,
-                name: `'${order.clientProfileData.firstName}'`,
-                last_name: `'${order.clientProfileData.lastName}'`,
+                name: `'${order.clientProfileData.firstName.trim()}'`,
+                last_name: `'${order.clientProfileData.lastName.trim()}'`,
                 email: `'${clientEmail}'`,
                 document: `'${order.clientProfileData.document}'`
             }
@@ -28,9 +28,9 @@ export default class HandleOrders implements IHandleOrders
             ShippingData: {
                 addressId: `'${order.shippingData.address.addressId}'`,
                 state: `'${order.shippingData.address.state}'`,
-                city: `'${order.shippingData.address.city.replace("'", "")}'`,
-                receiverName: `'${order.shippingData.address.receiverName}'`,
-                neighborhood: `'${order.shippingData.address.neighborhood}'`
+                city: `'${order.shippingData.address.city.replace("'", "").trim()}'`,
+                receiverName: `'${order.shippingData.address.receiverName.trim()}'`,
+                neighborhood: `'${order.shippingData.address.neighborhood.replace("'", "").trim()}'`
             }
         }
     }
