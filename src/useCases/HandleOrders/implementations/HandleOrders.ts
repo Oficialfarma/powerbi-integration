@@ -218,7 +218,7 @@ export default class HandleOrders implements IHandleOrders
         });
 
         const response = await db.build().then(resp => resp);
-        console.log(response);
+        
         return response;
     }
 }
