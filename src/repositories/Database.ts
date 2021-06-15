@@ -1,10 +1,9 @@
 import { IDatabaseRepository } from "../interfaces/IDatabaseRepository";
 import * as sql from 'mssql';
-import createFileSystemController from "../useCases/FileSystem";
 
 export class Database implements IDatabaseRepository
 {
-    private connPool: sql.ConnectionPool;
+    protected connPool: sql.ConnectionPool;
     private selectColumns = '';
     private tableName: string;
     private insertIntoTableName: string;
@@ -13,7 +12,7 @@ export class Database implements IDatabaseRepository
     private setFields = {};
     private whereFilter = '';
     private deleteTable: string;
-    private queriesToExecute: string[] = [];
+    protected queriesToExecute: string[] = [];
 
     /**
      * @description Creates a new connection pool using the
@@ -277,7 +276,10 @@ export class Database implements IDatabaseRepository
         }
         try
         {
-            await this.connPool.connect();
+            if(!this.connPool.connected && !this.connPool.connecting)
+            {
+                await this.connPool.connect();
+            }
             const transaction = new sql.Transaction(this.connPool);
             
             try
@@ -292,7 +294,7 @@ export class Database implements IDatabaseRepository
                 let result:object[] = [];
                 
                 for(const query of this.queriesToExecute)
-                {console.log(query)
+                {
                     if(query.match(/(update)|(insert)|(delete)/i))
                     {
                         const { rowsAffected } = await request.query(query);
@@ -318,7 +320,6 @@ export class Database implements IDatabaseRepository
             catch(err)
             {
                 transaction.rollback(async () => {
-                    await this.connPool.close();
                     this.clearDatas();
                 });
     
@@ -345,5 +346,10 @@ export class Database implements IDatabaseRepository
         this.updateTable = '';
         this.setFields = {};
         this.whereFilter = '';
+    }
+
+    public async closeConnection()
+    {
+        await this.connPool.close();
     }
 }
