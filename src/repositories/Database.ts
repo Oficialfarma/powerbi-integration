@@ -347,9 +347,4 @@ export class Database implements IDatabaseRepository
         this.setFields = {};
         this.whereFilter = '';
     }
-
-    public async closeConnection()
-    {
-        await this.connPool.close();
-    }
 }
