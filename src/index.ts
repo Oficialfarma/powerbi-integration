@@ -66,7 +66,7 @@ new CronJob('0 */20 * * * *', async () => {
             }
             else
             {
-                message = 'Orders have not been updated: ' + new Date();
+                message = data + '\r\nOrders have not been updated: ' + new Date();
             }
             
         }
