@@ -18,19 +18,18 @@ type ordersId = {
     const limit = 500;
     let actualIndex = 0;
     let max = limit;
-    let hasFailed = false;
-    let errorMessage: any;
+    let hasError = false;
 
     const interval = setInterval(async () => {
         const { rows } = response[0];
-
-        if(max > rows)
+        
+        if(actualIndex > rows)
         {
             clearInterval(interval);
-
-            if(hasFailed)
+            
+            if(hasError)
             {
-                process.exit(errorMessage);
+                process.exit(0);
             }
             else
             {
@@ -40,18 +39,17 @@ type ordersId = {
 
         const ordersToUpdate = await new UpdateOrders().createConnection().specialLimit(actualIndex, max).build();
         
-        actualIndex += limit + 1;
-        max += actualIndex + limit;
-
+        actualIndex += limit;
+        max += limit;
+        
         if(!ordersToUpdate.length)
         {
-            clearInterval(interval);
-            process.exit(1);
+            return;
         }
     
         const orderId = ordersToUpdate.map((order: ordersId) => order.orderId);
         let detailedOrders: OrdersDTO[];
-
+        
         try
         {
             detailedOrders = await createGetOrdersController.handle({
@@ -68,8 +66,9 @@ type ordersId = {
         catch(err)
         {
             writeLogError(err + " on update orders");
-            hasFailed = true;
-            errorMessage = err;
+            clearInterval(interval);
+            hasError = true;
+            process.exit(err);
         }
         
         const handleOrders = new HandleOrders();
@@ -136,9 +135,10 @@ type ordersId = {
 
         if(buildResponse instanceof Error)
         {
+            hasError = true;
             writeLogError(buildResponse.toString());
-            hasFailed = true;
-            errorMessage = buildResponse;
+            clearInterval(interval);
+            process.exit(0);
         }
     }, 20000);
 })();
