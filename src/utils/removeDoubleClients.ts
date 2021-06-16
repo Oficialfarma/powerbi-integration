@@ -19,6 +19,20 @@ export default function removeDoubleClients(items: Array<any>, itemsToBeReturned
 
             for(let i = 0; i < itemsToBeReturned.length; i++)
             {
+                const actualKey: any = Object.keys(itemsToBeReturned[i])[0];
+                const objId = Object.keys(itemsToBeReturned[i][actualKey])[0];
+                const objIdValue = itemsToBeReturned[i][actualKey][objId];
+                const objName = Object.getOwnPropertyNames(actualItem)[0];
+                
+                if(objName === actualKey)
+                {
+                    if(objIdValue === actualItem[actualKey][objId])
+                    {
+                        hasDoubleClient = true;
+                        break;
+                    }
+                }
+                
                 if(JSON.stringify(itemsToBeReturned[i]) === JSON.stringify(actualItem))
                 {
                     hasDoubleClient = true;
