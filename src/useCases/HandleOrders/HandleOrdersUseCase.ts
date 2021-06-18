@@ -1,7 +1,7 @@
 import { IHandleOrders } from "../../interfaces/IHandleOrders";
 import { OrdersDTO } from "../../interfaces/OrdersDTO";
 import { Database } from "../../repositories/Database";
-import removeDoubleClients from "../../utils/removeDoubleClients";
+import removeDoubleItems from "../../utils/removeDoubleItems";
 
 export default class HandleOrdersUseCase
 {
@@ -101,7 +101,7 @@ export default class HandleOrdersUseCase
         /* End of verification if the customer and
             address are already registered
         */
-        handledOrders = removeDoubleClients(handledOrders);
+        handledOrders = removeDoubleItems(handledOrders);
 
         const status = await this.HandleOrders.saveOrders(handledOrders);
 
