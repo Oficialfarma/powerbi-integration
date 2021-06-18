@@ -14,8 +14,8 @@ existentes na base de dados local para a utilização de todas as informações 
  - [x] Obtenção de informações detalhadas dos pedidos
  - [x] Manipulação das informações (remoção de dados que não serão armazenados) dos pedidos detalhados
  - [x] Cadastro dos pedidos/informações no banco de dados
- - [ ] Coleta de novos pedidos a cada 30 minutos
- - [ ] Atualização no banco de dados das informações dos pedidos
+ - [x] Coleta de novos pedidos a cada 30 minutos
+ - [x] Atualização no banco de dados das informações dos pedidos
  - [x] Escrita e leitura de status / logs das requisições em disco local
 
 ## Inicialização, instalação das dependências e execução de testes.
