@@ -15,7 +15,7 @@ export default function removeDoubleItems(items: Array<any>, itemsToBeReturned: 
 
         if(itemsToBeReturned.length !== 0)
         {
-            let hasDoubleitem = false;
+            let hasDoubleItem = false;
 
             for(let i = 0; i < itemsToBeReturned.length; i++)
             {
@@ -28,19 +28,19 @@ export default function removeDoubleItems(items: Array<any>, itemsToBeReturned: 
                 {
                     if(objIdValue === actualItem[actualKey][objId])
                     {
-                        hasDoubleitem = true;
+                        hasDoubleItem = true;
                         break;
                     }
                 }
                 
                 if(JSON.stringify(itemsToBeReturned[i]) === JSON.stringify(actualItem))
                 {
-                    hasDoubleitem = true;
+                    hasDoubleItem = true;
                     break;
                 }
             }
 
-            if(!hasDoubleitem)
+            if(!hasDoubleItem)
             {
                 itemsToBeReturned.push(actualItem);
             }
