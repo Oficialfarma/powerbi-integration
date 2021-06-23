@@ -2,10 +2,24 @@ import { v4 as uuidv4 } from 'uuid';
 import { IHandleOrders } from "../../../interfaces/IHandleOrders";
 import { OrdersDTO } from "../../../interfaces/OrdersDTO";
 import { Database } from '../../../repositories/Database';
-import writeLogError from '../../../utils/writeLogError';
 
+/**
+ * @classdesc creates the objects that will be save into the database.
+ * The format of the objects follows the following pattern:
+ * {
+ *      TableName: {
+ *          column1: value,
+ *          column2: value
+ *      }
+ * }
+ */
 export default class HandleOrders implements IHandleOrders
 {
+    /**
+     * @description Creates the client object to insert into database
+     * @param order detailed order
+     * @returns Client object 
+     */
     client(order: OrdersDTO)
     {
         let clientEmail = order.clientProfileData.email;
@@ -22,6 +36,11 @@ export default class HandleOrders implements IHandleOrders
         };
     }
 
+    /**
+     * @description Creates the ShippingData object to insert into database
+     * @param order detailed order
+     * @returns ShippingData object
+     */
     addressShippingData(order: OrdersDTO)
     {
         return {
@@ -35,6 +54,11 @@ export default class HandleOrders implements IHandleOrders
         }
     }
 
+    /**
+     * @description Creates the Client_ShippingData object to insert into database
+     * @param order detailed order
+     * @returns Client_ShippingData object 
+     */
     clientShippingData(order: OrdersDTO)
     {
         return {
@@ -46,6 +70,11 @@ export default class HandleOrders implements IHandleOrders
         }
     }
 
+    /**
+     * @description Creates the DiscountsName object to insert into database
+     * @param order detailed order
+     * @returns DiscountsName object 
+     */
     discountsName(order: OrdersDTO)
     {
         const discountsName = order.ratesAndBenefitsData.rateAndBenefitsIdentifiers.map(elem => {
@@ -61,6 +90,11 @@ export default class HandleOrders implements IHandleOrders
         return discountsName;
     }
 
+    /**
+     * @description Creates the Items object to insert into database
+     * @param order detailed order
+     * @returns Items object 
+     */
     items(order: OrdersDTO)
     {
         const itens = order.items.map(item => {
@@ -75,6 +109,11 @@ export default class HandleOrders implements IHandleOrders
         return itens;
     }
 
+    /**
+     * @description Creates the LogistcsInfo object to insert into database
+     * @param order detailed order
+     * @returns LogistcsInfo object 
+     */
     logisticsInfo(order: OrdersDTO)
     {
         let trackingNumber: string;
@@ -109,6 +148,11 @@ export default class HandleOrders implements IHandleOrders
         return logisticsInfo;
     }
 
+    /**
+     * @description Creates the Order_Items object to insert into database
+     * @param order detailed order
+     * @returns Order_Items object 
+     */
     orderItems(order: OrdersDTO)
     {
         const itens = order.items.map((item, index) => {
@@ -130,6 +174,11 @@ export default class HandleOrders implements IHandleOrders
         return itens;
     }
 
+    /**
+     * @description Creates the Orders object to insert into database
+     * @param order detailed order
+     * @returns Orders object 
+     */
     orders(order: OrdersDTO)
     {
         let callCenterDatas: object;
@@ -187,6 +236,11 @@ export default class HandleOrders implements IHandleOrders
         }
     }
 
+    /**
+     * @description Creates the PaymentData object to insert into database
+     * @param order detailed order
+     * @returns Payment object 
+     */
     paymentData(order: OrdersDTO)
     {
         const payments = order.paymentData.transactions[0].payments.map(payment => {
@@ -204,6 +258,11 @@ export default class HandleOrders implements IHandleOrders
         return payments
     }
 
+    /**
+     * @description run through the objects creating the database query and then execute it 
+     * @param order detailed order
+     * @returns true if all informations has saved successfully or false if an error has occurred 
+     */
     async saveOrders(orders: object[])
     {
         if(!orders.length) return false;
