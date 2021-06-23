@@ -312,7 +312,6 @@ export class Database implements IDatabaseRepository
                         throw err;
                     });
 
-                await this.connPool.close();
                 this.clearDatas();
 
                 return result;
