@@ -12,6 +12,7 @@ export default class HandleOrdersUseCase
     async execute(orders: OrdersDTO[])
     {   
         let handledOrders: object[] = [];
+        const db = new Database().createConnection();
         
         for(const order of orders)
         {
@@ -24,8 +25,6 @@ export default class HandleOrdersUseCase
             const Order_Items = this.HandleOrders.orderItems(order);
             const Orders = this.HandleOrders.orders(order);
             const PaymentData = this.HandleOrders.paymentData(order);
-
-            const db = new Database().createConnection();
 
             const ItemsToSave: object[] = [];
             
