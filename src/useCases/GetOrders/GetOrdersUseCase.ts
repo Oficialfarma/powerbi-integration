@@ -17,6 +17,10 @@ export class GetOrdersUseCase
             methodType: datas.methodType
         };
 
+        /**
+         * Checks if the method is to list all informations about the orders
+         * or if it is get detailed orders
+         */
         if(datas.methodType === "list")
         {
             return await this.GetOrders.getOrders({
