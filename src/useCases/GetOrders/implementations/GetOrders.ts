@@ -3,8 +3,6 @@ import { IGetOrdersDTO } from "../../../interfaces/IGetOrdersDTO";
 import { OrdersDTO } from "../../../interfaces/OrdersDTO";
 import { Requests } from "../../../providers/Requests";
 
-const requests = new Requests();
-
 export class GetOrders implements IGetOrders
 {
     /**
@@ -16,6 +14,7 @@ export class GetOrders implements IGetOrders
      */
     async getOrders(datas: IGetOrdersDTO): Promise<string[] | OrdersDTO[]>
     {
+        const requests = new Requests();
         let request = [];
         
         if(datas.methodType === "list")
