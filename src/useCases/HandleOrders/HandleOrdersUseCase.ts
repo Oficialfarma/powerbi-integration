@@ -12,8 +12,7 @@ export default class HandleOrdersUseCase
     async execute(orders: OrdersDTO[])
     {   
         let handledOrders: object[] = [];
-        const db = new Database().createConnection();
-        
+
         for(const order of orders)
         {
             const ShippingData = this.HandleOrders.addressShippingData(order);
@@ -30,13 +29,13 @@ export default class HandleOrdersUseCase
             
             for(const item of Items)
             {
-                const result = await db
-                    .select('skuID')
-                    .from('Items')
-                    .where(`skuID=${item.Items.skuId}`)
-                    .build();
+                const result = await this.checkIfItemExistsIntoDatabase(
+                    'skuID',
+                    'Items',
+                    `skuID=${item.Items.skuId}`
+                );
 
-                if(!result.length)
+                if(!result)
                 {
                     ItemsToSave.push(item);
                 }
@@ -45,35 +44,23 @@ export default class HandleOrdersUseCase
             /* Start of verification if the customer and
             address are already registered
             */
-            let ClientToSave = null;
-            let ShippingDataToSave = null;
+            const clientAlreadyExits = await this.checkIfItemExistsIntoDatabase(
+                'client_id',
+                'Client',
+                `client_id=${Client.Client.client_id}`
+            );
 
-            const clientAlreadyExits = await db
-                .select('client_id')
-                .from('Client')
-                .where(`client_id=${Client.Client.client_id}`)
-                .build();
-            
-            const shippingDataAlreadyExists = await db
-                .select('addressId')
-                .from('ShippingData')
-                .where(`addressId=${ShippingData.ShippingData.addressId}`)
-                .build();
+            const shippingDataAlreadyExists = await this.checkIfItemExistsIntoDatabase(
+                'addressId',
+                'ShippingData',
+                `addressId=${ShippingData.ShippingData.addressId}`
+            );
 
-            if(!clientAlreadyExits.length)
+            if(!clientAlreadyExits)
             {
-                ClientToSave = Client;
+                handledOrders = handledOrders.concat([Client]);
             }
 
-            if(!shippingDataAlreadyExists.length)
-            {
-                ShippingDataToSave = ShippingData;
-            }
-
-            if(ClientToSave)
-            {
-                handledOrders = handledOrders.concat([ClientToSave]);
-            }
             /*
                 concatenates in the array to the payment information and
                 then checks whether a new address will be inserted and
@@ -86,9 +73,9 @@ export default class HandleOrdersUseCase
                 ...PaymentData,
             ]);
 
-            if(ShippingDataToSave)
+            if(!shippingDataAlreadyExists)
             {
-                handledOrders = handledOrders.concat([ShippingDataToSave]);
+                handledOrders = handledOrders.concat([ShippingData]);
             }
 
             handledOrders = handledOrders.concat([
@@ -111,6 +98,30 @@ export default class HandleOrdersUseCase
         else
         {
             return true;
+        }
+    }
+
+    /**
+     * @description Checks if an item exists into some database table
+     * @param columnNames Columns that will be selected
+     * @param tableName Table where select will be make
+     * @param whereFilter Filter
+     * @returns true if item already exists into the database
+     * or false if item doesn't exists
+     */
+    async checkIfItemExistsIntoDatabase(columnNames: string, tableName: string, whereFilter: string): Promise<boolean>
+    {
+        const db = new Database().createConnection();
+
+        const response = await db.select(columnNames).from(tableName).where(whereFilter).build();
+
+        if(response.length)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
         }
     }
 }
