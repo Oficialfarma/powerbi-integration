@@ -22,15 +22,18 @@ export default class HandleOrders implements IHandleOrders
      */
     client(order: OrdersDTO)
     {
-        let clientEmail = order.clientProfileData.email;
-        clientEmail = clientEmail.substring(0, clientEmail.indexOf('-'));
-        
+        //treats the email that comes from the api removing the part inserted by vtex leaving only the client's real email
+        const clientEmail = order.clientProfileData.email;
+        const replacedEmail = clientEmail.substring(0, clientEmail.indexOf('-')).replace("'", "");
+        const clientName = this.handleString(order.clientProfileData.firstName);
+        const clientLastName = this.handleString(order.clientProfileData.lastName);
+
         return {
             Client: {
                 client_id: `'${order.clientProfileData.userProfileId}'`,
-                name: `'${order.clientProfileData.firstName.trim().replace("'", "")}'`,
-                last_name: `'${order.clientProfileData.lastName.trim().replace("'", "")}'`,
-                email: `'${clientEmail.replace("'", "")}'`,
+                name: `'${clientName}'`,
+                last_name: `'${clientLastName}'`,
+                email: `'${replacedEmail}'`,
                 document: `'${order.clientProfileData.document}'`
             }
         };
@@ -43,13 +46,17 @@ export default class HandleOrders implements IHandleOrders
      */
     addressShippingData(order: OrdersDTO)
     {
+        const city = this.handleString(order.shippingData.address.city);
+        const receiverName = this.handleString(order.shippingData.address.receiverName);
+        const neighborhood = this.handleString(order.shippingData.address.neighborhood);
+        
         return {
             ShippingData: {
                 addressId: `'${order.shippingData.address.addressId}'`,
                 state: `'${order.shippingData.address.state}'`,
-                city: `'${order.shippingData.address.city.replace("'", "").trim()}'`,
-                receiverName: `'${order.shippingData.address.receiverName.trim().replace("'", "")}'`,
-                neighborhood: `'${order.shippingData.address.neighborhood.replace("'", "").trim()}'`
+                city: `'${city}'`,
+                receiverName: `'${receiverName}'`,
+                neighborhood: `'${neighborhood}'`
             }
         }
     }
@@ -279,5 +286,15 @@ export default class HandleOrders implements IHandleOrders
         const response = await db.build().then(resp => resp);
         
         return response;
+    }
+
+    /**
+     * @description Removes white spaces at the end of the string and replace the apostrophe character
+     * @param string String to be handled
+     * @returns string whithout white space at the end of string and apostrophe character
+     */
+    private handleString(string: string)
+    {
+        return string.trimEnd().replace("'", "");
     }
 }
