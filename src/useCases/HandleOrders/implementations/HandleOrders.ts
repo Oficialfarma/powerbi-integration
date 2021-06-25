@@ -289,7 +289,7 @@ export default class HandleOrders implements IHandleOrders
     }
 
     /**
-     * @description Removes white spaces at the end of the string and replace the apostrophe character
+     * @description Removes white spaces at the end of the string and remove the apostrophe character
      * @param string String to be handled
      * @returns string whithout white space at the end of string and apostrophe character
      */
