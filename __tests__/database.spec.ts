@@ -90,9 +90,22 @@ describe("Database", () => {
                 id_status: 1
             }
         ];
+
+        const resultSelectWhere = await db
+            .select('lastTimeRequest')
+            .from('requestStatus')
+            .where('id_status=1')
+            .build();
+
+        const expectedSelectWhere = [
+            {
+                lastTimeRequest: new Date('2021-05-11T13:59:32.750Z') 
+            }
+        ]
         
         expect(result).toStrictEqual(expected);
         expect(resultChained).toStrictEqual(expectedSelectChained);
+        expect(resultSelectWhere).toStrictEqual(expectedSelectWhere);
     });
 
     test('#Insert - should insert datas in the table', async () => {
