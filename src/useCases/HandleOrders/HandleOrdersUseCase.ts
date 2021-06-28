@@ -15,15 +15,17 @@ export default class HandleOrdersUseCase
 
         for(const order of orders)
         {
-            const ShippingData = this.HandleOrders.addressShippingData(order);
-            const Client = this.HandleOrders.client(order);
-            const Client_ShippingData = this.HandleOrders.clientShippingData(order);
-            const DiscountsName = this.HandleOrders.discountsName(order);
-            const Items = this.HandleOrders.items(order);
-            const LogisticsInfo = this.HandleOrders.logisticsInfo(order);
-            const Order_Items = this.HandleOrders.orderItems(order);
-            const Orders = this.HandleOrders.orders(order);
-            const PaymentData = this.HandleOrders.paymentData(order);
+            const {
+                ShippingData,
+                Client,
+                Client_ShippingData,
+                DiscountsName,
+                Items,
+                LogisticsInfo,
+                Order_Items,
+                Orders,
+                PaymentData
+            } = this.handledOrders(order);
 
             const ItemsToSave: object[] = [];
             
@@ -123,5 +125,74 @@ export default class HandleOrdersUseCase
         {
             return false;
         }
+    }
+
+    /**
+     * @description Execute order update method
+     * @param orders detailed orders
+     * @returns response if orders has been updated or not
+     */
+    async executeUpdate(orders: OrdersDTO[])
+    {
+        let handledOrders: object[] = [];
+
+        for(const order of orders)
+        {
+            const {
+                ShippingData,
+                Client,
+                Client_ShippingData,
+                DiscountsName,
+                Items,
+                LogisticsInfo,
+                Order_Items,
+                Orders,
+                PaymentData
+            } = this.handledOrders(order);
+
+            handledOrders = handledOrders.concat([
+                Client,
+                ...Items,
+                Orders,
+                ...Order_Items,
+                ...PaymentData,
+                ShippingData,
+                Client_ShippingData,
+                ...DiscountsName,
+                LogisticsInfo
+            ]);
+        };
+
+        return await this.HandleOrders.updateOrders(handledOrders);
+    }
+
+    /**
+     * @description Handle detailed orders to remove unnecessary informations
+     * @param order detailed order to be handled;
+     * @returns orders handled
+     */
+    handledOrders(order: OrdersDTO)
+    {
+        const ShippingData = this.HandleOrders.addressShippingData(order);
+        const Client = this.HandleOrders.client(order);
+        const Client_ShippingData = this.HandleOrders.clientShippingData(order);
+        const DiscountsName = this.HandleOrders.discountsName(order);
+        const Items = this.HandleOrders.items(order);
+        const LogisticsInfo = this.HandleOrders.logisticsInfo(order);
+        const Order_Items = this.HandleOrders.orderItems(order);
+        const Orders = this.HandleOrders.orders(order);
+        const PaymentData = this.HandleOrders.paymentData(order);
+
+        return {
+            ShippingData,
+            Client,
+            Client_ShippingData,
+            DiscountsName,
+            Items,
+            LogisticsInfo,
+            Order_Items,
+            Orders,
+            PaymentData
+        };
     }
 }
