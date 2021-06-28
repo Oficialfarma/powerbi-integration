@@ -12,8 +12,10 @@ type ordersId = {
 (async function () {
 
     const db = new Database().createConnection();
-
-    let response = await db.select("COUNT(orderId) AS rows").from("Orders").build();
+    const response = await db
+        .select("COUNT(orderId) AS rows")
+        .from("OrdersToUpdate")
+        .build();
 
     const limit = 500; // Limit of orders that will be updated per block
     let actualIndex = 0; // Initial index used on limit query
@@ -40,7 +42,11 @@ type ordersId = {
             }
         }
 
-        const ordersToUpdate = await new UpdateOrders().createConnection().specialLimit(actualIndex, max).build();
+        const ordersToUpdate = await db
+            .select('orderId')
+            .from('OrdersToUpdate')
+            .where(`indice BETWEEN ${actualIndex} AND ${max}`)
+            .build();
         
         actualIndex += limit;
         max += limit;
