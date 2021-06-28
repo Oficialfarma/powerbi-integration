@@ -52,7 +52,7 @@ new CronJob('0 */20 * * * *', async () => {
             methodName: 'read'
         })
         .then(resp => resp)
-        .catch(err => err);
+        .catch(() => "");
 
         if(err instanceof Error)
         {
