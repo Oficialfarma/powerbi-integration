@@ -1346,6 +1346,43 @@ describe('Handle Orders', () => {
         ])
     });
 
+    test("#Update orders - Should update orders successfully", async () => {
+        // const db = new Database().createConnection();
+        const handleOrders = new HandleOrders();
+        let handledOrders: object[] = [];
+
+        for(const order of mockedResponse)
+        {
+            const ShippingData = handleOrders.addressShippingData(order);
+            const Client = handleOrders.client(order);
+            const Client_ShippingData = handleOrders.clientShippingData(order);
+            const DiscountsName = handleOrders.discountsName(order);
+            const Items = handleOrders.items(order);
+            const LogisticsInfo = handleOrders.logisticsInfo(order);
+            const Order_Items = handleOrders.orderItems(order);
+            const Orders = handleOrders.orders(order);
+            const PaymentData = handleOrders.paymentData(order);
+
+            handledOrders = handledOrders.concat([
+                Client,
+                ...Items,
+                Orders,
+                ...Order_Items,
+                ...PaymentData,
+                ShippingData,
+                Client_ShippingData,
+                ...DiscountsName,
+                LogisticsInfo,
+            ]);
+
+            await handleOrders.saveOrders(handledOrders);
+        }
+
+        const updateResponse = await handleOrders.updateOrders(handledOrders);
+
+        expect(updateResponse.length).toBeGreaterThan(1);
+    });
+
     test("#General - Should insert an Item from an Array into Item table, update and delete it", async () => {
         const db = new Database().createConnection();
 
