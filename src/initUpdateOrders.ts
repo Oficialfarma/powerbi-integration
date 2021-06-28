@@ -1,6 +1,5 @@
 import { OrdersDTO } from "./interfaces/OrdersDTO";
 import { Database } from "./repositories/Database";
-import UpdateOrders from "./repositories/UpdateOrders";
 import createGetOrdersController from "./useCases/GetOrders";
 import createHandleOrdersController from "./useCases/HandleOrders";
 import writeLogError from "./utils/writeLogError";
