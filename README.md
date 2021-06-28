@@ -13,9 +13,9 @@ existentes na base de dados local para a utilização de todas as informações 
  - [x] Obtenção da lista de ID's dos pedidos do período especificado
  - [x] Obtenção de informações detalhadas dos pedidos
  - [x] Manipulação das informações (remoção de dados que não serão armazenados e dados duplicados ou que já existem no banco de dados) dos pedidos detalhados
- - [x] Cadastro dos pedidos/informações no banco de dados
+ - [x] Cadastro dos novos pedidos/informações no banco de dados
  - [x] Coleta de novos pedidos a cada 30 minutos
- - [x] Atualização no banco de dados das informações dos pedidos
+ - [x] Atualização no banco de dados das informações dos pedidos a cada 20 minutos
  - [x] Escrita e leitura de status / logs das requisições em disco local
 
 ## Inicialização, instalação das dependências e execução de testes.
@@ -33,21 +33,20 @@ Antes de começar será necessário ter instalado em sua máquina o [Node.js](ht
 
 Crie o arquivo *.env* na raíz do projeto contendo os tokens de autenticação e configurações do banco de dados. Para a criação dessas variáveis de ambiente, siga o arquivo de exemplo *.env.example* que se encontra também na raíz.
 Certifique-se de ter feito a importação no banco de dados da tabela contendo o status da última requisição feita.
-*Obs*: Para obter os tokens de acesso para a api vtex, acesse o perfil da sua loja VTEX e procure por: "X-VTEX-API-AppKey" e "X-VTEX-API-AppToken" e "VTEX ACCOUNT NAME".
+*Obs*: Para obter os tokens de acesso, acesse o perfil da sua loja VTEX e procure por: "X-VTEX-API-AppKey" e "X-VTEX-API-AppToken" e "VTEX ACCOUNT NAME".
 
 ### Banco de Dados
 
 Para importar o banco de dados é necessário apenas abrir o script que está na pasta *database* como uma nova query no SQL Server Management Studio e executar.
-Pode ser necessário atualizar os paths para o caminho do SQL na sua máquina
 
 ### Para iniciar a geração dos pedidos em modo de desenvolvimento
 > ```npm run dev```
 
 ### Execução de testes
-Para rodar os testes dos módulos rode:
+Para inicar a execução dos testes:
 > ```npm test```
 
-Para os testes com watch:
+Para realizaçãao dos testes utilizando o modo watch:
 > ```npm run test:watch```
 
 Para gerar a cobertura de códigos:
@@ -57,14 +56,18 @@ Para gerar a cobertura de códigos:
 Para gerar o build do projeto execute:
 > ```npm run build```
 
-Logo após será possível iniciar a aplicação com:
+Logo após será possível iniciar a aplicação em modo produção com:
 > ```node build/src/index```
 
 ## :wrench: Tecnologias
-As seguintes ferramentas estão sendo utilizadas na construção deste projeto:
+As seguintes ferramentas foram utilizadas na construção deste projeto:
 
 - [Node.js](https://nodejs.org/en/)
 - [SQL Server 2019 Express](https://www.microsoft.com/pt-br/sql-server/sql-server-downloads)
+- [Axios](https://www.npmjs.com/package/axios)
+- [uuidv4](https://www.npmjs.com/package/uuidv4)
+- [dotenv](https://www.npmjs.com/package/dotenv)
+- [node-cron](https://www.npmjs.com/package/node-cron)
 
 ## Licença
 <img src="https://img.shields.io/hexpm/l/apa" alt="Badges"/>
