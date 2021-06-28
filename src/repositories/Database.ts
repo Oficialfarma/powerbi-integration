@@ -321,7 +321,7 @@ export class Database implements IDatabaseRepository
                 transaction.rollback(async () => {
                     this.clearDatas();
                 });
-                console.log('erro ', err);
+                
                 return err;
             }   
         }
