@@ -288,6 +288,47 @@ export default class HandleOrders implements IHandleOrders
         return response;
     }
 
+    async updateOrders(orders: object[])
+    {
+        const db = new Database().createConnection();
+
+        orders.forEach((information: any) => {
+            const actualKey = Object.keys(information)[0];
+            const objId = Object.keys(information[actualKey])[0];
+            const objIdValue = information[actualKey][objId];
+            const differentUpdates = ["logistics_id", "orderItemsId", "discountId"];
+
+            if(objId === "client_id")
+            {
+                const clientId = information[actualKey][objId];
+                delete information[actualKey][objId];
+                
+                db.update(actualKey).set(information[actualKey]).where(`client_id=${clientId}`);
+            }
+            else if(differentUpdates.includes(objId))
+            {
+                delete information[actualKey][objId];
+                
+                db.update(actualKey).set(information[actualKey]).where(`orderId=${information[actualKey].orderId}`);
+            }
+            else if(objId === "clientShippingId")
+            {
+                const clientId = information[actualKey].client_id;
+                delete information[actualKey][objId];
+                
+                db.update(actualKey).set(information[actualKey]).where(`client_id=${clientId}`);
+            }
+            else
+            {
+                db.update(actualKey).set(information[actualKey]).where(`${objId}=${objIdValue}`);
+            }
+        });
+
+        const response = await db.build();
+
+        return response;
+    }
+
     /**
      * @description Removes white spaces at the end of the string and remove the apostrophe character
      * @param string String to be handled
