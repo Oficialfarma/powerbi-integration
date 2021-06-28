@@ -295,7 +295,7 @@ export class Database implements IDatabaseRepository
                 
                 for(const query of this.queriesToExecute)
                 {
-                    if(query.match(/(update)|(insert)|(delete)/i))
+                    if(query.match(/(^update)|(^insert)|(^delete)/i))
                     {
                         const { rowsAffected } = await request.query(query);
                         result = result.concat(rowsAffected);
@@ -313,7 +313,7 @@ export class Database implements IDatabaseRepository
                     });
 
                 this.clearDatas();
-
+                    
                 return result;
             }
             catch(err)
@@ -321,7 +321,7 @@ export class Database implements IDatabaseRepository
                 transaction.rollback(async () => {
                     this.clearDatas();
                 });
-    
+                console.log('erro ', err);
                 return err;
             }   
         }
