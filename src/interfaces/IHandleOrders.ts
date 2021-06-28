@@ -9,7 +9,8 @@ export interface IHandleOrders
     discountsName(order: object): DiscountsName[];
     orderItems(order: object): OrderItems[];
     items(order: object): Items[];
-    saveOrders(orders: object[]): Promise<boolean | Error> 
+    saveOrders(orders: object[]): Promise<boolean | Error>
+    updateOrders(orders: object[]): Promise<boolean | Error> 
 }
 
 type Client = {
