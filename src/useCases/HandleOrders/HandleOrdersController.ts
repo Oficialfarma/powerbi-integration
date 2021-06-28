@@ -7,10 +7,15 @@ export default class HandleOrdersController
         private createHandleOrdersControllers: HandleOrdersUseCase
     ){}
 
-    async handle(order: OrdersDTO[])
+    async handle(orders: OrdersDTO[], method: 'update' | 'save' = 'save')
     {
-        const formatedOrders = await this.createHandleOrdersControllers.execute(order);
-        
-        return formatedOrders;
+        if(method === 'save')
+        {
+            return await this.createHandleOrdersControllers.execute(orders);
+        }
+        else
+        {
+            return await this.createHandleOrdersControllers.executeUpdate(orders);
+        }
     }
 }
