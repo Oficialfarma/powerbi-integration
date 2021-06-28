@@ -64,7 +64,6 @@ new CronJob('0 */20 * * * *', async () => {
             {   
                 message = data + '\r\nOrders have not been updated: ' + new Date();
             }
-            
         }
         await createFileSystemController.handle({
             filePath: 'updateStatus.log',
