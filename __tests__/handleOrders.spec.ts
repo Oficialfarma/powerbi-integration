@@ -1347,7 +1347,6 @@ describe('Handle Orders', () => {
     });
 
     test("#Update orders - Should update orders successfully", async () => {
-        // const db = new Database().createConnection();
         const handleOrders = new HandleOrders();
         let handledOrders: object[] = [];
 
