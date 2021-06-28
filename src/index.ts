@@ -60,12 +60,8 @@ new CronJob('0 */20 * * * *', async () => {
         }
         else
         {
-            if(Boolean(err))
+            if(!Boolean(err))
             {   
-                message = data + '\r\nOrders have been updated successfully ' + new Date();
-            }
-            else
-            {
                 message = data + '\r\nOrders have not been updated: ' + new Date();
             }
             
