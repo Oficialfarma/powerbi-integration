@@ -1,3 +1,83 @@
+export type OrdersDTO =
+{
+    orderId: string;
+    sequence: string;
+    marketplaceOrderId: string;
+    marketplaceServicesEndpoint: string;
+    sellerOrderId: string;
+    origin: string;
+    affiliateId: string;
+    salesChannel: string;
+    merchantName: any;
+    status: string;
+    statusDescription: string;
+    value: number;
+    creationDate: string;
+    lastChange: string;
+    orderGroup: string;
+    totals: Totals[];
+    items: Items[];
+    marketplaceItems: any[];
+    clientProfileData: ClientProfileData;
+    giftRegistryData: any;
+    marketingData: {
+        id: string;
+        utmSource: string;
+        utmPartner: any;
+        utmMedium: any;
+        utmCampaign: any;
+        coupon: any;
+        utmiCampaign: string;
+        utmipage: string;
+        utmiPart: string;
+        marketingTags: any[];
+    };
+    ratesAndBenefitsData: {
+        id: string;
+        rateAndBenefitsIdentifiers: RateAndBenefitsIdentifiers[]
+    };
+    shippingData: {
+        id: string;
+        address: Address;
+        logisticsInfo: LogisticsInfo[];
+        trackingHints: any;
+        selectedAddresses: SelectedAddresses[]
+    };
+    paymentData: {
+        giftCards: any[];
+        transactions: Transactions[]
+    };
+    packageAttachment: {
+        packages: Packages[]
+    };
+    sellers: Sellers[];
+    callCenterOperatorData: null | CallCenterOperatorData;
+    followUpEmail: string;
+    lastMessage: any;
+    hostname: string;
+    invoiceData: {
+        address: any
+    };
+    allowCancellation: boolean;
+    allowEdition: boolean;
+    isCheckedIn: boolean;
+    marketplace: {
+        baseURL: string;
+        isCertified: any;
+        name: string;
+    };
+    authorizedDate: string;
+    invoicedDate: string;
+    cancelReason: string;
+    itemMetadata: {
+        Items: ItemMetadata[]
+    };
+    subscriptionData: any;
+    taxData: any;
+    checkedInPickupPointId: any;
+    cancellationData: any
+}
+
 type Totals = {
     id: string;
     name: string;
@@ -292,83 +372,4 @@ type CallCenterOperatorData = {
     id: string;
     email: string;
     userName: string;
-}
-export type OrdersDTO =
-{
-    orderId: string;
-    sequence: string;
-    marketplaceOrderId: string;
-    marketplaceServicesEndpoint: string;
-    sellerOrderId: string;
-    origin: string;
-    affiliateId: string;
-    salesChannel: string;
-    merchantName: any;
-    status: string;
-    statusDescription: string;
-    value: number;
-    creationDate: string;
-    lastChange: string;
-    orderGroup: string;
-    totals: Totals[];
-    items: Items[];
-    marketplaceItems: any[];
-    clientProfileData: ClientProfileData;
-    giftRegistryData: any;
-    marketingData: {
-        id: string;
-        utmSource: string;
-        utmPartner: any;
-        utmMedium: any;
-        utmCampaign: any;
-        coupon: any;
-        utmiCampaign: string;
-        utmipage: string;
-        utmiPart: string;
-        marketingTags: any[];
-    };
-    ratesAndBenefitsData: {
-        id: string;
-        rateAndBenefitsIdentifiers: RateAndBenefitsIdentifiers[]
-    };
-    shippingData: {
-        id: string;
-        address: Address;
-        logisticsInfo: LogisticsInfo[];
-        trackingHints: any;
-        selectedAddresses: SelectedAddresses[]
-    };
-    paymentData: {
-        giftCards: any[];
-        transactions: Transactions[]
-    };
-    packageAttachment: {
-        packages: Packages[]
-    };
-    sellers: Sellers[];
-    callCenterOperatorData: null | CallCenterOperatorData;
-    followUpEmail: string;
-    lastMessage: any;
-    hostname: string;
-    invoiceData: {
-        address: any
-    };
-    allowCancellation: boolean;
-    allowEdition: boolean;
-    isCheckedIn: boolean;
-    marketplace: {
-        baseURL: string;
-        isCertified: any;
-        name: string;
-    };
-    authorizedDate: string;
-    invoicedDate: string;
-    cancelReason: string;
-    itemMetadata: {
-        Items: ItemMetadata[]
-    };
-    subscriptionData: any;
-    taxData: any;
-    checkedInPickupPointId: any;
-    cancellationData: any
 }
