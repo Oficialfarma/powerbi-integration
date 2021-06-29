@@ -291,7 +291,7 @@ export class Database implements IDatabaseRepository
     
                 const request = new sql.Request(transaction);
     
-                let result:object[] = [];
+                let result:object[] | number[] = [];
                 
                 for(const query of this.queriesToExecute)
                 {
