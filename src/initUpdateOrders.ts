@@ -18,7 +18,7 @@ type ordersId = {
 
     const limit = 500; // Limit of orders that will be updated per block
     let actualIndex = 0; // Initial index used on limit query
-    let max = limit; // Max index used on limit query
+    let maxIndex = limit; // Max index used on limit query
     let hasError = false; // Stores if any error occurred
 
     /**
@@ -44,11 +44,11 @@ type ordersId = {
         const ordersToUpdate = await db
             .select('orderId')
             .from('OrdersToUpdate')
-            .where(`indice BETWEEN ${actualIndex} AND ${max}`)
+            .where(`indice BETWEEN ${actualIndex} AND ${maxIndex}`)
             .build();
         
         actualIndex += limit;
-        max += limit;
+        maxIndex += limit;
         
         if(!ordersToUpdate.length)
         {
