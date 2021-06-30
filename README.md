@@ -59,7 +59,7 @@ Para gerar o build do projeto execute:
 Logo após será possível iniciar a aplicação em modo produção com:
 > ```node build/src/index```
 
-## :wrench: Tecnologias
+## :wrench: Ferramentas
 As seguintes ferramentas foram utilizadas na construção deste projeto:
 
 - [Node.js](https://nodejs.org/en/)
