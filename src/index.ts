@@ -6,8 +6,17 @@ import { fork } from 'child_process';
 import { Database } from './repositories/Database';
 import { DateFormat } from './utils/DateFormat';
 import createFileSystemController from './useCases/FileSystem';
+import DatabaseBackup from './repositories/DatabaseBackup';
 
-new CronJob('0 */30 * * * *', async () => {
+// Stop all cron jobs
+process.on('SIGINT', () => {
+    initGetOrders.stop();
+    initOrdersUpdate.stop();
+    initBackupRoutine.stop();
+});
+
+// Starts order taking functions
+const initGetOrders = new CronJob('0 */30 * * * *', async () => {
     console.log('Buscando pedidos');
     const child = fork(__dirname + '/initOrdersGeneration.ts', ['normal']);
     const db = new Database().createConnection();
@@ -41,7 +50,8 @@ new CronJob('0 */30 * * * *', async () => {
     });
 }, null, true, 'America/Sao_Paulo');
 
-new CronJob('0 */20 * * * *', async () => {
+// Starts orders update functions
+const initOrdersUpdate = new CronJob('0 */20 * * * *', async () => {
     const child = fork(__dirname + '/initUpdateOrders.ts', ['normal']);
     console.log('Atualizando pedidos');
     child.on('exit', async (err: number | Error) => {
@@ -72,4 +82,33 @@ new CronJob('0 */20 * * * *', async () => {
         });
         console.log('Atualizou pedidos');
     })
+}, null, true, 'America/Sao_Paulo');
+
+// Starts the database backup routine
+const initBackupRoutine = new CronJob('00 */10 00 * * *', async () => {
+    const databaseBackup = new DatabaseBackup().createConnection();
+
+    const response = await databaseBackup
+        .createBackup({
+            database: 'powerbi_testes',
+            localToSave: 'C:\\Users\\alessandro.miranda\\Desktop\\backup',
+            backupFileName: 'backupTeste'
+        })
+        .build();
+    
+    if(response instanceof Error)
+    {
+        const data = await createFileSystemController.handle({
+            filePath: 'updateStatus.log',
+            methodName: 'read'
+        })
+        .then(resp => resp)
+        .catch(() => "");
+
+        await createFileSystemController.handle({
+            filePath: 'backupStatus.log',
+            methodName: 'write',
+            errorMessage: data + "\r\n" + response.toString()
+        });
+    }
 }, null, true, 'America/Sao_Paulo');
