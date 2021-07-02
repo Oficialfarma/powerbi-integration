@@ -17,7 +17,7 @@ async function initOrdersGeneration(queryParams: string)
     {
         pages = await GetAmountPages.getPages({
             queryParams: queryParams,
-            timeout: 10000,
+            timeout: 20000,
         })
     }
     catch(err)
@@ -31,7 +31,7 @@ async function initOrdersGeneration(queryParams: string)
     {
         ordersId = await createGetOrdersController.handle({
             queryParams: queryParams,
-            timeout: 10000,
+            timeout: 60000,
             methodType: "list",
             amountPages: pages
         });
@@ -46,7 +46,7 @@ async function initOrdersGeneration(queryParams: string)
     try
     {
         detailedOrders = await createGetOrdersController.handle({
-            timeout: 10000,
+            timeout: 60000,
             methodType: "get",
             orderId: ordersId
         });
