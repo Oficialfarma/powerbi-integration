@@ -75,3 +75,6 @@ typings/
 detailedOrderExample.json
 moreThanOnePayment.json
 valeExample.json
+
+#backup files
+database_backup/
