@@ -61,7 +61,7 @@ type ordersId = {
         try
         {
             detailedOrders = await createGetOrdersController.handle({
-                timeout: 10000,
+                timeout: 60000,
                 methodType: "get",
                 orderId
             })
