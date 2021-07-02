@@ -12,7 +12,7 @@ import DatabaseBackup from './repositories/DatabaseBackup';
 process.on('SIGINT', () => {
     initGetOrders.stop();
     initOrdersUpdate.stop();
-    // initBackupRoutine.stop();
+    initBackupRoutine.stop();
 });
 
 // Starts order taking functions
@@ -85,10 +85,10 @@ const initOrdersUpdate = new CronJob('0 */20 * * * *', async () => {
 }, null, true, 'America/Sao_Paulo');
 
 // Starts the database backup routine
-const initBackupRoutine = new CronJob('00 */45 * * * *', async () => {
+const initBackupRoutine = new CronJob('00 00 00 * * *', async () => {
     const databaseBackup = new DatabaseBackup().createConnection();
     const envToUse = process.env.NODE_ENV.toUpperCase().trimEnd();
-
+    console.log("fazendo backup")
     const response = await databaseBackup
         .createBackup({
             database: process.env[`DB_NAME_${envToUse}`],
@@ -100,7 +100,7 @@ const initBackupRoutine = new CronJob('00 */45 * * * *', async () => {
     if(response instanceof Error)
     {
         const data = await createFileSystemController.handle({
-            filePath: 'updateStatus.log',
+            filePath: 'backupStatus.log',
             methodName: 'read'
         })
         .then(resp => resp)
