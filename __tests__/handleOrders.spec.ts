@@ -611,6 +611,32 @@ describe('Handle Orders', () => {
             "cancellationData": null
         }
     ]
+
+    const resetDatabase = async () => {
+        const config = {
+            user: process.env.DB_USERID_TEST,
+            password: process.env.DB_PASS_TEST,
+            server: process.env.DB_SERVER_TEST,
+            database: process.env.DB_NAME_TEST,
+            options: {
+                encrypt: true,
+                enableArithAbort: true
+            }
+        }
+        
+        const connPool = new sql.ConnectionPool(config);
+    
+        await connPool.connect();
+    
+        await connPool.query('DELETE FROM Order_Items');
+        await connPool.query('DELETE FROM Items');
+    
+        await connPool.close();
+    }
+
+    beforeEach(async () => {
+        await resetDatabase();
+    })
     
     test('#Client - should returns a client informations', async () => {
 
@@ -748,13 +774,15 @@ describe('Handle Orders', () => {
         const expected = [
             {
                 Items: {
-                    skuId: "'5304'",
+                    uniqueID: "'16E99E4890674D3883773A901FBEDA0A'",
+                    skuID: "'5304'",
                     skuName: "'Ioimbina'"
                 }
             },
             {
                 Items: {
-                    skuId: "'1008'",
+                    uniqueID: "'ED064B849F15438EACDF87C136A60CCB'",
+                    skuID: "'1008'",
                     skuName: "'Maca Peruana'"
                 }
             }
@@ -839,7 +867,7 @@ describe('Handle Orders', () => {
                     skuTotalPrice: 58.66,
                     skuValue: 78.00,
                     orderId: "'1080883513398-01'",
-                    skuId: "'5304'",
+                    uniqueID: "'16E99E4890674D3883773A901FBEDA0A'",
                     shippingValue: 7.57,
                     shippingListPrice: 7.57,
                 }
@@ -852,7 +880,7 @@ describe('Handle Orders', () => {
                     skuTotalPrice: 28.40,
                     skuValue: 53.90,
                     orderId: "'1080883513398-01'",
-                    skuId: "'1008'",
+                    uniqueID: "'ED064B849F15438EACDF87C136A60CCB'",
                     shippingValue: 7.58,
                     shippingListPrice: 7.58
                 }
@@ -1125,8 +1153,8 @@ describe('Handle Orders', () => {
         });
         
         const respSuccessfuly = await handleOrders.saveOrders(handledOrders);
-        let savedWithSuccess;
-
+        let savedWithSuccess: boolean;
+        
         if(respSuccessfuly instanceof Error)
         {
             savedWithSuccess = false;
@@ -1137,7 +1165,7 @@ describe('Handle Orders', () => {
         }
         
         const respError = await handleOrders.saveOrders([]);
-        let savedWithError;
+        let savedWithError: boolean;
 
         if(respError instanceof Error || !respError)
         {
@@ -1155,6 +1183,24 @@ describe('Handle Orders', () => {
     test('#General - should return an skuId and skuName', async () => {
         const db = new Database().createConnection();
 
+        await db.insertInto("Items").values([
+            {
+                uniqueID: "'B03F7F781D494D7884EDA4E10741878D'",
+                skuID: "'7517'",
+                skuName: "'Metilcobalamina 1mg 60 Cápsulas'"
+            },
+            {
+                uniqueID: "'C9BF781A7C4E4C158FE1A45B1C8B363A'",
+                skuID: "'4136'",
+                skuName: "'Laxosterone® 50mg + Bioperine 5mg 60 Cápsulas'"
+            },
+            {
+                uniqueID: "'EEDE443E0C614B1E8723682DEE7754B4'",
+                skuID: "'1802'",
+                skuName: "'Metilcobalamina 1mg 60 Cápsulas'"
+            }
+        ]).build();
+
         const response = await db
             .select('skuId')
             .from('Items')
@@ -1163,18 +1209,54 @@ describe('Handle Orders', () => {
             .build();
             
         expect(response).toEqual([
-            { skuId: '5304' },
-            { skuName: 'Ioimbina' }
+            { skuId: '7517' },
+            { skuId: '4136' },
+            { skuId: '1802' },
+            { skuName: 'Metilcobalamina 1mg 60 Cápsulas' },
+            { skuName: 'Laxosterone® 50mg + Bioperine 5mg 60 Cápsulas' },
+            { skuName: 'Metilcobalamina 1mg 60 Cápsulas' }
         ]);
     });
 
     test('#General - Should return all items from Items table', async () => {
         const db = new Database().createConnection();
 
+        await db.insertInto("Items").values([
+            {
+                uniqueID: "'B03F7F781D494D7884EDA4E10741878D'",
+                skuID: "'7517'",
+                skuName: "'Metilcobalamina 1mg 60 Cápsulas'"
+            },
+            {
+                uniqueID: "'C9BF781A7C4E4C158FE1A45B1C8B363A'",
+                skuID: "'4136'",
+                skuName: "'Laxosterone® 50mg + Bioperine 5mg 60 Cápsulas'"
+            },
+            {
+                uniqueID: "'EEDE443E0C614B1E8723682DEE7754B4'",
+                skuID: "'1802'",
+                skuName: "'Metilcobalamina 1mg 60 Cápsulas'"
+            }
+        ]).build();
+
         const response = await db.from('Items').build();
 
         expect(response).toEqual([
-            { skuID: '5304', skuName: 'Ioimbina' }
+            {
+                uniqueID: "B03F7F781D494D7884EDA4E10741878D",
+                skuID: "7517",
+                skuName: "Metilcobalamina 1mg 60 Cápsulas"
+            },
+            {
+                uniqueID: "C9BF781A7C4E4C158FE1A45B1C8B363A",
+                skuID: "4136",
+                skuName: "Laxosterone® 50mg + Bioperine 5mg 60 Cápsulas"
+            },
+            {
+                uniqueID: "EEDE443E0C614B1E8723682DEE7754B4",
+                skuID: "1802",
+                skuName: "Metilcobalamina 1mg 60 Cápsulas"
+            }
         ]);
     });
 
@@ -1274,9 +1356,9 @@ describe('Handle Orders', () => {
         for(const { Items } of handledItems)
         {
             const response = await db
-                .select('skuId')
+                .select('skuID')
                 .from('Items')
-                .where(`skuId=${Items.skuId}`)
+                .where(`skuID=${Items.skuID}`)
                 .build();
                 
             if(!response.length)
@@ -1313,9 +1395,9 @@ describe('Handle Orders', () => {
         for(const { Items } of handledItems)
         {
             const response = await db
-                .select('skuId')
+                .select('skuID')
                 .from('Items')
-                .where(`skuId=${Items.skuId}`)
+                .where(`skuID=${Items.skuID}`)
                 .build();
                 
             if(!response.length)
@@ -1328,18 +1410,20 @@ describe('Handle Orders', () => {
             }
         }
 
-        expect(someItemsToSave).toHaveLength(1);
+        expect(someItemsToSave).toHaveLength(2);
         expect(itensToSave).toHaveLength(2);
         expect(itensToSave).toEqual([
             {
                 Items: {
-                    skuId: "'5304'",
+                    uniqueID: "'16E99E4890674D3883773A901FBEDA0A'",
+                    skuID: "'5304'",
                     skuName: "'Ioimbina'"
                 }
             },
             {
                 Items: {
-                    skuId: "'1008'",
+                    uniqueID: "'ED064B849F15438EACDF87C136A60CCB'",
+                    skuID: "'1008'",
                     skuName: "'Maca Peruana'"
                 }
             }
@@ -1387,16 +1471,17 @@ describe('Handle Orders', () => {
 
         const insertResponse = await db.insertInto('Items').values([
             {
+                uniqueID: "'126SFDGD65F58FG4F5D'",
                 skuID: "'8340'",
                 skuName: "'Chá verde'"
             }
         ]).build();
-
+        
         const updateResponse = await db.update('Items').set({
             skuName: "'Creatina pure'"
-        }).where("skuId='8340'").build();
+        }).where("uniqueID='126SFDGD65F58FG4F5D'").build();
 
-        const deleteResponse = await db.deleteFrom('Items').where("skuID=8340").build();
+        const deleteResponse = await db.deleteFrom('Items').where("uniqueID='126SFDGD65F58FG4F5D'").build();
 
         const config = {
             user: process.env.DB_USERID_TEST,
