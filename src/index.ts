@@ -16,7 +16,7 @@ process.on('SIGINT', () => {
 });
 
 // Starts order taking functions
-const initGetOrders = new CronJob('0 */2 * * * *', async () => {
+const initGetOrders = new CronJob('0 */30 * * * *', async () => {
     const environment = process.env.NODE_ENV.trimEnd().toLowerCase();
     const child = fork(__dirname + `/initOrdersGeneration.${environment === "prod" ? "js" : "ts"}`, ['normal']);
     const db = new Database().createConnection();
