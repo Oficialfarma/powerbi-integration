@@ -82,9 +82,10 @@ CREATE TABLE DiscountsName(
 );
 
 CREATE TABLE Items(
+	uniqueID VARCHAR(50) NOT NULL,
 	skuID VARCHAR(6),
 	skuName VARCHAR(200) NOT NULL,
-	CONSTRAINT PK_skuId PRIMARY KEY CLUSTERED (skuId)
+	CONSTRAINT PK_uniqueID PRIMARY KEY CLUSTERED (uniqueID)
 );
 
 CREATE TABLE Order_Items(
@@ -94,12 +95,12 @@ CREATE TABLE Order_Items(
 	skuTotalPrice DECIMAL(18,2),
 	skuValue DECIMAL(18,2),
 	orderId VARCHAR(50),
-	skuId VARCHAR(6),
+	uniqueID VARCHAR(50),
 	shippingListPrice DECIMAL(18,2),
 	shippingValue DECIMAL(18,2),
 	CONSTRAINT PK_orderItensId PRIMARY KEY CLUSTERED (orderItemsId),
 	CONSTRAINT FK_Order_Itens_orderId FOREIGN KEY (orderId) REFERENCES Orders (orderId),
-	CONSTRAINT FK_Order_Itens_skuId FOREIGN KEY (skuId) REFERENCES Items (skuId)
+	CONSTRAINT FK_Order_Itens_uniqueID FOREIGN KEY (uniqueID) REFERENCES Items (uniqueID)
 );
 
 CREATE TABLE requestStatus(
