@@ -16,9 +16,9 @@ process.on('SIGINT', () => {
 });
 
 // Starts order taking functions
-const initGetOrders = new CronJob('0 */30 * * * *', async () => {
-    console.log('Buscando pedidos');
-    const child = fork(__dirname + '/initOrdersGeneration.ts', ['normal']);
+const initGetOrders = new CronJob('0 */2 * * * *', async () => {
+    const environment = process.env.NODE_ENV.trimEnd().toLowerCase();
+    const child = fork(__dirname + `/initOrdersGeneration.${environment === "prod" ? "js" : "ts"}`, ['normal']);
     const db = new Database().createConnection();
     
     const lastTimeInDb = await db.select('lastTimeRequest').from('requestStatus').build();
@@ -46,14 +46,15 @@ const initGetOrders = new CronJob('0 */30 * * * *', async () => {
                 requestStatus: 0
             }).where("id_status=1").build();
         }
-        console.log('Baixou pedidos');
+        console.log('Pedidos baixados');
     });
 }, null, true, 'America/Sao_Paulo');
 
 // Starts orders update functions
 const initOrdersUpdate = new CronJob('0 */20 * * * *', async () => {
-    const child = fork(__dirname + '/initUpdateOrders.ts', ['normal']);
-    console.log('Atualizando pedidos');
+    const environment = process.env.NODE_ENV.trimEnd().toLowerCase();
+    const child = fork(__dirname + `/initUpdateOrders.${environment === "prod" ? "js" : "ts"}`, ['normal']);
+
     child.on('exit', async (err: number | Error) => {
         
         let message: string;
@@ -80,7 +81,7 @@ const initOrdersUpdate = new CronJob('0 */20 * * * *', async () => {
             methodName: 'write',
             errorMessage: message
         });
-        console.log('Atualizou pedidos');
+        console.log('Pedidos atualizados');
     })
 }, null, true, 'America/Sao_Paulo');
 
@@ -88,7 +89,6 @@ const initOrdersUpdate = new CronJob('0 */20 * * * *', async () => {
 const initBackupRoutine = new CronJob('00 00 00 * * *', async () => {
     const databaseBackup = new DatabaseBackup().createConnection();
     const envToUse = process.env.NODE_ENV.toUpperCase().trimEnd();
-    console.log("fazendo backup")
     const response = await databaseBackup
         .createBackup({
             database: process.env[`DB_NAME_${envToUse}`],
@@ -112,4 +112,5 @@ const initBackupRoutine = new CronJob('00 00 00 * * *', async () => {
             errorMessage: data + "\r\n" + response.toString()
         });
     }
+    console.log("Backup concluído");
 }, null, true, 'America/Sao_Paulo');
