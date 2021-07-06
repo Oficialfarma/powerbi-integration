@@ -76,7 +76,7 @@ CREATE TABLE PaymentData(
 CREATE TABLE DiscountsName(
 	discountId VARCHAR(50),
 	orderId VARCHAR(50),
-	discountName VARCHAR(25),
+	discountName VARCHAR(50),
 	CONSTRAINT FK_DiscountsName_orderId FOREIGN KEY (orderId) REFERENCES Orders (orderId),
 	CONSTRAINT PK_DiscountsName_discountId PRIMARY KEY CLUSTERED (discountId)
 );
