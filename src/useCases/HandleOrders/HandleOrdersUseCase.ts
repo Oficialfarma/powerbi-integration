@@ -32,7 +32,7 @@ export default class HandleOrdersUseCase
             for(const item of Items)
             {
                 const result = await this.checkIfItemExistsIntoDatabase(
-                    'uniqueID',
+                    'skuID',
                     'Items',
                     `skuID=${item.Items.skuID}`
                 );
