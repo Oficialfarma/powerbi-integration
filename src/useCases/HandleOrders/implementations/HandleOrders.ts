@@ -107,7 +107,6 @@ export default class HandleOrders implements IHandleOrders
         const itens = order.items.map(item => {
             return {
                 Items: {
-                    uniqueID: `'${item.uniqueId}'`,
                     skuID: `'${item.id}'`,
                     skuName: `'${item.name}'`
                 }
@@ -172,7 +171,7 @@ export default class HandleOrders implements IHandleOrders
                     skuTotalPrice: (item.sellingPrice * Number(item.seller)) / 100,
                     skuValue: item.costPrice / 100,
                     orderId: `'${order.orderId}'`,
-                    uniqueID: `'${item.uniqueId}'`,
+                    skuID: `'${item.id}'`,
                     shippingValue: order.shippingData.logisticsInfo[index].price / 100,
                     shippingListPrice: order.shippingData.logisticsInfo[index].listPrice / 100
                 }
