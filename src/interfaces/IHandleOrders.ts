@@ -102,7 +102,7 @@ type OrderItems = {
         skuTotalPrice: number;
         skuValue: number;
         orderId: string;
-        uniqueID: string;
+        skuID: string;
         shippingValue: number;
         shippingListPrice: number;
     }
@@ -110,7 +110,6 @@ type OrderItems = {
 
 type Items = {
     Items: {
-        uniqueID: string;
         skuID: string;
         skuName: string;
     }
