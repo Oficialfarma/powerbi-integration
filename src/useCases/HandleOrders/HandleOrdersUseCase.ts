@@ -34,7 +34,7 @@ export default class HandleOrdersUseCase
                 const result = await this.checkIfItemExistsIntoDatabase(
                     'uniqueID',
                     'Items',
-                    `uniqueID=${item.Items.uniqueID}`
+                    `skuID=${item.Items.skuID}`
                 );
 
                 if(!result)
