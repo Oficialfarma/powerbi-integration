@@ -68,6 +68,7 @@ As seguintes ferramentas foram utilizadas na construção deste projeto:
 - [uuidv4](https://www.npmjs.com/package/uuidv4)
 - [dotenv](https://www.npmjs.com/package/dotenv)
 - [node-cron](https://www.npmjs.com/package/node-cron)
+- [pm2](https://pm2.keymetrics.io/)
 
 ## Licença
 <img src="https://img.shields.io/hexpm/l/apa" alt="Badges"/>
