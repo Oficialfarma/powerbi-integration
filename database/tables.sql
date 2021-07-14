@@ -66,7 +66,7 @@ CREATE TABLE LogisticsInfo(
 CREATE TABLE PaymentData(
 	transaction_id VARCHAR(50),
 	orderId VARCHAR(50),
-	paymentSystemName VARCHAR(100),
+	paymentSystemName VARCHAR(35),
 	installments INTEGER,
 	paymentValue DECIMAL(18,2)
 	CONSTRAINT FK_PaymentData_orderId FOREIGN KEY (orderId) REFERENCES Orders (orderId),
