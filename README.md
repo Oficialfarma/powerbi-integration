@@ -17,6 +17,7 @@ existentes na base de dados local para a utilização de todas as informações 
  - [x] Coleta de novos pedidos a cada 30 minutos
  - [x] Atualização no banco de dados das informações dos pedidos a cada 20 minutos
  - [x] Escrita e leitura de status / logs das requisições em disco local
+ - [x] Realização de back-up automático à meia-noite
 
 ## Inicialização, instalação das dependências e execução de testes.
 ### Pré-requisitos
