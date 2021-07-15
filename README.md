@@ -39,6 +39,13 @@ Certifique-se de ter feito a importação no banco de dados da tabela contendo o
 ### Banco de Dados
 
 Para importar o banco de dados é necessário apenas abrir o script que está na pasta *database* como uma nova query no SQL Server Management Studio e executar.
+Após ter o banco já instanciado, é necessário preencher as informações da tabela _requestStatus_ com o horário que se deseja iniciar a obtenção de pedidos.
+
+_Obs.: é recomendado que o horário inserido seja próximo no limite de até 8 horas do horário da build, caso contrário, será necessário atualizar manualmente no código o horário máximo para obtenção dos pedidos por dois fatores:_
+
+_1 - A VTEX limita em até 30 páginas sua API_
+
+_2 - Evitar que ocorra estouro de pilha na execução dos métodos de manipulação e remoção de itens duplicados_
 
 ### Para iniciar a geração dos pedidos em modo de desenvolvimento
 > ```npm run dev```
@@ -58,7 +65,25 @@ Para gerar o build do projeto execute:
 > ```npm run build```
 
 Logo após será possível iniciar a aplicação em modo produção com:
-> ```node build/src/index```
+> ```npm start```
+
+## Especificações
+
+### Limite de pedidos sendo manipulados
+
+Devido aos laços de repetição e recursividade utilizado em alguns módulos para a limpeza de itens que por ventura venham duplicados, o limite máximo de horas - em valor aproximado pois pode variar de acordo com a quantia de pedidos do período - está entre 6 e 9 horas.
+
+### Tolerância à erros
+
+Por rodar processos filhos, todo erro que ocorrer em algum dos childs lançados durante obtenção, atualização ou backup não derruba o sistema por completo, apenas o processo que gerou o erro é finalizado ou, se o erro for em pontos não esperados, o processo filho fica parado sem continuidade mas o processo principal consegue reexecutar o procedimento lançando uma nova thread após o período de tempo determinado para cada função.
+
+### Tempos de execução
+
+Tempo estimado para a finalização de cada processo:
+
+- Download de pedidos: 1/2 minutos (Período de 9 horas)
+- Atualização de pedidos (execução de blocos de 500 a cada 20 segundos): 6/9 minutos
+- Backup da base de dados: 1 minuto
 
 ## :wrench: Ferramentas
 As seguintes ferramentas foram utilizadas na construção deste projeto:
