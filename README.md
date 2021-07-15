@@ -54,7 +54,7 @@ _2 - Evitar que ocorra estouro de pilha na execução dos métodos de manipulaç
 Para inicar a execução dos testes:
 > ```npm test```
 
-Para realizaçãao dos testes utilizando o modo watch:
+Para realização dos testes utilizando o modo watch:
 > ```npm run test:watch```
 
 Para gerar a cobertura de códigos:
