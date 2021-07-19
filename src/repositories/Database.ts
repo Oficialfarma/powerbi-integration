@@ -20,13 +20,13 @@ export class Database implements IDatabaseRepository
      */
     createConnection()
     {
-        let envToUse = process.env.NODE_ENV.toUpperCase().trimEnd();
+        const NODE_ENV = process.env.NODE_ENV.toUpperCase().trimEnd();
 
         const config = {
-            user: process.env[`DB_USERID_${envToUse}`],
-            password: process.env[`DB_PASS_${envToUse}`],
-            server: process.env[`DB_SERVER_${envToUse}`],
-            database: process.env[`DB_NAME_${envToUse}`],
+            user: process.env[`DB_USERID_${NODE_ENV}`],
+            password: process.env[`DB_PASS_${NODE_ENV}`],
+            server: process.env[`DB_SERVER_${NODE_ENV}`],
+            database: process.env[`DB_NAME_${NODE_ENV}`],
             options: {
                 encrypt: true,
                 enableArithAbort: true
