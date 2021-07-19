@@ -17,8 +17,8 @@ process.on('SIGINT', () => {
 
 // Starts order taking functions
 const initGetOrders = new CronJob('0 */30 * * * *', async () => {
-    const environment = process.env.NODE_ENV.trimEnd().toLowerCase();
-    const child = fork(__dirname + `/initOrdersGeneration.${environment === "prod" ? "js" : "ts"}`, ['normal']);
+    const ENVIRONMENT = process.env.NODE_ENV.trimEnd().toLowerCase();
+    const child = fork(__dirname + `/initOrdersGeneration.${ENVIRONMENT === "prod" ? "js" : "ts"}`, ['normal']);
     const db = new Database().createConnection();
     
     const lastTimeInDb = await db.select('lastTimeRequest').from('requestStatus').build();
