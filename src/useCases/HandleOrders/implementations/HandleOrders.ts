@@ -336,6 +336,6 @@ export default class HandleOrders implements IHandleOrders
      */
     private handleString(string: string)
     {
-        return string.trimEnd().replace("'", "");
+        return string.trimEnd().replace(/'/g, "");
     }
 }
