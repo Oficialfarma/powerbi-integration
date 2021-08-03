@@ -1,7 +1,7 @@
 const axios = {
     get: jest.fn().mockImplementation(() => {
-        return new Promise(async (resolve, reject) => {
-            await setTimeout(() => {
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
                 resolve({
                     data: {
                         list: [
