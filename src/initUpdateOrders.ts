@@ -41,6 +41,8 @@ type ordersId = {
             }
         }
 
+        if(rows === 0) return;
+
         const ordersToUpdate = await db
             .select('orderId')
             .from('OrdersToUpdate')
