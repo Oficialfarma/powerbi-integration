@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "set NODE_ENV=dev && ts-node ./src/index.ts",
-    "start": "set NODE_ENV=prod && pm2 start ./build/index.js",
+    "start": "set NODE_ENV=prod && node --unhandled-rejections=strict ./build/index.js",
     "build": "tsc --build",
     "test": "set NODE_ENV=test && npx jest --runInBand --detectOpenHandles",
     "test:cov": "set NODE_ENV=test && npx jest --config jest.config.js --coverage --runInBand --detectOpenHandles",
