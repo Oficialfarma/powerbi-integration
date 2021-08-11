@@ -41,7 +41,7 @@ export class Database implements IDatabaseRepository
      * @description Clears the name of the existing columns in the class,
      * so that a chained select can be made and configures new columns
      * to mount the select query
-     * @param columns Name of the columns to be selected in the bank
+     * @param columns Name of the columns to be selected in the DB
      * @returns Class instance
      */
     select(columns: string)
