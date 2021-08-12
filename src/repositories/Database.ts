@@ -318,7 +318,7 @@ export class Database implements IDatabaseRepository
             }
             catch(err)
             {
-                transaction.rollback(async () => {
+                transaction.rollback(() => {
                     this.clearDatas();
                 });
                 
