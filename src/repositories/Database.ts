@@ -1,5 +1,5 @@
-import { IDatabaseRepository } from "../interfaces/IDatabaseRepository";
 import * as sql from 'mssql';
+import { IDatabaseRepository } from "../interfaces/IDatabaseRepository";
 
 export class Database implements IDatabaseRepository
 {

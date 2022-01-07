@@ -1,12 +1,11 @@
-import * as dotenv from 'dotenv';
-dotenv.config();
-
-import { CronJob } from 'cron';
 import { fork } from 'child_process';
+import { CronJob } from 'cron';
+import * as dotenv from 'dotenv';
 import { Database } from './repositories/Database';
-import { DateFormat } from './utils/DateFormat';
-import createFileSystemController from './useCases/FileSystem';
 import DatabaseBackup from './repositories/DatabaseBackup';
+import createFileSystemController from './useCases/FileSystem';
+import { DateFormat } from './utils/DateFormat';
+dotenv.config();
 
 // Stop all cron jobs
 process.on('SIGINT', () => {
