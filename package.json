@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/oficialfarma-dev-projetcs/powerbi-integration#readme",
   "dependencies": {
-    "axios": "^0.21.1",
+    "axios": "^0.21.2",
     "cron": "^1.8.2",
     "dotenv": "^8.2.0",
     "mssql": "^6.3.1",
