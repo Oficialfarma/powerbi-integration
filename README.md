@@ -85,16 +85,11 @@ Tempo estimado para a finalização de cada processo:
 - Atualização de pedidos (execução de blocos de 500 a cada 20 segundos): 6/9 minutos
 - Backup da base de dados: 1 minuto
 
-## :wrench: Ferramentas
+## :wrench: Ferramentas e tecnologias
 As seguintes ferramentas foram utilizadas na construção deste projeto:
 
 - [Node.js](https://nodejs.org/en/)
 - [SQL Server 2019 Express](https://www.microsoft.com/pt-br/sql-server/sql-server-downloads)
-- [Axios](https://www.npmjs.com/package/axios)
-- [uuidv4](https://www.npmjs.com/package/uuidv4)
-- [dotenv](https://www.npmjs.com/package/dotenv)
-- [node-cron](https://www.npmjs.com/package/node-cron)
-<!-- - [pm2](https://pm2.keymetrics.io/) -->
 
 ## Licença
 <img src="https://img.shields.io/hexpm/l/apa" alt="Badges"/>
